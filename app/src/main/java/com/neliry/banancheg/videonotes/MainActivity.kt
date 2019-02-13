@@ -1,12 +1,16 @@
 package com.neliry.banancheg.videonotes
 
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.facebook.CallbackManager
+import com.facebook.*
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -17,10 +21,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_main.*
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginResult
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-
-
+import java.security.MessageDigest
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -29,6 +35,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var auth: FirebaseAuth
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var callbackManager: CallbackManager
+    private lateinit var context: Context
 
     companion object {
         private const val RC_SIGN_IN = 9001
@@ -50,11 +57,40 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         callbackManager = CallbackManager.Factory.create()
 
+
+
+
         button_login.setOnClickListener(this)
         button_logout.setOnClickListener(this)
        sign_in_button.setOnClickListener(this)
 
+        var info: PackageInfo = getPackageManager().getPackageInfo("com.neliry.banancheg.videonotes",
+            PackageManager.GET_SIGNATURES);
+        for (signature in info.signatures) {
+            var md : MessageDigest  = MessageDigest.getInstance("SHA");
+            md.update(signature.toByteArray());
+            Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
 
+        }
+
+
+        login_button_facebook.setReadPermissions("email", "public_profile")
+        login_button_facebook.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+            override fun onSuccess(loginResult: LoginResult) {
+                Log.d(TAG, "facebook:onSuccess:$loginResult")
+                handleFacebookAccessToken(loginResult.accessToken)
+            }
+
+            override fun onCancel() {
+                Log.d(TAG, "facebook:onCancel")
+                // ...
+            }
+
+            override fun onError(error: FacebookException) {
+                Log.d(TAG, "facebook:onError", error)
+                // ...
+            }
+        })
     }
     override fun onClick(v: View?) {
         when(v!!.id){
@@ -84,7 +120,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.button_logout -> {
                 auth.signOut()
-                //LoginManager.getInstance().logOut();
+                LoginManager.getInstance().logOut();
                 Log.d(TAG, "logout")
             }
 
@@ -100,7 +136,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
-        Log.d(TAG, currentUser!!.email)
+        //Log.d(TAG, currentUser!!.email)
         updateUI(currentUser)
 
         val database = FirebaseDatabase.getInstance()
@@ -157,6 +193,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                     updateUI(null)
+                }
+
+                // ...
+            }
+    }
+
+    private fun handleFacebookAccessToken(token: AccessToken) {
+        Log.d(TAG, "handleFacebookAccessToken:$token")
+
+        val credential = FacebookAuthProvider.getCredential(token.token)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithFACEBOOKCredential:success")
+                    val user = auth.currentUser
+
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithFACEBOOKCredential:failure", task.exception)
+                    Toast.makeText(baseContext, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show()
                 }
 
                 // ...
