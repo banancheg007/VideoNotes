@@ -2,4 +2,5 @@
     <string name="app_name">VideoNotes</string>
     <string name="facebook_app_id">385978722180561</string>
     <string name="fb_login_protocol_scheme">fb385978722180561</string>
+    <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
 </resources>

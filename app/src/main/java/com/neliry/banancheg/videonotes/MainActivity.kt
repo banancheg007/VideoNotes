@@ -23,13 +23,23 @@ import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult
+import com.google.android.youtube.player.YouTubePlayer
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import java.security.MessageDigest
 
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
+    override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, p1: YouTubePlayer?, p2: Boolean) {
+        if (!p2) {
+            p1!!.cueVideo("wKJ9KzGQq0w");
+        }
+    }
+
+    override fun getYouTubePlayerProvider(): YouTubePlayer.Provider {
+        return youtube_view;
+    }
 
 
     private lateinit var auth: FirebaseAuth
@@ -63,6 +73,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         button_login.setOnClickListener(this)
         button_logout.setOnClickListener(this)
        sign_in_button.setOnClickListener(this)
+
+        youtube_view.initialize(DeveloperKey.DEVELOPER_KEY, this);
 
         var info: PackageInfo = getPackageManager().getPackageInfo("com.neliry.banancheg.videonotes",
             PackageManager.GET_SIGNATURES);
