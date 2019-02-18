@@ -24,9 +24,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult
 import com.google.android.youtube.player.YouTubePlayer
+import com.google.firebase.FirebaseError
 import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
+import com.neliry.banancheg.videonotes.model.Theme
 import java.security.MessageDigest
 
 
@@ -100,7 +101,7 @@ class MainActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
 
             override fun onError(error: FacebookException) {
                 Log.d(TAG, "facebook:onError", error)
-                // ...
+                  // ...
             }
         })
     }
@@ -149,12 +150,39 @@ class MainActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         //Log.d(TAG, currentUser!!.email)
+        Log.d(TAG,currentUser.toString())
         updateUI(currentUser)
 
         val database = FirebaseDatabase.getInstance()
-        val myRef = database.getReference("message")
+        val myRef = database.getReference("users").child(currentUser!!.uid).child("themes")
+        var theme = Theme("3r32r3", "jnajwdknwakjdn")
+        myRef.push().setValue(theme)
 
-        myRef.setValue("Hello, World!")
+        myRef.addChildEventListener(object:ChildEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+                 //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+                //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+                 //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+                var theme: Theme? = p0.getValue(Theme::class.java)
+               Log.d(TAG, theme.toString())
+            }
+
+            override fun onChildRemoved(p0: DataSnapshot) {
+                 //To change body of created functions use File | Settings | File Templates.
+            }
+
+
+        })
+
     }
 
     private fun updateUI(user: FirebaseUser?) {
