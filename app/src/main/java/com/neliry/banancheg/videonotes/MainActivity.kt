@@ -154,9 +154,10 @@ class MainActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
         updateUI(currentUser)
 
         val database = FirebaseDatabase.getInstance()
-        val myRef = database.getReference("users").child(currentUser!!.uid).child("themes")
-        var theme = Theme("3r32r3", "jnajwdknwakjdn")
-        myRef.push().setValue(theme)
+       val myRef = database.getReference("users").child(currentUser!!.uid).child("themes")
+        var key = myRef.push().key!!
+        var theme = Theme(key, "jnajwdknwakjdn")
+        myRef.child(key).setValue(theme)
 
         myRef.addChildEventListener(object:ChildEventListener{
             override fun onCancelled(p0: DatabaseError) {
