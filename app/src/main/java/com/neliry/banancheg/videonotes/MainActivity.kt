@@ -29,9 +29,13 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.database.*
 import com.neliry.banancheg.videonotes.model.Theme
 import java.security.MessageDigest
+import java.util.ArrayList
 
 
 class MainActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
+
+    var themeList: MutableList<Theme> = ArrayList()
+
     override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, p1: YouTubePlayer?, p2: Boolean) {
         if (!p2) {
             p1!!.cueVideo("wKJ9KzGQq0w");
@@ -155,9 +159,9 @@ class MainActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
 
         val database = FirebaseDatabase.getInstance()
        val myRef = database.getReference("users").child(currentUser!!.uid).child("themes")
-        var key = myRef.push().key!!
-        var theme = Theme(key, "jnajwdknwakjdn")
-        myRef.child(key).setValue(theme)
+       // var key = myRef.push().key!!
+        //var theme = Theme(key, "jnajwdknwakjdn")
+       // myRef.child(key).setValue(theme)
 
         myRef.addChildEventListener(object:ChildEventListener{
             override fun onCancelled(p0: DatabaseError) {
@@ -174,7 +178,8 @@ class MainActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
 
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
                 var theme: Theme? = p0.getValue(Theme::class.java)
-               Log.d(TAG, theme.toString())
+                themeList.add(theme!!)
+               Log.d (TAG, "size "+themeList.size)
             }
 
             override fun onChildRemoved(p0: DataSnapshot) {
