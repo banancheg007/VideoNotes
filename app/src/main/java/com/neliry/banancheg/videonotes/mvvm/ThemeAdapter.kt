@@ -31,7 +31,7 @@ class ThemeAdapter(private val list: List<Theme>) : RecyclerView.Adapter<ThemeAd
 
 
         init {
-            name = itemView.findViewById(R.id.theme_name)
+            name = itemView.findViewById(R.id.theme_name_textview)
 
         }
 

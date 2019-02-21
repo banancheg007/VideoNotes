@@ -1,10 +1,13 @@
 package com.neliry.banancheg.videonotes
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.util.Base64
 import android.util.Log
 import android.view.View
@@ -19,25 +22,21 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_auth.*
 import com.facebook.login.LoginResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.database.*
 import com.neliry.banancheg.videonotes.mvvm.Theme
+import com.neliry.banancheg.videonotes.mvvm.ThemeAdapter
+import kotlinx.android.synthetic.main.activity_auth.*
 import java.security.MessageDigest
 
 
-class MainActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
-    override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, p1: YouTubePlayer?, p2: Boolean) {
-        if (!p2) {
-            p1!!.cueVideo("wKJ9KzGQq0w");
-        }
-    }
+class AuthActivity : AppCompatActivity(), View.OnClickListener {
 
-    override fun getYouTubePlayerProvider(): YouTubePlayer.Provider {
-        return youtube_view;
-    }
+
+
 
 
     private lateinit var auth: FirebaseAuth
@@ -54,7 +53,7 @@ class MainActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_auth)
         auth = FirebaseAuth.getInstance();
 
         // Configure Google Sign In
@@ -72,7 +71,7 @@ class MainActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
         button_logout.setOnClickListener(this)
        sign_in_button.setOnClickListener(this)
 
-        youtube_view.initialize(DeveloperKey.DEVELOPER_KEY, this);
+
 
         var info: PackageInfo = getPackageManager().getPackageInfo("com.neliry.banancheg.videonotes",
             PackageManager.GET_SIGNATURES);
@@ -101,6 +100,15 @@ class MainActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
                   // ...
             }
         })
+
+        val viewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java!!)
+        viewModel.getArticles().observe(this, object : Observer<List<Theme>> {
+            override fun onChanged(themes: List<Theme>?) {
+                recycler_view.setAdapter(ThemeAdapter(themes!!))
+            }
+        })
+
+
     }
     override fun onClick(v: View?) {
         when(v!!.id){
@@ -151,7 +159,7 @@ class MainActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
         updateUI(currentUser)
 
         val database = FirebaseDatabase.getInstance()
-       val myRef = database.getReference("users").child(currentUser!!.uid).child("themes")
+       val myRef = database.getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2").child("themes")
         var key = myRef.push().key!!
         var theme = Theme(key, "jnajwdknwakjdn")
         myRef.child(key).setValue(theme)

@@ -5,7 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.neliry.banancheg.videonotes.model.Theme
+import com.neliry.banancheg.videonotes.mvvm.Theme
+
 import java.lang.NullPointerException
 import java.util.ArrayList
 
