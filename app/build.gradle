@@ -21,6 +21,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -52,9 +53,10 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.facebook.android:facebook-login:4.38.1'
     implementation 'com.android.support:customtabs:28.0.0'
-    implementation 'com.firebaseui:firebase-ui-database:1.1.1'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
+    implementation "android.arch.lifecycle:extensions:$arch_version"
 }

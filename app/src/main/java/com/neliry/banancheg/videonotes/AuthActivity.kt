@@ -1,5 +1,6 @@
 package com.neliry.banancheg.videonotes
 
+import android.arch.lifecycle.*
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
@@ -22,20 +23,23 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_auth.*
 import com.facebook.login.LoginResult
+import com.google.android.gms.common.api.internal.LifecycleActivity
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.database.*
 import com.neliry.banancheg.videonotes.model.Theme
 import java.security.MessageDigest
 import java.util.ArrayList
+import android.support.v7.app.AppCompatActivity
 
 
-class AuthActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
+
+class AuthActivity : View.OnClickListener, AppCompatActivity(){
 
 
-    var firebaseAdapter: FirebaseAdapter = FirebaseAdapter()
+    //var firebaseAdapter: FirebaseAdapter = FirebaseAdapter()
 
-    override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, p1: YouTubePlayer?, p2: Boolean) {
+   /* override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, p1: YouTubePlayer?, p2: Boolean) {
         if (!p2) {
             p1!!.cueVideo("wKJ9KzGQq0w");
         }
@@ -43,13 +47,14 @@ class AuthActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
 
     override fun getYouTubePlayerProvider(): YouTubePlayer.Provider {
         return youtube_view;
-    }
+    }*/
 
 
     private lateinit var auth: FirebaseAuth
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var callbackManager: CallbackManager
     private lateinit var context: Context
+    lateinit var viewModel: ThemeViewModel
     var themeList: MutableList<Theme> = ArrayList()
     companion object {
         private const val RC_SIGN_IN = 9001
@@ -74,13 +79,21 @@ class AuthActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
 
 
     recycler_view.layoutManager = LinearLayoutManager(this)
-        recycler_view.adapter = firebaseAdapter
+        //recycler_view.adapter = firebaseAdapter
+
+         viewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java)
+        viewModel.getArticles().observe(this, object : Observer<List<Theme>> {
+            override fun onChanged(t: List<Theme>?) {
+                recycler_view.adapter = FirebaseAdapter(t!!)
+            }
+
+        })
 
         button_login.setOnClickListener(this)
         button_logout.setOnClickListener(this)
        sign_in_button.setOnClickListener(this)
 
-        youtube_view.initialize(DeveloperKey.DEVELOPER_KEY, this);
+        //youtube_view.initialize(DeveloperKey.DEVELOPER_KEY, this);
 
         var info: PackageInfo = getPackageManager().getPackageInfo("com.neliry.banancheg.videonotes",
             PackageManager.GET_SIGNATURES);
@@ -122,7 +135,7 @@ class AuthActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
         //var theme = Theme(key, "jnajwdknwakjdn")
         //myRef.child(key).setValue(theme)
 
-        myRef.addChildEventListener(object:ChildEventListener{
+        /*myRef.addChildEventListener(object:ChildEventListener{
             override fun onCancelled(p0: DatabaseError) {
                 //To change body of created functions use File | Settings | File Templates.
             }
@@ -137,10 +150,10 @@ class AuthActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
 
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
                 var theme: Theme? = p0.getValue(Theme::class.java)
-                firebaseAdapter.themeList.add(theme!!)
+                //firebaseAdapter.themeList.add(theme!!)
                 Log.d(TAG, theme.toString())
-                Log.d(TAG, theme.name)
-                Log.d(TAG, "${firebaseAdapter.themeList.size}")
+                Log.d(TAG, theme!!.name)
+                //Log.d(TAG, "${firebaseAdapter.themeList.size}")
 
             }
 
@@ -149,7 +162,7 @@ class AuthActivity : YouTubeFailureRecoveryActivity(), View.OnClickListener {
             }
 
 
-        })
+        })*/
         Log.d(TAG, "${themeList.size}")
     }
     override fun onClick(v: View?) {

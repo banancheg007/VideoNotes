@@ -9,14 +9,15 @@ import com.neliry.banancheg.videonotes.model.Theme
 import java.lang.NullPointerException
 import java.util.ArrayList
 
-class FirebaseAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class FirebaseAdapter(list: List<Theme>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
-    var themeList: MutableList<Theme> = ArrayList()
-    companion object {
-        const val TYPE_THEME = 0
-        //const val TYPE_FIRST_USER = 1
-        //const val TYPE_SECOND_USER = 2
+    var themeList: List<Theme> = ArrayList()
+
+         val TYPE_THEME = 0
+    init{
+        this.themeList = list
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
