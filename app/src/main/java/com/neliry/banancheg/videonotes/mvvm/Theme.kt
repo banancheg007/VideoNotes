@@ -1,4 +1,4 @@
-package com.neliry.banancheg.videonotes.model
+package com.neliry.banancheg.videonotes.mvvm
 
 open class Theme(
      var id:String? = null,
