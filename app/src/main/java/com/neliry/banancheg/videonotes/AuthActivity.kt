@@ -8,6 +8,8 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Base64
 import android.util.Log
 import android.view.View
@@ -29,6 +31,7 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.database.*
 import com.neliry.banancheg.videonotes.mvvm.Theme
 import com.neliry.banancheg.videonotes.mvvm.ThemeAdapter
+import com.neliry.banancheg.videonotes.mvvm.ThemeViewModel
 import kotlinx.android.synthetic.main.activity_auth.*
 import java.security.MessageDigest
 
@@ -81,7 +84,7 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
             Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
 
         }
-
+        recycler_view.layoutManager = LinearLayoutManager(this)
 
         login_button_facebook.setReadPermissions("email", "public_profile")
         login_button_facebook.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
@@ -102,9 +105,14 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
         })
 
         val viewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java!!)
-        viewModel.getArticles().observe(this, object : Observer<List<Theme>> {
+        viewModel.getThemes().observe(this, object : Observer<List<Theme>> {
             override fun onChanged(themes: List<Theme>?) {
-                recycler_view.setAdapter(ThemeAdapter(themes!!))
+                Log.d(TAG, "ON CHANGED")
+                for (all in themes!!){
+                    Log.d(TAG, " " + all.name)
+                }
+                recycler_view.adapter = (ThemeAdapter(themes!!))
+
             }
         })
 
@@ -164,7 +172,7 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
         var theme = Theme(key, "jnajwdknwakjdn")
         myRef.child(key).setValue(theme)
 
-        myRef.addChildEventListener(object:ChildEventListener{
+        /*myRef.addChildEventListener(object:ChildEventListener{
             override fun onCancelled(p0: DatabaseError) {
                  //To change body of created functions use File | Settings | File Templates.
             }
@@ -187,7 +195,7 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
             }
 
 
-        })
+        })*/
 
     }
 

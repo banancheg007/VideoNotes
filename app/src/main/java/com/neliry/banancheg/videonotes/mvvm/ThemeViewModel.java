@@ -16,7 +16,7 @@ private ThemeRepository repository = new ThemeRepository();
 public LiveData<List<Theme>> getThemes() {
     if (themes == null) {
         themes = new MutableLiveData<>();
-        loadArticles();
+        loadThemes();
     }
     return themes;
 }
@@ -26,7 +26,7 @@ protected void onCleared() {
     repository.removeListener();
 }
 
-private void loadArticles() {
+private void loadThemes() {
     repository.addListener(new FirebaseDatabaseRepository.FirebaseDatabaseRepositoryCallback<Theme>() {
         @Override
         public void onSuccess(List<Theme> result) {
