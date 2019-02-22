@@ -13,7 +13,7 @@ class ThemeViewModel : ViewModel() {
 
     fun getThemes(): LiveData<List<Theme>> {
         if (themes == null) {
-            themes = MutableLiveData<List<Theme>>()
+            themes = MutableLiveData()
             loadThemes()
         }
         return themes!!

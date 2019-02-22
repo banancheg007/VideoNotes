@@ -108,7 +108,7 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
         viewModel.getThemes().observe(this, object : Observer<List<Theme>> {
             override fun onChanged(themes: List<Theme>?) {
                 Log.d(TAG, "ON CHANGED")
-                for (all in themes!!){
+               for (all in themes!!){
                     Log.d(TAG, " " + all.name)
                 }
                 recycler_view.adapter = (ThemeAdapter(themes!!))
