@@ -168,9 +168,9 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
 
         val database = FirebaseDatabase.getInstance()
        val myRef = database.getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2").child("themes")
-        var key = myRef.push().key!!
+        /*var key = myRef.push().key!!
         var theme = Theme(key, "jnajwdknwakjdn")
-        myRef.child(key).setValue(theme)
+        myRef.child(key).setValue(theme)*/
 
         /*myRef.addChildEventListener(object:ChildEventListener{
             override fun onCancelled(p0: DatabaseError) {
