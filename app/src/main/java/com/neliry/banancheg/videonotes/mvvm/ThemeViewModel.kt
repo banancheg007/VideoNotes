@@ -36,7 +36,7 @@ class ThemeViewModel : ViewModel() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 list.clear()
                 for (child in dataSnapshot.getChildren()) {
-                    val data = child.getValue(Theme::class.java);
+                    val data = child.getValue(repository.getEntityClass());
                     list.add(data!!)
                 }
                 themes!!.value = list
