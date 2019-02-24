@@ -2,14 +2,12 @@ package com.neliry.banancheg.videonotes
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Base64
 import android.util.Log
 import android.view.View
@@ -26,13 +24,11 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_auth.*
 import com.facebook.login.LoginResult
-import com.google.android.youtube.player.YouTubePlayer
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.database.*
-import com.neliry.banancheg.videonotes.mvvm.Theme
-import com.neliry.banancheg.videonotes.mvvm.ThemeAdapter
-import com.neliry.banancheg.videonotes.mvvm.ThemeViewModel
-import kotlinx.android.synthetic.main.activity_auth.*
+import com.neliry.banancheg.videonotes.models.Theme
+import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
+import com.neliry.banancheg.videonotes.viewmodels.ThemesViewModel
 import java.security.MessageDigest
 
 
@@ -45,7 +41,6 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var auth: FirebaseAuth
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var callbackManager: CallbackManager
-    private lateinit var context: Context
 
     companion object {
         private const val RC_SIGN_IN = 9001
@@ -104,14 +99,14 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
             }
         })
 
-        val viewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java!!)
-        viewModel.getThemes().observe(this, object : Observer<List<Theme>> {
+        val viewModel = ViewModelProviders.of(this).get(ThemesViewModel::class.java!!)
+        viewModel.getItems().observe(this, object : Observer<List<Theme>> {
             override fun onChanged(themes: List<Theme>?) {
                 Log.d(TAG, "ON CHANGED")
                for (all in themes!!){
                     Log.d(TAG, " " + all.name)
                 }
-                recycler_view.adapter = (ThemeAdapter(themes!!))
+                recycler_view.adapter = (FirebaseAdapter(themes!!))
 
             }
         })

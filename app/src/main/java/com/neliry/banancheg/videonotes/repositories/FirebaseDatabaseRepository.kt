@@ -1,7 +1,6 @@
-package com.neliry.banancheg.videonotes.mvvm.repository
+package com.neliry.banancheg.videonotes.repositories
 
 import com.google.firebase.database.*
-import com.neliry.banancheg.videonotes.mvvm.Theme
 import java.lang.Exception
 import java.lang.reflect.ParameterizedType
 
@@ -40,11 +39,11 @@ abstract class FirebaseDatabaseRepository<Model> {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 list.clear()
-                for (child in dataSnapshot.getChildren()) {
+                for (child in dataSnapshot.children) {
                     val data = child.getValue(getEntityClass());
                     list.add(data!!)
-                    firebaseCallback.onSuccess(list)
                 }
+                firebaseCallback.onSuccess(list)
             }
 
         }

@@ -1,19 +1,15 @@
-package com.neliry.banancheg.videonotes.mvvm
+package com.neliry.banancheg.videonotes.viewmodels
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.neliry.banancheg.videonotes.mvvm.repository.FirebaseDatabaseRepository
-import com.neliry.banancheg.videonotes.mvvm.repository.ThemeRepository
+import com.neliry.banancheg.videonotes.models.Theme
+import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
+import com.neliry.banancheg.videonotes.repositories.ThemeRepository
 import java.lang.Exception
 
 class ThemeViewModel : ViewModel() {
-    
+
     private var themes: MutableLiveData<List<Theme>>? = null
     private val repository = ThemeRepository()
 

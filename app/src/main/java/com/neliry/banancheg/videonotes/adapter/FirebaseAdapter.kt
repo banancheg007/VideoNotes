@@ -1,17 +1,16 @@
-package com.neliry.banancheg.videonotes.mvvm
+package com.neliry.banancheg.videonotes.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
+import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.R
 
-class ThemeAdapter(private val list: List<Theme>) : RecyclerView.Adapter<ThemeAdapter.ArticleViewHolder>() {
+class FirebaseAdapter(private val list: List<Theme>) : RecyclerView.Adapter<FirebaseAdapter.ArticleViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ArticleViewHolder {
-        val view = LayoutInflater.from(parent!!.getContext()).inflate(R.layout.theme_item, parent, false)
+        val view = LayoutInflater.from(parent!!.context).inflate(R.layout.theme_item, parent, false)
         return ArticleViewHolder(view)
     }
 
