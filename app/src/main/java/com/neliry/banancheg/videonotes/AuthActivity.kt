@@ -67,7 +67,7 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
 
         button_login.setOnClickListener(this)
         button_logout.setOnClickListener(this)
-       sign_in_button.setOnClickListener(this)
+       sign_in_google_button.setOnClickListener(this)
 
 
 
@@ -79,10 +79,10 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
             Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
 
         }
-        recycler_view.layoutManager = LinearLayoutManager(this)
+        //recycler_view.layoutManager = LinearLayoutManager(this)
 
-        login_button_facebook.setReadPermissions("email", "public_profile")
-        login_button_facebook.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+        sign_in_facebook_button.setReadPermissions("email", "public_profile")
+        sign_in_facebook_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
                 Log.d(TAG, "facebook:onSuccess:$loginResult")
                 handleFacebookAccessToken(loginResult.accessToken)
@@ -106,7 +106,7 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
                for (all in themes!!){
                     Log.d(TAG, " " + all.name)
                 }
-                recycler_view.adapter = (FirebaseAdapter(themes!!))
+               // recycler_view.adapter = (FirebaseAdapter(themes!!))
 
             }
         })
@@ -145,7 +145,7 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
                 Log.d(TAG, "logout")
             }
 
-            R.id.sign_in_button ->{
+            R.id.sign_in_google_button ->{
                 val signInIntent = mGoogleSignInClient.getSignInIntent()
                 startActivityForResult(signInIntent, RC_SIGN_IN)
              }

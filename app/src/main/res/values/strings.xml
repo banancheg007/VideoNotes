@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">VideoNotes</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
     <string name="facebook_app_id">385978722180561</string>
+    <string name="your_email">Your email</string>
+    <string name="your_password">Your password</string>
+    <string name="or">or</string>
+    <string name="LOGIN">LOGIN</string>
+    <string name="SIGN_UP">SIGN UP</string>
     <string name="fb_login_protocol_scheme">fb385978722180561</string>
     <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
 </resources>
