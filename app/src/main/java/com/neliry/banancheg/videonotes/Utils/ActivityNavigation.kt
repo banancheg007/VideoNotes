@@ -1,4 +1,4 @@
-package com.neliry.banancheg.videonotes
+package com.neliry.banancheg.videonotes.Utils
 
 import android.content.Intent
 

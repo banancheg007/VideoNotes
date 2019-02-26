@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.neliry.banancheg.videonotes
+package com.neliry.banancheg.videonotes.Utils
 
 import android.content.Intent
 import android.widget.Toast
 import com.google.android.youtube.player.YouTubeBaseActivity
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
+import com.neliry.banancheg.videonotes.R
 
 /**
  * An abstract activity which deals with recovering from errors which may occur during API
@@ -35,7 +36,9 @@ abstract class YouTubeFailureRecoveryActivity : YouTubeBaseActivity(), YouTubePl
         errorReason: YouTubeInitializationResult
     ) {
         if (errorReason.isUserRecoverableError) {
-            errorReason.getErrorDialog(this, RECOVERY_DIALOG_REQUEST).show()
+            errorReason.getErrorDialog(this,
+                RECOVERY_DIALOG_REQUEST
+            ).show()
         } else {
             val errorMessage = String.format(getString(R.string.error_player), errorReason.toString())
             Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
