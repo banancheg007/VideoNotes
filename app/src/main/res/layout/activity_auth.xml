@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="8dp"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.496"
-            android:id="@+id/sign_in_google_button"/>
+            android:id="@+id/sign_in_google_button2"/>
     <com.facebook.login.widget.LoginButton
             android:layout_width="250dp"
             android:layout_height="50dp"
@@ -37,7 +37,7 @@
             android:background="@color/blue"
             android:textColor="@color/white"
             android:textStyle="normal|italic"
-            android:id="@+id/sign_in_facebook_button" android:layout_marginEnd="8dp"
+            android:id="@+id/sign_in_facebook_button2" android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.496" android:layout_marginTop="20dp"
@@ -67,7 +67,7 @@
             android:layout_height="50dp"
             android:text="@string/LOGIN"
             android:textStyle="normal|italic"
-            android:id="@+id/button_login" app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/button_login2" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintHorizontal_bias="0.494" android:layout_marginTop="28dp"
@@ -88,7 +88,7 @@
             android:layout_height="50dp"
             android:text="@string/SIGN_UP"
             android:textStyle="normal|italic"
-            android:id="@+id/sign_up_button"
+            android:id="@+id/sign_up_button2"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             app:layout_constraintHorizontal_bias="0.494"

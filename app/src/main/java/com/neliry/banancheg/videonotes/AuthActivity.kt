@@ -63,9 +63,9 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
 
 
 
-        button_login.setOnClickListener(this)
-        button_logout.setOnClickListener(this)
-       sign_in_google_button.setOnClickListener(this)
+        //button_login.setOnClickListener(this)
+        //button_logout.setOnClickListener(this)
+       //sign_in_google_button.setOnClickListener(this)
 
 
 
@@ -79,8 +79,8 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
         }
         //recycler_view.layoutManager = LinearLayoutManager(this)
 
-        sign_in_facebook_button.setReadPermissions("email", "public_profile")
-        sign_in_facebook_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+        //sign_in_facebook_button.setReadPermissions("email", "public_profile")
+        /*sign_in_facebook_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
                 Log.d(TAG, "facebook:onSuccess:$loginResult")
                 handleFacebookAccessToken(loginResult.accessToken)
@@ -95,7 +95,7 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
                 Log.d(TAG, "facebook:onError", error)
                   // ...
             }
-        })
+        })*/
 
         val viewModel = ViewModelProviders.of(this).get(ThemesViewModel::class.java!!)
         viewModel.getItems().observe(this, object : Observer<List<Theme>> {
