@@ -1,10 +1,9 @@
 package com.neliry.banancheg.videonotes.viewmodels
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.ViewModel
 import android.util.Log
 import android.view.View
+import androidx.lifecycle.AndroidViewModel
 import com.facebook.CallbackManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient

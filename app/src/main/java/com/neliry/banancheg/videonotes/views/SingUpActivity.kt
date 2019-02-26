@@ -1,7 +1,8 @@
 package com.neliry.banancheg.videonotes.views
 
-import android.support.v7.app.AppCompatActivity
+
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.neliry.banancheg.videonotes.R
 
 class SingUpActivity : AppCompatActivity() {
