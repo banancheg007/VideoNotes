@@ -4,7 +4,11 @@
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="facebook_app_id">385978722180561</string>
     <string name="your_email">Your email</string>
+    <string name="email">Email</string>
     <string name="your_password">Your password</string>
+    <string name="password">Password</string>
+    <string name="retype_your_password">Retype your password</string>
+    <string name="username">Username</string>
     <string name="or">or</string>
     <string name="LOGIN">LOGIN</string>
     <string name="SIGN_UP">SIGN UP</string>

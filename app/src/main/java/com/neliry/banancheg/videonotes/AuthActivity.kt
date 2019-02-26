@@ -7,7 +7,6 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import android.util.Log
 import android.view.View
@@ -27,7 +26,6 @@ import com.facebook.login.LoginResult
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.database.*
 import com.neliry.banancheg.videonotes.models.Theme
-import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
 import com.neliry.banancheg.videonotes.viewmodels.ThemesViewModel
 import java.security.MessageDigest
 
@@ -116,8 +114,8 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v!!.id){
             R.id.button_login-> {
-                if(!editText_email.text.toString().isEmpty() && !editText_password.text.toString().isEmpty()){
-                    auth.signInWithEmailAndPassword(editText_email.text.toString(), editText_password.text.toString())
+                if(!editText_your_email.text.toString().isEmpty() && !editText_your_password.text.toString().isEmpty()){
+                    auth.signInWithEmailAndPassword(editText_your_email.text.toString(), editText_your_password.text.toString())
                         .addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
                                 // Sign in success, update UI with the signed-in user's information

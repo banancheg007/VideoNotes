@@ -9,17 +9,20 @@ import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.R
 
 class FirebaseAdapter(private val list: List<Theme>) : RecyclerView.Adapter<FirebaseAdapter.ArticleViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ArticleViewHolder {
-        val view = LayoutInflater.from(parent!!.context).inflate(R.layout.theme_item, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.theme_item, parent, false)
         return ArticleViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return list.size
+    override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
+        holder?.let{
+            it.bind(list[position])}
     }
 
-    override fun onBindViewHolder(holder: ArticleViewHolder?, position: Int) {
-        holder!!.bind(list[position])
+
+
+    override fun getItemCount(): Int {
+        return list.size
     }
 
 
