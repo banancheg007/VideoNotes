@@ -19,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -40,9 +41,6 @@ class LoginViewModel(application: Application): AndroidViewModel(application), O
     private  var auth: FirebaseAuth = FirebaseAuth.getInstance();
     val startActivityForResultEvent = LiveMessageEvent<ActivityNavigation>()
     lateinit var googleSignInClient: GoogleSignInClient
-    private val _uiState = MutableLiveData<LoginUiModel>()
-    val uiState: LiveData<LoginUiModel>
-        get() = _uiState
 
     override fun onButtonClicked(view: View) {
         when(view.id){
@@ -90,7 +88,16 @@ class LoginViewModel(application: Application): AndroidViewModel(application), O
         Log.d(TAG, "handleFacebookAccessToken:$token")
 
         val credential = FacebookAuthProvider.getCredential(token.token)
-        auth.signInWithCredential(credential)
+        auth.signInWithCredential(credential).addOnCompleteListener{if (it.isSuccessful) {
+            // Sign in success, update UI with the signed-in user's information
+            Log.d(TAG, "signInWithFacebookCredential:success")
+            val user = auth.currentUser
+        } else {
+            // If sign in fails, display a message to the user.
+            Log.w(TAG, "signInWithCredential:failure", it.exception)
+
+        }
+        }
 
 
     }
@@ -103,11 +110,6 @@ class LoginViewModel(application: Application): AndroidViewModel(application), O
                 googleSignInComplete(task)
 
             }
-            else ->{
-                emitUiState(
-                    showError = Event(R.string.login_failed)
-                )
-            }
         }
     }
 
@@ -116,32 +118,36 @@ class LoginViewModel(application: Application): AndroidViewModel(application), O
             val account = completedTask.getResult(ApiException::class.java)
             account?.apply {
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-                auth.signInWithCredential(credential)
-                emitUiState(
-                    showSuccess = Event(R.string.login_successful)
-                )
+                auth.signInWithCredential(credential).addOnCompleteListener{if (it.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithGoogleCredential:success")
+                    val user = auth.currentUser
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithGoogleCredential:failure", it.exception)
+
+                }
+                }
             }
         }catch (e: ApiException) {
-            emitUiState(
-                showError = Event(R.string.login_failed)
-            )
+
         }
     }
 
-    private fun emitUiState(
-        showSuccess: Event<Int>? = null,
-        showError: Event<Int>? = null
-    ) {
-        val uiModel = LoginUiModel(showSuccess,showError)
-        _uiState.value = uiModel
+
+    fun emailPasswordSignIn(email:String, password:String){
+        auth.signInWithEmailAndPassword(email,password)
+            .addOnCompleteListener{if (it.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithEmail:success")
+
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithEmail:failure", it.exception)
+                }
+            }
     }
-
-
 
     val TAG: String = "myTag"
 }
 
-data class LoginUiModel(
-    val showSuccess : Event<Int>?,
-    val showError : Event<Int>?
-)
