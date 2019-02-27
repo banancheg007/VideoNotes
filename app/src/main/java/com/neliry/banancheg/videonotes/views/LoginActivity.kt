@@ -46,7 +46,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
 
     private lateinit var auth: FirebaseAuth
     private lateinit var mGoogleSignInClient: GoogleSignInClient
-    private lateinit var callbackManager: CallbackManager
+    //private lateinit var callbackManager: CallbackManager
 
     companion object {
         private const val RC_SIGN_IN = 9001
@@ -117,11 +117,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
             .requestEmail()
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        callbackManager = CallbackManager.Factory.create()
+        //callbackManager = CallbackManager.Factory.create()
         loginViewModel!!.addGoogleSignInClient(mGoogleSignInClient)
 
-        sign_in_facebook_button.setReadPermissions("email", "public_profile")
-        sign_in_facebook_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+        //sign_in_facebook_button.setReadPermissions("email", "public_profile")
+        /*sign_in_facebook_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
                 Log.d(TAG, "facebook:onSuccess:$loginResult")
                 handleFacebookAccessToken(loginResult.accessToken)
@@ -136,7 +136,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
                 Log.d(TAG, "facebook:onError", error)
                 // ...
             }
-        })
+        })*/
 
         subscribeUi()
     }
@@ -201,7 +201,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
 
     }
 
-   /* public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+  /*  public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         callbackManager.onActivityResult(requestCode, resultCode, data)
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
@@ -218,7 +218,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
             }
 
         }
-    }
+    }*/
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.id!!)
@@ -239,7 +239,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
 
                 // ...
             }
-    }*/
+    }
 
     private fun updateUI(user: FirebaseUser?) {
 
