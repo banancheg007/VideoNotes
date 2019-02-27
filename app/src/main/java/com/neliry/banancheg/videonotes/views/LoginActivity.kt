@@ -3,10 +3,15 @@ package com.neliry.banancheg.videonotes.views
 
 import android.content.Intent
 import android.os.Bundle
+import android.transition.TransitionManager
+import androidx.appcompat.app.AppCompatActivity
+
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.StringRes
+import androidx.lifecycle.Observer
+
 import androidx.lifecycle.ViewModelProviders
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
@@ -25,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.neliry.banancheg.videonotes.R
+import com.neliry.banancheg.videonotes.Utils.ActivityNavigation
 import com.neliry.banancheg.videonotes.viewmodels.LoginViewModel
 
 import com.neliry.banancheg.videonotes.viewmodels.OnButtonClickListener
@@ -33,7 +39,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 
 
-class LoginActivity : AppCompatActivity(), View.OnClickListener {
+class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigation {
 
     lateinit var callback: OnButtonClickListener
     private var loginViewModel: LoginViewModel? = null
@@ -87,8 +93,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             }*/
 
             R.id.sign_in_google_button ->{
-                val signInIntent = mGoogleSignInClient.getSignInIntent()
-                startActivityForResult(signInIntent, RC_SIGN_IN)
+               // val signInIntent = mGoogleSignInClient.getSignInIntent()
+                //startActivityForResult(signInIntent, RC_SIGN_IN)
             }
             // R.id.button_register ->
         }
@@ -112,7 +118,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         callbackManager = CallbackManager.Factory.create()
-
+        loginViewModel!!.addGoogleSignInClient(mGoogleSignInClient)
 
         sign_in_facebook_button.setReadPermissions("email", "public_profile")
         sign_in_facebook_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
@@ -131,7 +137,45 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 // ...
             }
         })
+
+        subscribeUi()
     }
+
+    private fun subscribeUi() {
+        loginViewModel!!.startActivityForResultEvent.setEventReceiver(this, this)
+
+        loginViewModel!!.uiState.observe( this, Observer {
+            val uiModel = it
+
+            if (uiModel.showError != null && !uiModel.showError.consumed) {
+                uiModel.showError.consume()?.let { showLoginFailed(it) }
+            }
+
+            if (uiModel.showSuccess != null && !uiModel.showSuccess.consumed) {
+                uiModel.showSuccess.consume()?.let { showLoginSuccess(it) }
+            }
+        }
+        )
+    }
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        loginViewModel!!.onResultFromActivity(requestCode,resultCode,data)
+
+    }
+
+    private fun showLoginSuccess(@StringRes successString : Int){
+        Toast.makeText(this.applicationContext,successString,Toast.LENGTH_SHORT).show()
+        //startActivity<HomeActivity>()
+        //finish()
+    }
+
+    private fun showLoginFailed(@StringRes errorString : Int) {
+        //Snackbar.make(binding.container, errorString, Snackbar.LENGTH_SHORT).show()
+        //beginDelayedTransition()
+    }
+
+
+
     private fun handleFacebookAccessToken(token: AccessToken) {
         Log.d(TAG, "handleFacebookAccessToken:$token")
 
@@ -157,7 +201,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+   /* public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         callbackManager.onActivityResult(requestCode, resultCode, data)
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
@@ -195,7 +239,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
                 // ...
             }
-    }
+    }*/
 
     private fun updateUI(user: FirebaseUser?) {
 
