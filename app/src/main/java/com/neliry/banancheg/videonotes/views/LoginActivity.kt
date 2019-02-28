@@ -68,6 +68,10 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
                     loginViewModel!!.emailPasswordSignIn(editText_your_email.text.toString(),editText_your_password.text.toString())
                 }
             }
+            R.id.sign_up_button->{
+                val intent = Intent(this@LoginActivity, SingUpActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 
@@ -110,6 +114,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
             override fun onChanged(currentUser:FirebaseUser?) {
                 if (currentUser!= null){
                     Log.d(TAG, " current user: " + currentUser.email)
+                    val intent = Intent(this@LoginActivity, ThemeConspectusActivity::class.java)
+                    startActivity(intent)
                 }
             }
         })
