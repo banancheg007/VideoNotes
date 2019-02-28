@@ -10,6 +10,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
 import androidx.lifecycle.ViewModelProviders
@@ -31,6 +33,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.Utils.ActivityNavigation
+import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.viewmodels.LoginViewModel
 
 import com.neliry.banancheg.videonotes.viewmodels.OnButtonClickListener
@@ -43,8 +46,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
 
     lateinit var callback: OnButtonClickListener
     private var loginViewModel: LoginViewModel? = null
-    private lateinit var auth: FirebaseAuth
+    //private lateinit var auth: FirebaseAuth
     private lateinit var mGoogleSignInClient: GoogleSignInClient
+
 
     companion object {
         private const val RC_SIGN_IN = 9001
@@ -77,7 +81,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
         button_login.setOnClickListener(this)
         sign_up_button.setOnClickListener(this)
 
-        auth = FirebaseAuth.getInstance();
+        //auth = FirebaseAuth.getInstance();
         // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("225628396953-2vpgba6lr7obg85vp0l331ma6mkoshh1.apps.googleusercontent.com")
@@ -98,5 +102,16 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
         super.onActivityResult(requestCode, resultCode, data)
         loginViewModel!!.onResultFromActivity(requestCode,resultCode,data)
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+       loginViewModel!!.getCurrentUser().observe(this, object : Observer<FirebaseUser> {
+            override fun onChanged(currentUser:FirebaseUser?) {
+                if (currentUser!= null){
+                    Log.d(TAG, " current user: " + currentUser.email)
+                }
+            }
+        })
     }
 }

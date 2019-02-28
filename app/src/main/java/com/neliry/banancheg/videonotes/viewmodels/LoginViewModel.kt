@@ -4,10 +4,12 @@ import android.app.Application
 import android.content.Intent
 import android.util.Log
 import android.view.View
+import android.widget.TableRow
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -21,9 +23,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.*
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.Utils.ActivityNavigation
 import com.neliry.banancheg.videonotes.Utils.Event
@@ -34,13 +34,19 @@ import kotlinx.android.synthetic.main.activity_login.view.*
 
 const val GOOGLE_SIGN_IN : Int = 9001
 
-class LoginViewModel(application: Application): AndroidViewModel(application), OnButtonClickListener{
+class LoginViewModel(): ViewModel(), OnButtonClickListener{
 
     lateinit var facebookButton: LoginButton
     private var callbackManager: CallbackManager = CallbackManager.Factory.create()
     private  var auth: FirebaseAuth = FirebaseAuth.getInstance();
     val startActivityForResultEvent = LiveMessageEvent<ActivityNavigation>()
     lateinit var googleSignInClient: GoogleSignInClient
+    private var currentUser: MutableLiveData<FirebaseUser> = MutableLiveData()
+
+    fun getCurrentUser(): LiveData<FirebaseUser> {
+        currentUser.value = auth.currentUser
+        return currentUser!!
+    }
 
     override fun onButtonClicked(view: View) {
         when(view.id){
@@ -88,16 +94,7 @@ class LoginViewModel(application: Application): AndroidViewModel(application), O
         Log.d(TAG, "handleFacebookAccessToken:$token")
 
         val credential = FacebookAuthProvider.getCredential(token.token)
-        auth.signInWithCredential(credential).addOnCompleteListener{if (it.isSuccessful) {
-            // Sign in success, update UI with the signed-in user's information
-            Log.d(TAG, "signInWithFacebookCredential:success")
-            val user = auth.currentUser
-        } else {
-            // If sign in fails, display a message to the user.
-            Log.w(TAG, "signInWithCredential:failure", it.exception)
-
-        }
-        }
+        signIn(authCredential = credential)
 
 
     }
@@ -118,16 +115,7 @@ class LoginViewModel(application: Application): AndroidViewModel(application), O
             val account = completedTask.getResult(ApiException::class.java)
             account?.apply {
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-                auth.signInWithCredential(credential).addOnCompleteListener{if (it.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithGoogleCredential:success")
-                    val user = auth.currentUser
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithGoogleCredential:failure", it.exception)
-
-                }
-                }
+                signIn(authCredential = credential)
             }
         }catch (e: ApiException) {
 
@@ -136,16 +124,35 @@ class LoginViewModel(application: Application): AndroidViewModel(application), O
 
 
     fun emailPasswordSignIn(email:String, password:String){
-        auth.signInWithEmailAndPassword(email,password)
-            .addOnCompleteListener{if (it.isSuccessful) {
+        signIn(email, password)
+    }
+
+    fun signIn(email: String?=null, password: String?=null,authCredential: AuthCredential? = null){
+        if(email != null && password != null){
+            auth.signInWithEmailAndPassword(email,password)
+                .addOnCompleteListener{if (it.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success")
-
+                    currentUser.value=auth.currentUser
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", it.exception)
                 }
+                }
+        }else{
+            auth.signInWithCredential(authCredential!!).addOnCompleteListener{if (it.isSuccessful) {
+                // Sign in success, update UI with the signed-in user's information
+                currentUser.value= auth.currentUser
+                Log.d(TAG, "signInWithGoogleCredential:success")
+                val user = auth.currentUser
+            } else {
+                // If sign in fails, display a message to the user.
+                Log.w(TAG, "signInWithGoogleCredential:failure", it.exception)
+
             }
+            }
+        }
+
     }
 
     val TAG: String = "myTag"
