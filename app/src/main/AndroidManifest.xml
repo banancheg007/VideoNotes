@@ -13,7 +13,8 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".views.ThemeConspectusActivity">
+        <activity android:name=".views.ThemeConspectusActivity"
+                  android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".views.SingUpActivity">
         </activity>
@@ -44,8 +45,6 @@
 
                 <data android:scheme="@string/fb_login_protocol_scheme"/>
             </intent-filter>
-        </activity>
-        <activity android:name=".AuthActivity">
         </activity>
     </application>
 

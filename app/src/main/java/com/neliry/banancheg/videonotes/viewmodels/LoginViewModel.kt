@@ -1,12 +1,8 @@
 package com.neliry.banancheg.videonotes.viewmodels
 
-import android.app.Application
 import android.content.Intent
 import android.util.Log
 import android.view.View
-import android.widget.TableRow
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,17 +15,12 @@ import com.facebook.login.widget.LoginButton
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.Utils.ActivityNavigation
-import com.neliry.banancheg.videonotes.Utils.Event
 import com.neliry.banancheg.videonotes.Utils.LiveMessageEvent
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_login.view.*
 
 
 const val GOOGLE_SIGN_IN : Int = 9001
