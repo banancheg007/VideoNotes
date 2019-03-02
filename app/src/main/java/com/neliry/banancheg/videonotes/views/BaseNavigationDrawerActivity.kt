@@ -10,9 +10,14 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import com.neliry.banancheg.videonotes.R
 import kotlinx.android.synthetic.main.activity_base_navigation_drawer.*
 import kotlinx.android.synthetic.main.app_bar_base_navigation_drawer.*
+import android.content.Intent
+import android.R
+import android.widget.Toast
+import android.app.Activity
+import android.net.Uri
+
 
 abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -22,7 +27,7 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
     }
 
     private fun addElements(){
-        setContentView(R.layout.activity_base_navigation_drawer)
+        setContentView(com.neliry.banancheg.videonotes.R.layout.activity_base_navigation_drawer)
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
@@ -31,7 +36,7 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
         }
 
         val toggle = ActionBarDrawerToggle(
-            this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+            this, drawer_layout, toolbar, com.neliry.banancheg.videonotes.R.string.navigation_drawer_open, com.neliry.banancheg.videonotes.R.string.navigation_drawer_close
         )
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
@@ -59,7 +64,7 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.base_navigation_drawer, menu)
+        menuInflater.inflate(com.neliry.banancheg.videonotes.R.menu.base_navigation_drawer, menu)
         return true
     }
 
@@ -68,7 +73,7 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
-            R.id.action_settings -> return true
+            com.neliry.banancheg.videonotes.R.id.action_settings -> return true
             else -> return super.onOptionsItemSelected(item)
         }
     }
@@ -76,27 +81,44 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_camera -> {
+            com.neliry.banancheg.videonotes.R.id.nav_all_pages -> {
                 // Handle the camera action
             }
-            R.id.nav_gallery -> {
+            com.neliry.banancheg.videonotes.R.id.nav_conspectuses -> {
 
             }
-            R.id.nav_slideshow -> {
+            com.neliry.banancheg.videonotes.R.id.nav_account -> {
 
             }
-            R.id.nav_manage -> {
-
+            com.neliry.banancheg.videonotes.R.id.nav_share -> {
+                val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
+                sharingIntent.type = "text/plain"
+                val shareBody = "I use VideoNotes app. Download this app from google play market"
+                val shareSub = "VideoNotes"
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub)
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody)
+                startActivity(Intent.createChooser(sharingIntent, "Share using"))
             }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
+            com.neliry.banancheg.videonotes.R.id.nav_send -> {
+                sendEmail()
             }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun sendEmail() {
+
+        val emailIntent = Intent(Intent.ACTION_SENDTO)
+        emailIntent.data = Uri.parse("mailto:" + "littletester007@gmail.com")
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "VideoNotes")
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send email using..."))
+        } catch (ex: android.content.ActivityNotFoundException) {
+            Toast.makeText(this@BaseNavigationDrawerActivity, "No email clients installed.", Toast.LENGTH_SHORT).show()
+        }
+
     }
 }
