@@ -3,37 +3,19 @@ package com.neliry.banancheg.videonotes.views
 
 import android.content.Intent
 import android.os.Bundle
-import android.transition.TransitionManager
 import androidx.appcompat.app.AppCompatActivity
 
 import android.util.Log
 import android.view.View
-import android.widget.Toast
-import androidx.annotation.StringRes
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
 import androidx.lifecycle.ViewModelProviders
-import com.facebook.AccessToken
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
-import com.facebook.login.LoginManager
-import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.android.youtube.player.internal.v
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.Utils.ActivityNavigation
-import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.viewmodels.LoginViewModel
 
 import com.neliry.banancheg.videonotes.viewmodels.OnButtonClickListener
@@ -69,7 +51,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
                 }
             }
             R.id.sign_up_button->{
-                val intent = Intent(this@LoginActivity, SingUpActivity::class.java)
+                val intent = Intent(this@LoginActivity, SignUpActivity::class.java)
                 startActivity(intent)
             }
         }
