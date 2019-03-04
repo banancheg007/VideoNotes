@@ -82,7 +82,7 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
         // Handle navigation view item clicks here.
         when (item.itemId) {
             com.neliry.banancheg.videonotes.R.id.nav_all_pages -> {
-                // Handle the camera action
+                // viewModel.method()
             }
             com.neliry.banancheg.videonotes.R.id.nav_conspectuses -> {
 

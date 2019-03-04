@@ -5,12 +5,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.facebook.login.LoginManager
 import com.google.firebase.auth.FirebaseAuth
 import com.neliry.banancheg.videonotes.R
+import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
+import com.neliry.banancheg.videonotes.models.Theme
+import com.neliry.banancheg.videonotes.viewmodels.ThemeConspectusViewModel
 import kotlinx.android.synthetic.main.activity_theme_conspectus.*
 
 class ThemeConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickListener{
+
+    lateinit var themeConspectusViewModel:ThemeConspectusViewModel
+
     override fun getMainContentLayout(): Int {
         return R.layout.activity_theme_conspectus
     }
@@ -46,6 +55,20 @@ class ThemeConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickLis
             val uid = user.uid
             Log.d("myTag","user + name:$name + email:$email + photoUrl:$photoUrl + emailVerified: $emailVerified + uid: $uid")
         }
+        recycler_view.layoutManager = LinearLayoutManager(this)
+
+        themeConspectusViewModel = ViewModelProviders.of(this).get(ThemeConspectusViewModel::class.java!!)
+       themeConspectusViewModel.getThemes().observe(this, object : Observer<List<Theme>> {
+            override fun onChanged(themes: List<Theme>?) {
+                Log.d("myTag", "ON CHANGED")
+                for (all in themes!!){
+                    Log.d("myTag", " " + all.name)
+                }
+                recycler_view.adapter = (FirebaseAdapter(themes!!))
+
+            }
+        })
+
     }
 
 }
