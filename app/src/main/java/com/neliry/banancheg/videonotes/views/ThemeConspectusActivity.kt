@@ -1,24 +1,26 @@
 package com.neliry.banancheg.videonotes.views
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.facebook.login.LoginManager
 import com.google.firebase.auth.FirebaseAuth
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
+import com.neliry.banancheg.videonotes.adapter.ItemDecorator
+import com.neliry.banancheg.videonotes.models.Conspectus
 import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.viewmodels.ThemeConspectusViewModel
 import kotlinx.android.synthetic.main.activity_theme_conspectus.*
 
 class ThemeConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickListener{
 
-    lateinit var themeConspectusViewModel:ThemeConspectusViewModel
+    private lateinit var themeConspectusViewModel:ThemeConspectusViewModel
 
     override fun getMainContentLayout(): Int {
         return R.layout.activity_theme_conspectus
@@ -55,7 +57,14 @@ class ThemeConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickLis
             val uid = user.uid
             Log.d("myTag","user + name:$name + email:$email + photoUrl:$photoUrl + emailVerified: $emailVerified + uid: $uid")
         }
-        recycler_view.layoutManager = LinearLayoutManager(this)
+        val numberOfColumns =  2
+        val layoutManager =  GridLayoutManager (this, numberOfColumns)
+        recycler_view_themes.layoutManager = layoutManager
+        recycler_view_themes.addItemDecoration(ItemDecorator(20))
+
+        val layoutManager2=  LinearLayoutManager(this)
+        recycler_view_conspectuses.layoutManager = layoutManager2
+        recycler_view_conspectuses.addItemDecoration(ItemDecorator(20))
 
         themeConspectusViewModel = ViewModelProviders.of(this).get(ThemeConspectusViewModel::class.java!!)
        themeConspectusViewModel.getThemes().observe(this, object : Observer<List<Theme>> {
@@ -64,7 +73,18 @@ class ThemeConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickLis
                 for (all in themes!!){
                     Log.d("myTag", " " + all.name)
                 }
-                recycler_view.adapter = (FirebaseAdapter(themes!!))
+                recycler_view_themes.adapter = (FirebaseAdapter(themes!!))
+
+            }
+        })
+
+        themeConspectusViewModel.getConspectuses().observe(this, object : Observer<List<Conspectus>> {
+            override fun onChanged(conspectuses: List<Conspectus>?) {
+                Log.d("myTag", "ON CHANGED")
+                for (all in conspectuses!!){
+                    Log.d("myTag", " " + all.name)
+                }
+                recycler_view_conspectuses.adapter = (FirebaseAdapter(conspectuses!!))
 
             }
         })

@@ -10,7 +10,7 @@ abstract class FirebaseDatabaseRepository<Model> {
     var databaseReference: DatabaseReference
     private var listener: ValueEventListener? = null
 
-    protected lateinit var firebaseCallback: FirebaseDatabaseRepositoryCallback<Model>
+    private lateinit var firebaseCallback: FirebaseDatabaseRepositoryCallback<Model>
 
     protected abstract fun getRootNode(): String
 
