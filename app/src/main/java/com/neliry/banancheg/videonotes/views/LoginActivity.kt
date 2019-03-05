@@ -18,7 +18,7 @@ import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.Utils.ActivityNavigation
 import com.neliry.banancheg.videonotes.viewmodels.LoginViewModel
 
-import com.neliry.banancheg.videonotes.viewmodels.OnButtonClickListener
+import com.neliry.banancheg.videonotes.viewmodels.OnViewClickListener
 import kotlinx.android.synthetic.main.activity_login.*
 
 
@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigation {
 
-    lateinit var callback: OnButtonClickListener
+    lateinit var callback: OnViewClickListener
     private var loginViewModel: LoginViewModel? = null
     //private lateinit var auth: FirebaseAuth
     private lateinit var mGoogleSignInClient: GoogleSignInClient
@@ -38,7 +38,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
 
     val TAG: String = "myTag"
 
-    fun registerCallBack(callback: OnButtonClickListener) {
+    fun registerCallBack(callback: OnViewClickListener) {
         this.callback = callback
     }
 

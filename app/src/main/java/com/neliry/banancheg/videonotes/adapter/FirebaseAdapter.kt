@@ -9,9 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.models.Conspectus
-import com.neliry.banancheg.videonotes.models.Page
+import com.neliry.banancheg.videonotes.viewmodels.OnViewClickListener
+import com.neliry.banancheg.videonotes.viewmodels.OnViewFocusChangeListener
 
-class FirebaseAdapter(private val list: List<Any>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
+                      private val list: List<Any>,
+                      private var onViewFocusChangeListener: OnViewFocusChangeListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+
 
     companion object {
         const val TYPE_THEME = 0
@@ -55,8 +60,18 @@ class FirebaseAdapter(private val list: List<Any>) : RecyclerView.Adapter<Recycl
 
     }
 
-    class ThemeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ThemeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnFocusChangeListener {
+        override fun onClick(view: View) {
+            onViewClickListener.onButtonClicked(view)
+        }
 
+        override fun onFocusChange(view: View, hasFocus: Boolean) {
+            onViewFocusChangeListener.onChangeFocus(view,hasFocus)
+        }
+        init{
+            itemView.setOnClickListener(this)
+            itemView.onFocusChangeListener = this
+        }
 
         internal var name: TextView = itemView.findViewById(R.id.theme_name_textview)
 
@@ -66,7 +81,7 @@ class FirebaseAdapter(private val list: List<Any>) : RecyclerView.Adapter<Recycl
         }
     }
 
-    class ConspectusViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ConspectusViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 
         internal var name: TextView = itemView.findViewById(R.id.conspectus_name_textview)

@@ -73,7 +73,7 @@ class ThemeConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickLis
                 for (all in themes!!){
                     Log.d("myTag", " " + all.name)
                 }
-                recycler_view_themes.adapter = (FirebaseAdapter(themes!!))
+                recycler_view_themes.adapter = (FirebaseAdapter(themeConspectusViewModel,themes!!, themeConspectusViewModel))
 
             }
         })
@@ -84,7 +84,7 @@ class ThemeConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickLis
                 for (all in conspectuses!!){
                     Log.d("myTag", " " + all.name)
                 }
-                recycler_view_conspectuses.adapter = (FirebaseAdapter(conspectuses!!))
+                recycler_view_conspectuses.adapter = (FirebaseAdapter(themeConspectusViewModel,conspectuses!!, themeConspectusViewModel))
 
             }
         })

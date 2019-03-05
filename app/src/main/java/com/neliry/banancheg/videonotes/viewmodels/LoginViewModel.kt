@@ -25,7 +25,7 @@ import com.neliry.banancheg.videonotes.Utils.LiveMessageEvent
 
 const val GOOGLE_SIGN_IN : Int = 9001
 
-class LoginViewModel: ViewModel(), OnButtonClickListener{
+class LoginViewModel: ViewModel(), OnViewClickListener{
 
     lateinit var facebookButton: LoginButton
     private var callbackManager: CallbackManager = CallbackManager.Factory.create()
