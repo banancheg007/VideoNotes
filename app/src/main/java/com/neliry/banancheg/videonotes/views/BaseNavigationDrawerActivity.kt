@@ -85,9 +85,10 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
                 // viewModel.method()
             }
             com.neliry.banancheg.videonotes.R.id.nav_conspectuses -> {
-
+                startActivity(Intent(this, ThemeConspectusActivity::class.java))
             }
             com.neliry.banancheg.videonotes.R.id.nav_account -> {
+
 
             }
             com.neliry.banancheg.videonotes.R.id.nav_share -> {
