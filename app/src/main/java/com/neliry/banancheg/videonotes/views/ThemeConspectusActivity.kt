@@ -18,6 +18,7 @@ import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.viewmodels.ThemeConspectusViewModel
 import kotlinx.android.synthetic.main.activity_theme_conspectus.*
 
+
 class ThemeConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickListener{
 
     private lateinit var themeConspectusViewModel:ThemeConspectusViewModel
@@ -28,18 +29,18 @@ class ThemeConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickLis
 
     override fun onClick(v: View?) {
         when(v!!.id){
-            R.id.button_logout->{
+           /* R.id.button_logout->{
                 FirebaseAuth.getInstance().signOut();
                 LoginManager.getInstance().logOut();
                 val intent = Intent(this@ThemeConspectusActivity, LoginActivity::class.java)
                 startActivity(intent)
-            }
+            }*/
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        button_logout.setOnClickListener(this)
+        //button_logout.setOnClickListener(this)
 
         val user = FirebaseAuth.getInstance().currentUser
         user?.let {
@@ -70,9 +71,6 @@ class ThemeConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickLis
        themeConspectusViewModel.getThemes().observe(this, object : Observer<List<Theme>> {
             override fun onChanged(themes: List<Theme>?) {
                 Log.d("myTag", "ON CHANGED")
-                for (all in themes!!){
-                    Log.d("myTag", " " + all.name)
-                }
                 recycler_view_themes.adapter = (FirebaseAdapter(themeConspectusViewModel,themes!!, themeConspectusViewModel))
 
             }
@@ -81,9 +79,6 @@ class ThemeConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickLis
         themeConspectusViewModel.getConspectuses().observe(this, object : Observer<List<Conspectus>> {
             override fun onChanged(conspectuses: List<Conspectus>?) {
                 Log.d("myTag", "ON CHANGED")
-                for (all in conspectuses!!){
-                    Log.d("myTag", " " + all.name)
-                }
                 recycler_view_conspectuses.adapter = (FirebaseAdapter(themeConspectusViewModel,conspectuses!!, themeConspectusViewModel))
 
             }
