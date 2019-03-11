@@ -10,16 +10,21 @@
             android:id="@+id/imageView_user_photo"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
-            android:layout_marginTop="68dp" app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="44dp"
+            android:layout_marginTop="68dp" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="8dp"
+            app:layout_constraintVertical_bias="0.0"/>
     <Button
             android:text="@string/logout"
             android:id="@+id/button_logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="68dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="56dp"/>
+            android:layout_marginEnd="28dp"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.0" android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="1.0"/>
 
     <Button
             android:text="@string/change_password"
@@ -27,28 +32,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp" android:layout_marginBottom="496dp"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.034"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/textView_user_display_name"
-            app:layout_constraintVertical_bias="1.0"/>
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.268"
+            android:layout_marginTop="84dp" app:layout_constraintTop_toBottomOf="@+id/textView_user_display_name"
+    />
 
     <TextView
             android:id="@+id/textView_user_display_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="wdawd" android:layout_marginTop="24dp"
+            android:layout_width="46dp"
+            android:layout_height="18dp"
+            android:text="wdawd" android:layout_marginTop="12dp"
             app:layout_constraintTop_toBottomOf="@+id/textView_user_email"
-            app:layout_constraintStart_toEndOf="@+id/imageView_user_photo" android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/button_logout" android:layout_marginEnd="8dp"
-            app:layout_constraintHorizontal_bias="0.455"/>
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+            app:layout_constraintHorizontal_bias="0.343"/>
 
     <TextView
             android:id="@+id/textView_user_email"
             android:layout_width="wrap_content"
-            android:layout_height="14dp"
-            android:text="wdawd" android:layout_marginTop="68dp"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toEndOf="@+id/imageView_user_photo"
-            android:layout_marginStart="8dp" app:layout_constraintEnd_toStartOf="@+id/button_logout"
-            android:layout_marginEnd="8dp" app:layout_constraintHorizontal_bias="0.455"/>
+            android:layout_height="0dp"
+            android:text="wdawd"
+            android:layout_marginTop="68dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="128dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,10 @@
 package com.neliry.banancheg.videonotes.views
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import com.facebook.login.LoginManager
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -12,11 +15,26 @@ import kotlinx.android.synthetic.main.activity_user_profile.*
 import kotlinx.android.synthetic.main.nav_header_base_navigation_drawer.*
 
 
-class UserProfileActivity : AppCompatActivity() {
+class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
+    override fun onClick(v: View?) {
+        when(v!!.id){
+             R.id.button_logout->{
+                 FirebaseAuth.getInstance().signOut();
+                 LoginManager.getInstance().logOut();
+                 val intent = Intent(this@UserProfileActivity, LoginActivity::class.java)
+                 startActivity(intent)
+             }
+            R.id.button_change_password->{
+
+            }
+        }
+    }
+
     var user = FirebaseAuth.getInstance().currentUser
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.neliry.banancheg.videonotes.R.layout.activity_user_profile)
+        button_logout.setOnClickListener(this)
 
         if (user != null) {
             // Name, email address, and profile photo Url
