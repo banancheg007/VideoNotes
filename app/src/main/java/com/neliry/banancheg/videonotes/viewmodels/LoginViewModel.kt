@@ -39,7 +39,7 @@ class LoginViewModel: ViewModel(), OnViewClickListener{
         return currentUser!!
     }
 
-    override fun onButtonClicked(view: View) {
+    override fun onViewClicked(view: View) {
         when(view.id){
             R.id.button_login-> Log.d("myTag", "Button login")
             R.id.sign_in_facebook_button->

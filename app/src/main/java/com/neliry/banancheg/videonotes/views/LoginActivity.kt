@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
     }
 
     override fun onClick(view: View?) {
-        callback.onButtonClicked(view!!)
+        callback.onViewClicked(view!!)
         when(view!!.id){
             R.id.button_login-> {
                 if(!editText_your_email.text.toString().isEmpty() && !editText_your_password.text.toString().isEmpty()){

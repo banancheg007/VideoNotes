@@ -19,17 +19,21 @@ class ThemeConspectusViewModel:ViewModel(), OnViewFocusChangeListener, OnViewCli
 
     lateinit var firebaseAdapter: FirebaseAdapter
 
-    override fun onChangeFocus(view: View, hasFocus: Boolean) {
+    override fun onChangeFocus(view: View, hasFocus: Boolean, any: Any) {
        if(view.hasFocus()){
            view.setBackgroundResource(R.drawable.active_border)
+           conspectusRepository.removeListener()
            Log.d("myTag","has focus")
+           val theme: Theme = any as Theme
+           conspectusRepository.setConspectusesByThemes(theme.id.toString())
+           loadConspectuses()
        }else{
            view.setBackgroundResource(R.drawable.border)
            Log.d("myTag","lost focus")
        }
     }
 
-    override fun onButtonClicked(view: View) {
+    override fun onViewClicked(view: View) {
         Log.d("myTag", "On Theme click")
         view.isSelected = true
     }

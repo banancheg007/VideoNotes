@@ -62,11 +62,11 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
 
     inner class ThemeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnFocusChangeListener {
         override fun onClick(view: View) {
-            onViewClickListener.onButtonClicked(view)
+            onViewClickListener.onViewClicked(view)
         }
 
         override fun onFocusChange(view: View, hasFocus: Boolean) {
-            onViewFocusChangeListener.onChangeFocus(view,hasFocus)
+            onViewFocusChangeListener.onChangeFocus(view,hasFocus, list[position])
         }
         init{
             itemView.setOnClickListener(this)
