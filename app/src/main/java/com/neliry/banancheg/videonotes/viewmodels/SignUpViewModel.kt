@@ -1,5 +1,6 @@
 package com.neliry.banancheg.videonotes.viewmodels
 
+import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -15,7 +16,7 @@ import com.google.firebase.auth.UserProfileChangeRequest
 
 
 
-class SignUpViewModel: ViewModel(){
+class SignUpViewModel(application: Application): BaseViewModel(application){
     private  var auth: FirebaseAuth = FirebaseAuth.getInstance();
     private var currentUser: MutableLiveData<FirebaseUser> = MutableLiveData()
     fun getCurrentUser(): LiveData<FirebaseUser> {

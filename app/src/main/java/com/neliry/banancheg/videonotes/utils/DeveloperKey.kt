@@ -1,6 +1,6 @@
 // Copyright 2014 Google Inc. All Rights Reserved.
 
-package com.neliry.banancheg.videonotes.Utils
+package com.neliry.banancheg.videonotes.utils
 
 /**
  * Static container class for holding a reference to your YouTube Developer Key.
@@ -13,6 +13,6 @@ object DeveloperKey {
      * [Google Developers Console](https://console.developers.google.com/)
      * to register a new developer key.
      */
-    val DEVELOPER_KEY = "AIzaSyBs13ByqKwTYJoW03kc71sORsvlzDhCrQA"
+    const val DEVELOPER_KEY = "AIzaSyBs13ByqKwTYJoW03kc71sORsvlzDhCrQA"
 
 }

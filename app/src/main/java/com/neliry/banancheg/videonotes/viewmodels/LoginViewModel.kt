@@ -1,11 +1,11 @@
 package com.neliry.banancheg.videonotes.viewmodels
 
+import android.app.Application
 import android.content.Intent
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -15,32 +15,37 @@ import com.facebook.login.widget.LoginButton
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
 import com.neliry.banancheg.videonotes.R
-import com.neliry.banancheg.videonotes.Utils.ActivityNavigation
-import com.neliry.banancheg.videonotes.Utils.LiveMessageEvent
+import com.neliry.banancheg.videonotes.models.BaseItem
+import com.neliry.banancheg.videonotes.utils.ActivityNavigation
+import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
+import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 
 
 const val GOOGLE_SIGN_IN : Int = 9001
 
-class LoginViewModel: ViewModel(), OnViewClickListener{
+class LoginViewModel(application: Application): BaseViewModel(application), OnViewClickListener {
 
-    lateinit var facebookButton: LoginButton
+    private lateinit var facebookButton: LoginButton
     private var callbackManager: CallbackManager = CallbackManager.Factory.create()
-    private  var auth: FirebaseAuth = FirebaseAuth.getInstance();
+    private  var auth: FirebaseAuth = FirebaseAuth.getInstance()
     val startActivityForResultEvent = LiveMessageEvent<ActivityNavigation>()
     lateinit var googleSignInClient: GoogleSignInClient
     private var currentUser: MutableLiveData<FirebaseUser> = MutableLiveData()
 
+
     fun getCurrentUser(): LiveData<FirebaseUser> {
         currentUser.value = auth.currentUser
         return currentUser!!
+
     }
 
-    override fun onViewClicked(view: View) {
-        when(view.id){
+    override fun onViewClicked(view: View?, baseItem: BaseItem?) {
+        when(view?.id){
             R.id.button_login-> Log.d("myTag", "Button login")
             R.id.sign_in_facebook_button->
             {
@@ -68,8 +73,12 @@ class LoginViewModel: ViewModel(), OnViewClickListener{
             R.id.sign_in_google_button->{
                 Log.d("myTag", "Button google login")
                googleSignUp()
+
             }
-            R.id.sign_up_button->Log.d("myTag", "Button sign up")
+            R.id.sign_up_button-> {
+                Log.d("myTag", "Button sign up")
+
+            }
         }
     }
     fun googleSignUp() {
@@ -77,8 +86,14 @@ class LoginViewModel: ViewModel(), OnViewClickListener{
        startActivityForResultEvent.sendEvent { startActivityForResult(signInIntent, GOOGLE_SIGN_IN) }
    }
 
-    fun addGoogleSignInClient(googleSignInClient: GoogleSignInClient){
-        this.googleSignInClient = googleSignInClient
+    fun addGoogleSignInClient(){
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken("225628396953-2vpgba6lr7obg85vp0l331ma6mkoshh1.apps.googleusercontent.com")
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(getApplication<Application>(), gso)
+
     }
 
     private fun handleFacebookAccessToken(token: AccessToken) {

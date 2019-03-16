@@ -1,4 +1,4 @@
-package com.neliry.banancheg.videonotes.Utils
+package com.neliry.banancheg.videonotes.utils
 
 import android.util.Log
 
@@ -29,7 +29,7 @@ open class SingleLiveEvent<T> : MutableLiveData<T>() {
     override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
 
         if (hasActiveObservers()) {
-            Log.w(TAG, "Multiple observers registered but only one will be notified of changes.")
+            Log.w(tag, "Multiple observers registered but only one will be notified of changes.")
         }
 
         // Observe the internal MutableLiveData
@@ -56,6 +56,6 @@ open class SingleLiveEvent<T> : MutableLiveData<T>() {
 
     companion object {
 
-        private val TAG = "SingleLiveEvent"
+        private const val tag = "SingleLiveEvent"
     }
 }

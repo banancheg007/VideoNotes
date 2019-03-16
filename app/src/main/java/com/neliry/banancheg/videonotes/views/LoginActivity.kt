@@ -10,15 +10,12 @@ import android.view.View
 import androidx.lifecycle.Observer
 
 import androidx.lifecycle.ViewModelProviders
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseUser
 import com.neliry.banancheg.videonotes.R
-import com.neliry.banancheg.videonotes.Utils.ActivityNavigation
+import com.neliry.banancheg.videonotes.utils.ActivityNavigation
 import com.neliry.banancheg.videonotes.viewmodels.LoginViewModel
 
-import com.neliry.banancheg.videonotes.viewmodels.OnViewClickListener
+import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import kotlinx.android.synthetic.main.activity_login.*
 
 
@@ -26,25 +23,18 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigation {
 
-    lateinit var callback: OnViewClickListener
+    private lateinit var callback: OnViewClickListener
     private var loginViewModel: LoginViewModel? = null
-    //private lateinit var auth: FirebaseAuth
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
 
+    private val tag: String = "myTag"
 
-    companion object {
-        private const val RC_SIGN_IN = 9001
-    }
-
-    val TAG: String = "myTag"
-
-    fun registerCallBack(callback: OnViewClickListener) {
+    private fun registerCallBack(callback: OnViewClickListener) {
         this.callback = callback
     }
 
     override fun onClick(view: View?) {
-        callback.onViewClicked(view!!)
-        when(view!!.id){
+        callback.onViewClicked(view)
+        when(view?.id){
             R.id.button_login-> {
                 if(!editText_your_email.text.toString().isEmpty() && !editText_your_password.text.toString().isEmpty()){
                     loginViewModel!!.emailPasswordSignIn(editText_your_email.text.toString(),editText_your_password.text.toString())
@@ -69,17 +59,13 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
 
         //auth = FirebaseAuth.getInstance();
         // Configure Google Sign In
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("225628396953-2vpgba6lr7obg85vp0l331ma6mkoshh1.apps.googleusercontent.com")
-            .requestEmail()
-            .build()
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        loginViewModel!!.addGoogleSignInClient(mGoogleSignInClient)
+
 
         subscribeUi()
     }
 
     private fun subscribeUi() {
+        loginViewModel!!.addGoogleSignInClient()
         loginViewModel!!.startActivityForResultEvent.setEventReceiver(this, this)
 
 
@@ -92,14 +78,13 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
 
     override fun onStart() {
         super.onStart()
-       loginViewModel!!.getCurrentUser().observe(this, object : Observer<FirebaseUser> {
-            override fun onChanged(currentUser:FirebaseUser?) {
-                if (currentUser!= null){
-                    Log.d(TAG, " current user: " + currentUser.email)
-                    val intent = Intent(this@LoginActivity, ThemeConspectusActivity::class.java)
-                    startActivity(intent)
-                }
-            }
-        })
+       loginViewModel!!.getCurrentUser().observe(this,
+           Observer<FirebaseUser> { currentUser ->
+               if (currentUser!= null){
+                   Log.d(tag, " current user: " + currentUser.email)
+                   val intent = Intent(this@LoginActivity, ThemeConspectusActivity::class.java)
+                   startActivity(intent)
+               }
+           })
     }
 }

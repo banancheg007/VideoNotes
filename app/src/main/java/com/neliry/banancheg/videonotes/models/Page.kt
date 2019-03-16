@@ -1,3 +1,3 @@
 package com.neliry.banancheg.videonotes.models
 
-class Page
+class Page: BaseItem()

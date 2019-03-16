@@ -1,4 +1,4 @@
-package com.neliry.banancheg.videonotes.Utils
+package com.neliry.banancheg.videonotes.utils
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer

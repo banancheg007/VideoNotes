@@ -1,22 +1,27 @@
 package com.neliry.banancheg.videonotes.repositories
 
+import android.util.Log
 import com.google.firebase.database.*
 import java.lang.Exception
 import java.lang.reflect.ParameterizedType
 
 
-abstract class FirebaseDatabaseRepository<Model> {
+open class FirebaseDatabaseRepository<Model> {
     var list = ArrayList<Model>()
-    var databaseReference: DatabaseReference
+    lateinit var databaseReference: DatabaseReference
     private var listener: ValueEventListener? = null
 
     private lateinit var firebaseCallback: FirebaseDatabaseRepositoryCallback<Model>
 
-    protected abstract fun getRootNode(): String
 
-    init {
+
+    fun setDatabaseReference(reference: String){
         databaseReference =
-            FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2").child(getRootNode())
+            FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2").child(reference)
+    }
+    fun setDatabaseReference(reference: String, childReference:String){
+        databaseReference =
+            FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2").child(reference).child(childReference)
     }
 
     fun getEntityClass(): Class<Model> {
@@ -40,7 +45,7 @@ abstract class FirebaseDatabaseRepository<Model> {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 list.clear()
                 for (child in dataSnapshot.children) {
-                    val data = child.getValue(getEntityClass());
+                    val data = child.getValue(getEntityClass())
                     list.add(data!!)
                 }
                 firebaseCallback.onSuccess(list)
@@ -51,6 +56,8 @@ abstract class FirebaseDatabaseRepository<Model> {
     }
 
     fun removeListener() {
+        Log.d("myTag",listener.toString())
         databaseReference.removeEventListener(listener!!)
+        //Log.d("myTag",listener.toString())
     }
 }

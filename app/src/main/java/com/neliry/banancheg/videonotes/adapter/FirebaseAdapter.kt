@@ -8,13 +8,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.R
+import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Conspectus
-import com.neliry.banancheg.videonotes.viewmodels.OnViewClickListener
-import com.neliry.banancheg.videonotes.viewmodels.OnViewFocusChangeListener
+import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 
 class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
-                      private val list: List<Any>,
-                      private var onViewFocusChangeListener: OnViewFocusChangeListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+                      private val list: List<BaseItem>
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
 
@@ -60,17 +60,13 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
 
     }
 
-    inner class ThemeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnFocusChangeListener {
+    inner class ThemeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
         override fun onClick(view: View) {
-            onViewClickListener.onViewClicked(view)
+            onViewClickListener.onViewClicked(view, list[layoutPosition])
         }
 
-        override fun onFocusChange(view: View, hasFocus: Boolean) {
-            onViewFocusChangeListener.onChangeFocus(view,hasFocus, list[position])
-        }
         init{
             itemView.setOnClickListener(this)
-            itemView.onFocusChangeListener = this
         }
 
         internal var name: TextView = itemView.findViewById(R.id.theme_name_textview)

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.neliry.banancheg.videonotes.Utils
+package com.neliry.banancheg.videonotes.utils
 
 import android.content.Intent
 import android.widget.Toast
@@ -54,7 +54,7 @@ abstract class YouTubeFailureRecoveryActivity : YouTubeBaseActivity(), YouTubePl
 
     companion object {
 
-        private val RECOVERY_DIALOG_REQUEST = 1
+        private const val RECOVERY_DIALOG_REQUEST = 1
     }
 
 }
