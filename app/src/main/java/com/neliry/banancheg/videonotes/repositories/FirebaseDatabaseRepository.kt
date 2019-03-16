@@ -8,7 +8,7 @@ import java.lang.reflect.ParameterizedType
 
 open class FirebaseDatabaseRepository<Model> {
     var list = ArrayList<Model>()
-    lateinit var databaseReference: DatabaseReference
+    private lateinit var databaseReference: DatabaseReference
     private var listener: ValueEventListener? = null
 
     private lateinit var firebaseCallback: FirebaseDatabaseRepositoryCallback<Model>
@@ -24,8 +24,10 @@ open class FirebaseDatabaseRepository<Model> {
             FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2").child(reference).child(childReference)
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun getEntityClass(): Class<Model> {
         val superclass = javaClass.genericSuperclass as ParameterizedType
+
         return superclass.actualTypeArguments[0] as Class<Model>
     }
 

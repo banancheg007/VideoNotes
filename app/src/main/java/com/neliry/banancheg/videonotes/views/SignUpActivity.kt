@@ -10,9 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseUser
 import com.neliry.banancheg.videonotes.R
-import com.neliry.banancheg.videonotes.viewmodels.LoginViewModel
 import com.neliry.banancheg.videonotes.viewmodels.SignUpViewModel
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_sing_up.*
 
 class SignUpActivity : AppCompatActivity(),View.OnClickListener {
@@ -32,7 +30,7 @@ class SignUpActivity : AppCompatActivity(),View.OnClickListener {
             override fun onChanged(currentUser: FirebaseUser?) {
                 if (currentUser!= null){
                     Log.d("myTag", " current user: " + currentUser.email)
-                    val intent = Intent(this@SignUpActivity, ThemeConspectusActivity::class.java)
+                    val intent = Intent(this@SignUpActivity, ThemeActivity::class.java)
                     startActivity(intent)
                 }
             }

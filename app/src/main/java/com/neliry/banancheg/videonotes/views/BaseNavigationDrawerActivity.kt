@@ -13,9 +13,7 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_base_navigation_drawer.*
 import kotlinx.android.synthetic.main.app_bar_base_navigation_drawer.*
 import android.content.Intent
-import android.R
 import android.widget.Toast
-import android.app.Activity
 import android.net.Uri
 
 
@@ -85,7 +83,7 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
                 // viewModel.method()
             }
             com.neliry.banancheg.videonotes.R.id.nav_conspectuses -> {
-                startActivity(Intent(this, ThemeConspectusActivity::class.java))
+                startActivity(Intent(this, ThemeActivity::class.java))
             }
             com.neliry.banancheg.videonotes.R.id.nav_account -> {
                 startActivity(Intent(this, UserProfileActivity::class.java))
