@@ -10,6 +10,7 @@ import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Conspectus
+import com.neliry.banancheg.videonotes.models.Page
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 
 class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
@@ -21,7 +22,7 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
     companion object {
         const val TYPE_THEME = 0
         const val TYPE_CONSPECTUS = 1
-        //const val TYPE_PAGE = 1
+        const val TYPE_PAGE = 1
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -34,6 +35,10 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.conspectus_item, parent, false)
                 ConspectusViewHolder(view)
             }
+            TYPE_PAGE ->{
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.page_item, parent, false)
+                PageViewHolder(view)
+            }
             else-> throw NullPointerException()
         }
 
@@ -41,8 +46,9 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder) {
-           is ThemeViewHolder-> holder.bind(list[position] as Theme)
+            is ThemeViewHolder-> holder.bind(list[position] as Theme)
             is ConspectusViewHolder -> holder.bind(list[position] as Conspectus)
+            is PageViewHolder -> holder.bind(list[position] as Page)
         }
     }
 
@@ -56,7 +62,7 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
 
            if (list[position] is Theme) return TYPE_THEME
         return if (list[position] is Conspectus) TYPE_CONSPECTUS
-        else 5
+        else TYPE_PAGE
 
     }
 
@@ -77,7 +83,7 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
         }
     }
 
-    inner class ConspectusViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ConspectusViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
 
         internal var name: TextView = itemView.findViewById(R.id.conspectus_name_textview)
@@ -86,5 +92,31 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
         fun bind(conspectus: Conspectus) {
             name.text = conspectus.name
         }
+
+        init{
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(view: View) {
+            onViewClickListener.onViewClicked(view, list[layoutPosition])
+        }
+    }
+
+    inner class PageViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener{
+        internal var name: TextView = itemView.findViewById(R.id.page_name_textview)
+
+
+        fun bind(page: Page) {
+            name.text = page.name
+        }
+
+        init{
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(view: View) {
+            onViewClickListener.onViewClicked(view, list[layoutPosition])
+        }
+
     }
 }

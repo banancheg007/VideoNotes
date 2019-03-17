@@ -22,7 +22,7 @@ class ThemeViewModel(application: Application):FirebaseViewModel(application), O
         repository.setDatabaseReference("themes" )
     }
     override fun onViewClicked(view: View?, baseItem: BaseItem?) {
-        Log.d("myTag", "я кликнул")
+        Log.d("myTag", "click on theme_item")
          currentClickedTheme?.value = baseItem as Theme
     }
 

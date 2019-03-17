@@ -2,44 +2,41 @@ package com.neliry.banancheg.videonotes.viewmodels
 
 import android.app.Application
 import android.content.Intent
-import android.content.Intent.getIntent
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Conspectus
+import com.neliry.banancheg.videonotes.models.Page
 import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.repositories.ConspectusRepository
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
-import com.neliry.banancheg.videonotes.repositories.ThemeRepository
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 
-class ConspectusViewModel(application: Application):FirebaseViewModel(application), OnViewClickListener {
+class PageViewModel(application: Application):FirebaseViewModel(application), OnViewClickListener {
 
-    private var currentClickedConspectus: MutableLiveData<Conspectus>? = null
+    private var currentClickedPage: MutableLiveData<Page>? = null
 
     init{
         @Suppress("UNCHECKED_CAST")
         repository = ConspectusRepository() as FirebaseDatabaseRepository<BaseItem>
     }
     override fun onViewClicked(view: View?, baseItem: BaseItem?) {
-        currentClickedConspectus?.value = baseItem as Conspectus
+        currentClickedPage?.value = baseItem as Page
     }
 
     fun parseIntent(intent: Intent){
-        if (intent.getSerializableExtra("currentTheme") !=null) {
-        val theme:Theme = intent.getSerializableExtra("currentTheme") as Theme
-            repository.setDatabaseReference("conspectuses", theme.id.toString())
+        if (intent.getSerializableExtra("currentConspectus") !=null) {
+            val conspectus: Conspectus = intent.getSerializableExtra("currentConspectus") as Conspectus
+            repository.setDatabaseReference("pages", conspectus.id.toString())
         }
-        else
-            repository.setDatabaseReference("conspectuses")
     }
 
-    fun getClickedConspectus(): LiveData<Conspectus> {
-        if (currentClickedConspectus == null) {
-            currentClickedConspectus = MutableLiveData()
+    fun getClickedPage(): LiveData<Page> {
+        if (currentClickedPage == null) {
+            currentClickedPage = MutableLiveData()
         }
-        return currentClickedConspectus!!
+        return currentClickedPage!!
     }
 
 }

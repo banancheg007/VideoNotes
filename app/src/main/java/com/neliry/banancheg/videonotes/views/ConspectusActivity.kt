@@ -13,6 +13,7 @@ import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
 import com.neliry.banancheg.videonotes.adapter.ItemDecorator
 import com.neliry.banancheg.videonotes.models.BaseItem
+import com.neliry.banancheg.videonotes.models.Conspectus
 import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.viewmodels.ConspectusViewModel
 import com.neliry.banancheg.videonotes.viewmodels.ThemeViewModel
@@ -50,6 +51,17 @@ class ConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickListener
             Observer<List<BaseItem>> { items ->
                 Log.d("myTag", "ON CHANGED")
                 recycler_view_conspectuses.adapter = (FirebaseAdapter(conspectusViewModel,items!!))
+            })
+
+        conspectusViewModel.getClickedConspectus().observe(this,
+            Observer<Conspectus> { currentClickedConspectus ->
+                Log.d("myTag", "clicked on conspectus_item")
+                if (currentClickedConspectus != null){
+                    val intent = Intent(this@ConspectusActivity, PageActivity::class.java)
+                    intent.putExtra("currentConspectus", currentClickedConspectus)
+                    startActivity(intent)
+                }
+
             })
 
     }
