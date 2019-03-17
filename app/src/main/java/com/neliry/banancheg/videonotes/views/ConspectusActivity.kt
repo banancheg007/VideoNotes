@@ -1,5 +1,6 @@
 package com.neliry.banancheg.videonotes.views
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
 import com.neliry.banancheg.videonotes.adapter.ItemDecorator
 import com.neliry.banancheg.videonotes.models.BaseItem
+import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.viewmodels.ConspectusViewModel
 import com.neliry.banancheg.videonotes.viewmodels.ThemeViewModel
 import kotlinx.android.synthetic.main.activity_conspectus.*
@@ -40,6 +42,10 @@ class ConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickListener
 
 
         conspectusViewModel = ViewModelProviders.of(this).get(ConspectusViewModel::class.java!!)
+
+        val intent: Intent = intent
+        conspectusViewModel.parseIntent(intent)
+
         conspectusViewModel.getItems().observe(this,
             Observer<List<BaseItem>> { items ->
                 Log.d("myTag", "ON CHANGED")

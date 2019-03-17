@@ -79,10 +79,10 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            com.neliry.banancheg.videonotes.R.id.nav_all_pages -> {
-                // viewModel.method()
+            com.neliry.banancheg.videonotes.R.id.nav_all_conspectuses -> {
+                startActivity(Intent(this, ConspectusActivity::class.java))
             }
-            com.neliry.banancheg.videonotes.R.id.nav_conspectuses -> {
+            com.neliry.banancheg.videonotes.R.id.nav_themes -> {
                 startActivity(Intent(this, ThemeActivity::class.java))
             }
             com.neliry.banancheg.videonotes.R.id.nav_account -> {

@@ -82,7 +82,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ActivityNavigat
            Observer<FirebaseUser> { currentUser ->
                if (currentUser!= null){
                    Log.d(tag, " current user: " + currentUser.email)
-                   val intent = Intent(this@LoginActivity, ConspectusActivity::class.java)
+                   val intent = Intent(this@LoginActivity, ThemeActivity::class.java)
                    startActivity(intent)
                }
            })

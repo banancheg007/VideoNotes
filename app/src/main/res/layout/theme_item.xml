@@ -4,7 +4,6 @@
               android:layout_height="wrap_content"
               android:orientation="horizontal"
               android:background="@drawable/border"
-              android:focusableInTouchMode="true"
                 android:padding="15dp">
 
         <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
