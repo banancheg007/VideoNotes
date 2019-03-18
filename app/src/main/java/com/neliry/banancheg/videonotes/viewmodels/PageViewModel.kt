@@ -11,6 +11,7 @@ import com.neliry.banancheg.videonotes.models.Page
 import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.repositories.ConspectusRepository
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
+import com.neliry.banancheg.videonotes.repositories.PageRepository
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 
 class PageViewModel(application: Application):FirebaseViewModel(application), OnViewClickListener {
@@ -19,7 +20,7 @@ class PageViewModel(application: Application):FirebaseViewModel(application), On
 
     init{
         @Suppress("UNCHECKED_CAST")
-        repository = ConspectusRepository() as FirebaseDatabaseRepository<BaseItem>
+        repository = PageRepository() as FirebaseDatabaseRepository<BaseItem>
     }
     override fun onViewClicked(view: View?, baseItem: BaseItem?) {
         currentClickedPage?.value = baseItem as Page

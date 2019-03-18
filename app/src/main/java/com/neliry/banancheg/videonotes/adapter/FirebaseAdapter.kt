@@ -22,7 +22,7 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
     companion object {
         const val TYPE_THEME = 0
         const val TYPE_CONSPECTUS = 1
-        const val TYPE_PAGE = 1
+        const val TYPE_PAGE = 2
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
