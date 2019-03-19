@@ -21,9 +21,11 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.models.BaseItem
-import com.neliry.banancheg.videonotes.utils.ActivityNavigation
+import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
+import com.neliry.banancheg.videonotes.views.SignUpActivity
+import com.neliry.banancheg.videonotes.views.ThemeActivity
 
 
 const val GOOGLE_SIGN_IN : Int = 9001
@@ -33,15 +35,21 @@ class LoginViewModel(application: Application): BaseViewModel(application), OnVi
     private lateinit var facebookButton: LoginButton
     private var callbackManager: CallbackManager = CallbackManager.Factory.create()
     private  var auth: FirebaseAuth = FirebaseAuth.getInstance()
-    val startActivityForResultEvent = LiveMessageEvent<ActivityNavigation>()
+    val navigationEvent = LiveMessageEvent<ViewNavigation>()
     lateinit var googleSignInClient: GoogleSignInClient
     private var currentUser: MutableLiveData<FirebaseUser> = MutableLiveData()
 
 
-    fun getCurrentUser(): LiveData<FirebaseUser> {
+    /*fun getCurrentUser(): LiveData<FirebaseUser> {
         currentUser.value = auth.currentUser
-        return currentUser!!
+        return currentUser
 
+    }*/
+
+    fun getCurrentUser(){
+        if (auth.currentUser != null)
+            navigationEvent.sendEvent {  val intent = Intent(getApplication(), ThemeActivity::class.java)
+                navigationEvent.sendEvent{ startActivity(intent)} }
     }
 
     override fun onViewClicked(view: View?, baseItem: BaseItem?) {
@@ -77,13 +85,14 @@ class LoginViewModel(application: Application): BaseViewModel(application), OnVi
             }
             R.id.sign_up_button-> {
                 Log.d("myTag", "Button sign up")
-
+                val intent = Intent(getApplication(), SignUpActivity::class.java)
+                navigationEvent.sendEvent{ startActivity(intent)}
             }
         }
     }
     fun googleSignUp() {
        val signInIntent = googleSignInClient.signInIntent
-       startActivityForResultEvent.sendEvent { startActivityForResult(signInIntent, GOOGLE_SIGN_IN) }
+       navigationEvent.sendEvent { startActivityForResult(signInIntent, GOOGLE_SIGN_IN) }
    }
 
     fun addGoogleSignInClient(){
