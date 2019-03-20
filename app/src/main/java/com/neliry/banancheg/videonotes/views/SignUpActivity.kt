@@ -15,7 +15,7 @@ class SignUpActivity : AppCompatActivity(),View.OnClickListener, ViewNavigation 
     private lateinit var signUpViewModel: SignUpViewModel
 
     override fun onClick(v: View?) {
-            signUpViewModel?.createUserWithEmailAndPassword(editText_email.text.toString(),editText_username.text.toString(), editText_password.text.toString(), editText_retype_password.text.toString() )
+            signUpViewModel.createUserWithEmailAndPassword(editText_email.text.toString(),editText_username.text.toString(), editText_password.text.toString(), editText_retype_password.text.toString() )
 
     }
 

@@ -9,11 +9,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
 import com.neliry.banancheg.videonotes.adapter.ItemDecorator
 import com.neliry.banancheg.videonotes.models.BaseItem
-import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.neliry.banancheg.videonotes.viewmodels.ThemeViewModel
 import kotlinx.android.synthetic.main.activity_theme.*
-import android.content.Intent
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 
 

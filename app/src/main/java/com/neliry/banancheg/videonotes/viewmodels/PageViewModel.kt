@@ -4,8 +4,6 @@ import android.app.Application
 import android.content.Intent
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Conspectus
 import com.neliry.banancheg.videonotes.models.Page
@@ -14,12 +12,11 @@ import com.neliry.banancheg.videonotes.repositories.PageRepository
 import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
-import com.neliry.banancheg.videonotes.views.PageActivity
 
 class PageViewModel(application: Application):FirebaseViewModel(application), OnViewClickListener {
 
     //private var currentClickedPage: MutableLiveData<Page>? = null
-    lateinit var currentClickedPage: Page
+    private lateinit var currentClickedPage: Page
     val navigationEvent = LiveMessageEvent<ViewNavigation>()
 
     init{
