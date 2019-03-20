@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Theme
-import com.neliry.banancheg.videonotes.repositories.ConspectusRepository
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
 import com.neliry.banancheg.videonotes.repositories.ThemeRepository
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener

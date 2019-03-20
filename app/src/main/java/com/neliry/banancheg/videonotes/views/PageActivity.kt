@@ -1,7 +1,6 @@
 package com.neliry.banancheg.videonotes.views
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
@@ -11,11 +10,8 @@ import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
 import com.neliry.banancheg.videonotes.adapter.ItemDecorator
 import com.neliry.banancheg.videonotes.models.BaseItem
-import com.neliry.banancheg.videonotes.models.Conspectus
 import com.neliry.banancheg.videonotes.models.Page
-import com.neliry.banancheg.videonotes.viewmodels.ConspectusViewModel
 import com.neliry.banancheg.videonotes.viewmodels.PageViewModel
-import kotlinx.android.synthetic.main.activity_conspectus.*
 import kotlinx.android.synthetic.main.activity_page.*
 
 class PageActivity : BaseNavigationDrawerActivity() {
@@ -34,7 +30,7 @@ class PageActivity : BaseNavigationDrawerActivity() {
         recycler_view_pages.layoutManager = layoutManager
         recycler_view_pages.addItemDecoration(ItemDecorator(20))
 
-        pageViewModel = ViewModelProviders.of(this).get(PageViewModel::class.java!!)
+        pageViewModel = ViewModelProviders.of(this).get(PageViewModel::class.java)
 
         val intent: Intent = intent
         pageViewModel.parseIntent(intent)

@@ -5,8 +5,6 @@ import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -37,7 +35,7 @@ class LoginViewModel(application: Application): BaseViewModel(application), OnVi
     private var callbackManager: CallbackManager = CallbackManager.Factory.create()
     private  var auth: FirebaseAuth = FirebaseAuth.getInstance()
     val navigationEvent = LiveMessageEvent<ViewNavigation>()
-    lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var googleSignInClient: GoogleSignInClient
    // private var currentUser: MutableLiveData<FirebaseUser> = MutableLiveData()
 
 
@@ -64,18 +62,18 @@ class LoginViewModel(application: Application): BaseViewModel(application), OnVi
                 facebookButton.setReadPermissions("email", "public_profile")
                 facebookButton.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
                     override fun onSuccess(loginResult: LoginResult) {
-                        Log.d(TAG, "facebook:onSuccess:$loginResult")
+                        Log.d(tag, "facebook:onSuccess:$loginResult")
                         handleFacebookAccessToken(loginResult.accessToken)
                     }
 
                     override fun onCancel() {
-                        Log.d(TAG, "facebook:onCancel")
+                        Log.d(tag, "facebook:onCancel")
                         // ...
                     }
 
                     override fun onError(error: FacebookException) {
-                        Log.d(TAG, "facebook:onError", error)
-                        Toast.makeText(getApplication<Application>(),"Something went wrong or you have lost your internet connection",Toast.LENGTH_SHORT).show()
+                        Log.d(tag, "facebook:onError", error)
+                        Toast.makeText(getApplication(),"Something went wrong or you have lost your internet connection",Toast.LENGTH_SHORT).show()
                     }
                 })
             }
@@ -91,7 +89,7 @@ class LoginViewModel(application: Application): BaseViewModel(application), OnVi
             }
         }
     }
-    fun googleSignUp() {
+    private fun googleSignUp() {
        val signInIntent = googleSignInClient.signInIntent
        navigationEvent.sendEvent { startActivityForResult(signInIntent, GOOGLE_SIGN_IN) }
    }
@@ -107,7 +105,7 @@ class LoginViewModel(application: Application): BaseViewModel(application), OnVi
     }
 
     private fun handleFacebookAccessToken(token: AccessToken) {
-        Log.d(TAG, "handleFacebookAccessToken:$token")
+        Log.d(tag, "handleFacebookAccessToken:$token")
 
         val credential = FacebookAuthProvider.getCredential(token.token)
         signIn(authCredential = credential)
@@ -141,24 +139,24 @@ class LoginViewModel(application: Application): BaseViewModel(application), OnVi
 
     fun emailPasswordSignIn(email:String, password:String){
         if (email.isEmpty()||password.isEmpty()){
-            Toast.makeText(getApplication<Application>(),"Email or password cannot be empty",Toast.LENGTH_SHORT).show()
+            Toast.makeText(getApplication(),"Email or password cannot be empty",Toast.LENGTH_SHORT).show()
         }else {
             signIn(email, password)
         }
     }
 
-    fun signIn(email: String?=null, password: String?=null,authCredential: AuthCredential? = null){
+    private fun signIn(email: String?=null, password: String?=null,authCredential: AuthCredential? = null){
         if(email != null && password != null){
             auth.signInWithEmailAndPassword(email,password)
                 .addOnCompleteListener{if (it.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithEmail:success")
+                    Log.d(tag, "signInWithEmail:success")
                    // currentUser.value=auth.currentUser
                     getCurrentUser()
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithEmail:failure", it.exception)
-                    Toast.makeText(getApplication<Application>(),"Bad credentials or you have lost your internet connection",Toast.LENGTH_SHORT).show()
+                    Log.w(tag, "signInWithEmail:failure", it.exception)
+                    Toast.makeText(getApplication(),"Bad credentials or you have lost your internet connection",Toast.LENGTH_SHORT).show()
                 }
                 }
         }else{
@@ -166,12 +164,11 @@ class LoginViewModel(application: Application): BaseViewModel(application), OnVi
                 // Sign in success, update UI with the signed-in user's information
                 //currentUser.value= auth.currentUser
                 getCurrentUser()
-                Log.d(TAG, "signInWithGoogleCredential:success")
-                val user = auth.currentUser
+                Log.d(tag, "signInWithGoogleCredential:success")
             } else {
                 // If sign in fails, display a message to the user.
-                Log.w(TAG, "signInWithGoogleCredential:failure", it.exception)
-                Toast.makeText(getApplication<Application>(),"Something went wrong or you have lost your internet connection",Toast.LENGTH_SHORT).show()
+                Log.w(tag, "signInWithGoogleCredential:failure", it.exception)
+                Toast.makeText(getApplication(),"Something went wrong or you have lost your internet connection",Toast.LENGTH_SHORT).show()
             }
             }
         }
@@ -179,6 +176,6 @@ class LoginViewModel(application: Application): BaseViewModel(application), OnVi
     }
 
 
-    val TAG: String = "myTag"
+    val tag: String = "myTag"
 }
 

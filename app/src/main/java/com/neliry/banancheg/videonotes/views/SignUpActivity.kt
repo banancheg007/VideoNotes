@@ -1,14 +1,11 @@
 package com.neliry.banancheg.videonotes.views
 
 
-import android.content.Intent
+
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.firebase.auth.FirebaseUser
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.viewmodels.SignUpViewModel

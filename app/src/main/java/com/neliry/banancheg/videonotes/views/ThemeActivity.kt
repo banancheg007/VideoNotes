@@ -6,8 +6,6 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.auth.FirebaseAuth
 import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
 import com.neliry.banancheg.videonotes.adapter.ItemDecorator
 import com.neliry.banancheg.videonotes.models.BaseItem
@@ -16,7 +14,6 @@ import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.neliry.banancheg.videonotes.viewmodels.ThemeViewModel
 import kotlinx.android.synthetic.main.activity_theme.*
 import android.content.Intent
-import android.R
 
 
 
@@ -49,12 +46,12 @@ class ThemeActivity : BaseNavigationDrawerActivity() , View.OnClickListener{
         recycler_view_themes.addItemDecoration(ItemDecorator(20))
 
 
-        themeViewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java!!)
+        themeViewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java)
         registerCallBack(themeViewModel)
        themeViewModel.getItems().observe(this,
            Observer<List<BaseItem>> { items ->
                Log.d("myTag", "ON CHANGED")
-               recycler_view_themes.adapter = (FirebaseAdapter(themeViewModel,items!!))
+               recycler_view_themes.adapter = (FirebaseAdapter(themeViewModel,items))
            })
 
         themeViewModel.getClickedTheme().observe(this,

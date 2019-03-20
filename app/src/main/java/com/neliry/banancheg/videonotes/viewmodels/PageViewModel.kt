@@ -8,8 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Conspectus
 import com.neliry.banancheg.videonotes.models.Page
-import com.neliry.banancheg.videonotes.models.Theme
-import com.neliry.banancheg.videonotes.repositories.ConspectusRepository
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
 import com.neliry.banancheg.videonotes.repositories.PageRepository
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener

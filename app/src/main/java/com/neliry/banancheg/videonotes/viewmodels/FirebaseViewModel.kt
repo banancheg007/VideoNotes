@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.neliry.banancheg.videonotes.models.BaseItem
-import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
 import java.lang.Exception
 
@@ -20,7 +19,7 @@ open class FirebaseViewModel(application: Application): BaseViewModel(applicatio
         return items!!
     }
 
-    fun loadItems() {
+    private fun loadItems() {
        repository.addListener(object: FirebaseDatabaseRepository.FirebaseDatabaseRepositoryCallback<BaseItem>{
             override fun onSuccess(result: List<BaseItem>) {
                 items!!.value = result

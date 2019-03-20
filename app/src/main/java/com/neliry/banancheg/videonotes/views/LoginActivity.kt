@@ -4,17 +4,11 @@ package com.neliry.banancheg.videonotes.views
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-
-import android.util.Log
 import android.view.View
-import androidx.lifecycle.Observer
-
 import androidx.lifecycle.ViewModelProviders
-import com.google.firebase.auth.FirebaseUser
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.viewmodels.LoginViewModel
-
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -26,8 +20,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ViewNavigation 
     private lateinit var callback: OnViewClickListener
     private lateinit var loginViewModel: LoginViewModel
 
-    private val tag: String = "myTag"
-
     private fun registerCallBack(callback: OnViewClickListener) {
         this.callback = callback
     }
@@ -36,7 +28,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ViewNavigation 
         callback.onViewClicked(view)
         when(view?.id){
             R.id.button_login-> {
-                    loginViewModel?.emailPasswordSignIn(editText_your_email.text.toString(),editText_your_password.text.toString())
+                    loginViewModel.emailPasswordSignIn(editText_your_email.text.toString(),editText_your_password.text.toString())
 
             }
         }
@@ -60,14 +52,14 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ViewNavigation 
     }
 
     private fun subscribeUi() {
-        loginViewModel!!.addGoogleSignInClient()
-        loginViewModel!!.navigationEvent.setEventReceiver(this, this)
+        loginViewModel.addGoogleSignInClient()
+        loginViewModel.navigationEvent.setEventReceiver(this, this)
 
 
     }
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        loginViewModel!!.onResultFromActivity(requestCode,resultCode,data)
+        loginViewModel.onResultFromActivity(requestCode,resultCode,data)
 
     }
 

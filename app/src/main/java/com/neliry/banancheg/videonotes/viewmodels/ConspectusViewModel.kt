@@ -2,7 +2,6 @@ package com.neliry.banancheg.videonotes.viewmodels
 
 import android.app.Application
 import android.content.Intent
-import android.content.Intent.getIntent
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +10,6 @@ import com.neliry.banancheg.videonotes.models.Conspectus
 import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.repositories.ConspectusRepository
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
-import com.neliry.banancheg.videonotes.repositories.ThemeRepository
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 
 class ConspectusViewModel(application: Application):FirebaseViewModel(application), OnViewClickListener {
