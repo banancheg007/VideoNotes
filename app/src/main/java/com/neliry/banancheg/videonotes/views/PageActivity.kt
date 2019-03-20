@@ -11,10 +11,11 @@ import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
 import com.neliry.banancheg.videonotes.adapter.ItemDecorator
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Page
+import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.viewmodels.PageViewModel
 import kotlinx.android.synthetic.main.activity_page.*
 
-class PageActivity : BaseNavigationDrawerActivity() {
+class PageActivity : BaseNavigationDrawerActivity(), ViewNavigation {
 
     private lateinit var pageViewModel:PageViewModel
 
@@ -31,7 +32,7 @@ class PageActivity : BaseNavigationDrawerActivity() {
         recycler_view_pages.addItemDecoration(ItemDecorator(20))
 
         pageViewModel = ViewModelProviders.of(this).get(PageViewModel::class.java)
-
+        pageViewModel.navigationEvent.setEventReceiver(this, this)
         val intent: Intent = intent
         pageViewModel.parseIntent(intent)
 
@@ -41,13 +42,13 @@ class PageActivity : BaseNavigationDrawerActivity() {
                 recycler_view_pages.adapter = (FirebaseAdapter(pageViewModel,items!!))
             })
 
-        pageViewModel.getClickedPage().observe(this,
+       /* pageViewModel.getClickedPage().observe(this,
             Observer<Page> { currentClickedPage ->
                 Log.d("myTag", "clicked on conspectus_item")
                 if (currentClickedPage != null){
                     Log.d("myTag", "clicked on page")
                 }
 
-            })
+            })*/
     }
 }

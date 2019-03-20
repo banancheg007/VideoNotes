@@ -14,11 +14,10 @@ import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.neliry.banancheg.videonotes.viewmodels.ThemeViewModel
 import kotlinx.android.synthetic.main.activity_theme.*
 import android.content.Intent
+import com.neliry.banancheg.videonotes.utils.ViewNavigation
 
 
-
-
-class ThemeActivity : BaseNavigationDrawerActivity() , View.OnClickListener{
+class ThemeActivity : BaseNavigationDrawerActivity() , View.OnClickListener, ViewNavigation {
 
     private lateinit var callback: OnViewClickListener
     private lateinit var themeViewModel:ThemeViewModel
@@ -48,13 +47,14 @@ class ThemeActivity : BaseNavigationDrawerActivity() , View.OnClickListener{
 
         themeViewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java)
         registerCallBack(themeViewModel)
+        themeViewModel.navigationEvent.setEventReceiver(this, this)
        themeViewModel.getItems().observe(this,
            Observer<List<BaseItem>> { items ->
                Log.d("myTag", "ON CHANGED")
                recycler_view_themes.adapter = (FirebaseAdapter(themeViewModel,items))
            })
 
-        themeViewModel.getClickedTheme().observe(this,
+       /* themeViewModel.getClickedTheme().observe(this,
             Observer<Theme> { currentClickedTheme ->
             Log.d("myTag", "clicked on theme")
                 if (currentClickedTheme != null){
@@ -63,7 +63,7 @@ class ThemeActivity : BaseNavigationDrawerActivity() , View.OnClickListener{
                     startActivity(intent)
                 }
 
-        })
+        })*/
 
     }
 

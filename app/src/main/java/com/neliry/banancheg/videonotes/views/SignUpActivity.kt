@@ -12,7 +12,7 @@ import com.neliry.banancheg.videonotes.viewmodels.SignUpViewModel
 import kotlinx.android.synthetic.main.activity_sing_up.*
 
 class SignUpActivity : AppCompatActivity(),View.OnClickListener, ViewNavigation {
-    private var signUpViewModel: SignUpViewModel? = null
+    private lateinit var signUpViewModel: SignUpViewModel
 
     override fun onClick(v: View?) {
             signUpViewModel?.createUserWithEmailAndPassword(editText_email.text.toString(),editText_username.text.toString(), editText_password.text.toString(), editText_retype_password.text.toString() )
@@ -24,7 +24,7 @@ class SignUpActivity : AppCompatActivity(),View.OnClickListener, ViewNavigation 
         setContentView(R.layout.activity_sing_up)
        button_sign_up.setOnClickListener(this)
         signUpViewModel = ViewModelProviders.of(this).get(SignUpViewModel::class.java)
-        signUpViewModel!!.navigationEvent.setEventReceiver(this, this)
+        signUpViewModel.navigationEvent.setEventReceiver(this, this)
        /* signUpViewModel!!.getCurrentUser().observe(this, object : Observer<FirebaseUser> {
             override fun onChanged(currentUser: FirebaseUser?) {
                 if (currentUser!= null){

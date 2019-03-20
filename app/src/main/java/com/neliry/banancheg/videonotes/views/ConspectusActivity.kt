@@ -12,10 +12,11 @@ import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
 import com.neliry.banancheg.videonotes.adapter.ItemDecorator
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Conspectus
+import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.viewmodels.ConspectusViewModel
 import kotlinx.android.synthetic.main.activity_conspectus.*
 
-class ConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickListener {
+class ConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickListener, ViewNavigation {
     override fun onClick(v: View?) {
         //
     }
@@ -41,14 +42,14 @@ class ConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickListener
 
         var intent: Intent = intent
         conspectusViewModel.parseIntent(intent)
-
+       conspectusViewModel.navigationEvent.setEventReceiver(this, this)
         conspectusViewModel.getItems().observe(this,
             Observer<List<BaseItem>> { items ->
                 Log.d("myTag", "ON CHANGED")
                 recycler_view_conspectuses.adapter = (FirebaseAdapter(conspectusViewModel,items!!))
             })
 
-        conspectusViewModel.getClickedConspectus().observe(this,
+       /* conspectusViewModel.getClickedConspectus().observe(this,
             Observer<Conspectus> { currentClickedConspectus ->
                 Log.d("myTag", "clicked on conspectus_item")
                 if (currentClickedConspectus != null){
@@ -57,7 +58,7 @@ class ConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickListener
                     startActivity(intent)
                 }
 
-            })
+            })*/
 
     }
 }
