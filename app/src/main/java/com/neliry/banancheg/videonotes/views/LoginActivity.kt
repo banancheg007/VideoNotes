@@ -36,9 +36,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ViewNavigation 
         callback.onViewClicked(view)
         when(view?.id){
             R.id.button_login-> {
-                if(!editText_your_email.text.toString().isEmpty() && !editText_your_password.text.toString().isEmpty()){
                     loginViewModel?.emailPasswordSignIn(editText_your_email.text.toString(),editText_your_password.text.toString())
-                }
+
             }
         }
     }

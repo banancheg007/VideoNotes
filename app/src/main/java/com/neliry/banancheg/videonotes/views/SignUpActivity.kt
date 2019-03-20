@@ -10,10 +10,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseUser
 import com.neliry.banancheg.videonotes.R
+import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.viewmodels.SignUpViewModel
 import kotlinx.android.synthetic.main.activity_sing_up.*
 
-class SignUpActivity : AppCompatActivity(),View.OnClickListener {
+class SignUpActivity : AppCompatActivity(),View.OnClickListener, ViewNavigation {
     private var signUpViewModel: SignUpViewModel? = null
 
     override fun onClick(v: View?) {
@@ -26,7 +27,8 @@ class SignUpActivity : AppCompatActivity(),View.OnClickListener {
         setContentView(R.layout.activity_sing_up)
        button_sign_up.setOnClickListener(this)
         signUpViewModel = ViewModelProviders.of(this).get(SignUpViewModel::class.java)
-        signUpViewModel!!.getCurrentUser().observe(this, object : Observer<FirebaseUser> {
+        signUpViewModel!!.navigationEvent.setEventReceiver(this, this)
+       /* signUpViewModel!!.getCurrentUser().observe(this, object : Observer<FirebaseUser> {
             override fun onChanged(currentUser: FirebaseUser?) {
                 if (currentUser!= null){
                     Log.d("myTag", " current user: " + currentUser.email)
@@ -34,7 +36,7 @@ class SignUpActivity : AppCompatActivity(),View.OnClickListener {
                     startActivity(intent)
                 }
             }
-        })
+        })*/
     }
 
 }
