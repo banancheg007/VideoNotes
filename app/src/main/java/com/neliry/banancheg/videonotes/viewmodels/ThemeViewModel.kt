@@ -15,7 +15,6 @@ import com.neliry.banancheg.videonotes.views.ConspectusActivity
 
 class ThemeViewModel(application: Application):FirebaseViewModel(application), OnViewClickListener {
 
-   // private var currentClickedTheme: MutableLiveData<Theme>? = null
     val navigationEvent = LiveMessageEvent<ViewNavigation>()
     private lateinit var currentClickedTheme: Theme
 
@@ -26,18 +25,10 @@ class ThemeViewModel(application: Application):FirebaseViewModel(application), O
     }
     override fun onViewClicked(view: View?, baseItem: BaseItem?) {
         Log.d("myTag", "click on theme_item")
-         //currentClickedTheme?.value = baseItem as Theme
+
         currentClickedTheme = baseItem as Theme
         navigationEvent.sendEvent {  val intent = Intent(getApplication(), ConspectusActivity::class.java)
             intent.putExtra("currentTheme", currentClickedTheme)
             navigationEvent.sendEvent{ startActivity(intent)} }
     }
-
-    /*fun getClickedTheme(): LiveData<Theme> {
-        if (currentClickedTheme == null) {
-            currentClickedTheme = MutableLiveData()
-        }
-        return currentClickedTheme!!
-    }*/
-
 }

@@ -27,11 +27,6 @@ class ConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickListener
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //button_logout.setOnClickListener(this)
-
-
-        //val numberOfColumns =  2
-        //val layoutManager =  GridLayoutManager (this, numberOfColumns)
         val layoutManager=  LinearLayoutManager(this)
         recycler_view_conspectuses.layoutManager = layoutManager
         recycler_view_conspectuses.addItemDecoration(ItemDecorator(20))
@@ -46,17 +41,6 @@ class ConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickListener
                 Log.d("myTag", "ON CHANGED")
                 recycler_view_conspectuses.adapter = (FirebaseAdapter(conspectusViewModel,items!!))
             })
-
-       /* conspectusViewModel.getClickedConspectus().observe(this,
-            Observer<Conspectus> { currentClickedConspectus ->
-                Log.d("myTag", "clicked on conspectus_item")
-                if (currentClickedConspectus != null){
-                    intent = Intent(this@ConspectusActivity, PageActivity::class.java)
-                    intent.putExtra("currentConspectus", currentClickedConspectus)
-                    startActivity(intent)
-                }
-
-            })*/
 
     }
 }

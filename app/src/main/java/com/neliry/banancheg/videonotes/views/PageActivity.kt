@@ -40,14 +40,5 @@ class PageActivity : BaseNavigationDrawerActivity(), ViewNavigation {
                 Log.d("myTag", "ON CHANGED")
                 recycler_view_pages.adapter = (FirebaseAdapter(pageViewModel,items!!))
             })
-
-       /* pageViewModel.getClickedPage().observe(this,
-            Observer<Page> { currentClickedPage ->
-                Log.d("myTag", "clicked on conspectus_item")
-                if (currentClickedPage != null){
-                    Log.d("myTag", "clicked on page")
-                }
-
-            })*/
     }
 }

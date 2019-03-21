@@ -15,12 +15,8 @@ import com.neliry.banancheg.videonotes.views.ThemeActivity
 
 class SignUpViewModel(application: Application): BaseViewModel(application){
     private  var auth: FirebaseAuth = FirebaseAuth.getInstance()
-   // private var currentUser: MutableLiveData<FirebaseUser> = MutableLiveData()
     val navigationEvent = LiveMessageEvent<ViewNavigation>()
-        /* fun getCurrentUser(): LiveData<FirebaseUser> {
-        currentUser.value = auth.currentUser
-        return currentUser!!
-    }*/
+
 
     private fun getCurrentUser(){
         if (auth.currentUser != null)

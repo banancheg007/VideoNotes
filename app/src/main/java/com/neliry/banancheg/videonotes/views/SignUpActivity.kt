@@ -25,15 +25,6 @@ class SignUpActivity : AppCompatActivity(),View.OnClickListener, ViewNavigation 
        button_sign_up.setOnClickListener(this)
         signUpViewModel = ViewModelProviders.of(this).get(SignUpViewModel::class.java)
         signUpViewModel.navigationEvent.setEventReceiver(this, this)
-       /* signUpViewModel!!.getCurrentUser().observe(this, object : Observer<FirebaseUser> {
-            override fun onChanged(currentUser: FirebaseUser?) {
-                if (currentUser!= null){
-                    Log.d("myTag", " current user: " + currentUser.email)
-                    val intent = Intent(this@SignUpActivity, ThemeActivity::class.java)
-                    startActivity(intent)
-                }
-            }
-        })*/
     }
 
 }

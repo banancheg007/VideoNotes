@@ -44,9 +44,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ViewNavigation 
         button_login.setOnClickListener(this)
         sign_up_button.setOnClickListener(this)
 
-        //auth = FirebaseAuth.getInstance();
-        // Configure Google Sign In
-
 
         subscribeUi()
     }
@@ -66,13 +63,5 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ViewNavigation 
     override fun onStart() {
         super.onStart()
         loginViewModel.getCurrentUser()
-       /*loginViewModel!!.getCurrentUser().observe(this,
-           Observer<FirebaseUser> { currentUser ->
-               if (currentUser!= null){
-                   Log.d(tag, " current user: " + currentUser.email)
-                   val intent = Intent(this@LoginActivity, ThemeActivity::class.java)
-                   startActivity(intent)
-               }
-           })*/
     }
 }

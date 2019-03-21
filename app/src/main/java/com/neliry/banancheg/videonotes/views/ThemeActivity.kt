@@ -33,12 +33,10 @@ class ThemeActivity : BaseNavigationDrawerActivity() , View.OnClickListener, Vie
 
     override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
-                //button_logout.setOnClickListener(this)
 
 
-        val numberOfColumns =  1
+        val numberOfColumns =  2
         val layoutManager =  GridLayoutManager (this, numberOfColumns)
-        //val layoutManager=  LinearLayoutManager(this)
         recycler_view_themes.layoutManager = layoutManager
         recycler_view_themes.addItemDecoration(ItemDecorator(20))
 
@@ -51,18 +49,6 @@ class ThemeActivity : BaseNavigationDrawerActivity() , View.OnClickListener, Vie
                Log.d("myTag", "ON CHANGED")
                recycler_view_themes.adapter = (FirebaseAdapter(themeViewModel,items))
            })
-
-       /* themeViewModel.getClickedTheme().observe(this,
-            Observer<Theme> { currentClickedTheme ->
-            Log.d("myTag", "clicked on theme")
-                if (currentClickedTheme != null){
-                    val intent = Intent(this@ThemeActivity, ConspectusActivity::class.java)
-                    intent.putExtra("currentTheme", currentClickedTheme)
-                    startActivity(intent)
-                }
-
-        })*/
-
     }
 
 }

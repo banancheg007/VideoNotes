@@ -15,7 +15,6 @@ import com.neliry.banancheg.videonotes.views.PageActivity
 
 class ConspectusViewModel(application: Application):FirebaseViewModel(application), OnViewClickListener {
 
-    //private var currentClickedConspectus: MutableLiveData<Conspectus>? = null
     val navigationEvent = LiveMessageEvent<ViewNavigation>()
     private lateinit var currentClickedConspectus: Conspectus
 
@@ -24,7 +23,6 @@ class ConspectusViewModel(application: Application):FirebaseViewModel(applicatio
         repository = ConspectusRepository() as FirebaseDatabaseRepository<BaseItem>
     }
     override fun onViewClicked(view: View?, baseItem: BaseItem?) {
-        //currentClickedConspectus?.value = baseItem as Conspectus
         currentClickedConspectus = baseItem as Conspectus
         navigationEvent.sendEvent {  val intent = Intent(getApplication(), PageActivity::class.java)
             intent.putExtra("currentConspectus", currentClickedConspectus)
@@ -39,12 +37,5 @@ class ConspectusViewModel(application: Application):FirebaseViewModel(applicatio
         else
             repository.setDatabaseReference("conspectuses")
     }
-
-    /*fun getClickedConspectus(): LiveData<Conspectus> {
-        if (currentClickedConspectus == null) {
-            currentClickedConspectus = MutableLiveData()
-        }
-        return currentClickedConspectus!!
-    }*/
 
 }
