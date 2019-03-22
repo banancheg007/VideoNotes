@@ -34,6 +34,11 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener, ViewNavig
 
     override fun onClick(view: View?) {
         callback.onViewClicked(view)
+        when(view?.id){
+            R.id.button_save_password->{
+                userProfileViewModel.setNewPassword(editText_new_password.text.toString(), editText_retype_new_password.text.toString())
+            }
+        }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

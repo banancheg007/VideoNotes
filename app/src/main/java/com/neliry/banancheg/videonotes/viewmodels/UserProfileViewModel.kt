@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.facebook.login.LoginManager
@@ -37,7 +38,6 @@ class UserProfileViewModel(application: Application): BaseViewModel(application)
                 isChangePasswordViewsVisible?.value = true
             }
             R.id.button_save_password ->{
-                isChangePasswordViewsVisible?.value = false
             }
         }
     }
@@ -61,6 +61,25 @@ class UserProfileViewModel(application: Application): BaseViewModel(application)
 
     private fun loadCurrentUser() {
         currentUser?.value = FirebaseAuth.getInstance().currentUser
+    }
+
+    fun setNewPassword(newPassword: String, retypeNewPassword: String) {
+        if (newPassword.isEmpty() || retypeNewPassword.isEmpty()){
+            Toast.makeText(getApplication(), "Please, fill all fields", Toast.LENGTH_SHORT)
+        }else if(newPassword != retypeNewPassword){
+            Toast.makeText(getApplication(), "Password and password confirmation do not match", Toast.LENGTH_SHORT ).show()
+        }else if(newPassword.length<6 || retypeNewPassword.length<6){
+            Toast.makeText(getApplication(), "The password must contain at least 6 characters", Toast.LENGTH_SHORT ).show()
+        }else{
+            val user = FirebaseAuth.getInstance().currentUser
+            user?.updatePassword(newPassword)
+                ?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d("myTag", "User password updated.")
+                        isChangePasswordViewsVisible?.value = false
+                    }
+                }
+        }
     }
 
 
