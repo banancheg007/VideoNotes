@@ -32,4 +32,5 @@
     <string name="communicate">Communicate</string>
     <string name="share">Share</string>
     <string name="send">Send</string>
+    <string name="save_password">Save password</string>
 </resources>

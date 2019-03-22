@@ -2,7 +2,10 @@ package com.neliry.banancheg.videonotes.viewmodels
 
 import android.app.Application
 import android.content.Intent
+import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.facebook.login.LoginManager
@@ -19,6 +22,7 @@ class UserProfileViewModel(application: Application): BaseViewModel(application)
 
     val navigationEvent = LiveMessageEvent<ViewNavigation>()
     private var currentUser: MutableLiveData<FirebaseUser>? = null
+    private var isChangePasswordViewsVisible: MutableLiveData<Boolean>? = null
 
     override fun onViewClicked(view: View?, baseItem: BaseItem?) {
         when(view!!.id){
@@ -29,7 +33,11 @@ class UserProfileViewModel(application: Application): BaseViewModel(application)
                     navigationEvent.sendEvent{ startActivity(intent)} }
             }
             R.id.button_change_password->{
-
+                Log.d("myTag", " Change password button clicked")
+                isChangePasswordViewsVisible?.value = true
+            }
+            R.id.button_save_password ->{
+                isChangePasswordViewsVisible?.value = false
             }
         }
     }
@@ -42,7 +50,16 @@ class UserProfileViewModel(application: Application): BaseViewModel(application)
         return currentUser!!
     }
 
-    fun loadCurrentUser() {
+    fun isChangePasswordViewsVisible(): LiveData<Boolean> {
+        if (isChangePasswordViewsVisible == null) {
+            isChangePasswordViewsVisible = MutableLiveData()
+        }
+        return isChangePasswordViewsVisible as MutableLiveData<Boolean>
+    }
+
+
+
+    private fun loadCurrentUser() {
         currentUser?.value = FirebaseAuth.getInstance().currentUser
     }
 
