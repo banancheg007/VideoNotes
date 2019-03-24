@@ -36,7 +36,7 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener, ViewNavig
         callback.onViewClicked(view)
         when(view?.id){
             R.id.button_save_password->{
-                userProfileViewModel.setNewPassword(editText_new_password.text.toString(), editText_retype_new_password.text.toString())
+                userProfileViewModel.setNewPassword(editText_old_password.text.toString(), editText_new_password.text.toString(), editText_retype_new_password.text.toString())
             }
         }
     }
@@ -68,10 +68,12 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener, ViewNavig
                 editText_new_password.visibility = View.VISIBLE
                 editText_retype_new_password.visibility = View.VISIBLE
                 button_save_password.visibility = View.VISIBLE
+                editText_old_password.visibility = View.VISIBLE
             }else{
                 editText_new_password.visibility = View.INVISIBLE
                 editText_retype_new_password.visibility = View.INVISIBLE
                 button_save_password.visibility = View.INVISIBLE
+                editText_old_password.visibility = View.INVISIBLE
             }
         })
         /*if (user != null) {

@@ -9,9 +9,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.facebook.AccessToken
 import com.facebook.login.LoginManager
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.*
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
@@ -35,7 +37,12 @@ class UserProfileViewModel(application: Application): BaseViewModel(application)
             }
             R.id.button_change_password->{
                 Log.d("myTag", " Change password button clicked")
-                isChangePasswordViewsVisible?.value = true
+                Log.d("myTag", " Provider - " +  FirebaseAuth.getInstance().currentUser?.providers + FirebaseAuth.getInstance().currentUser?.providers?.size)
+                if(FirebaseAuth.getInstance().currentUser?.providers!![0]  == "password" && FirebaseAuth.getInstance().currentUser?.providers?.size == 1) {
+                    isChangePasswordViewsVisible?.value = true
+                }else{
+                    Toast.makeText(getApplication(), "Only users registered by e-mail and password can change the password", Toast.LENGTH_SHORT ).show()
+                }
             }
             R.id.button_save_password ->{
             }
@@ -61,24 +68,37 @@ class UserProfileViewModel(application: Application): BaseViewModel(application)
 
     private fun loadCurrentUser() {
         currentUser?.value = FirebaseAuth.getInstance().currentUser
+        Log.d("myTag","GOOGLE  " + GoogleSignIn.getLastSignedInAccount(getApplication()))
+        //Log.d("myTag","FACEBOOK " +  FacebookAuthProvider.getCredential(AccessToken.getCurrentAccessToken().toString()))
+
     }
 
-    fun setNewPassword(newPassword: String, retypeNewPassword: String) {
-        if (newPassword.isEmpty() || retypeNewPassword.isEmpty()){
-            Toast.makeText(getApplication(), "Please, fill all fields", Toast.LENGTH_SHORT)
+    fun setNewPassword(oldPassword: String, newPassword: String, retypeNewPassword: String) {
+        if (newPassword.isEmpty() || retypeNewPassword.isEmpty()||oldPassword.isEmpty()){
+            Toast.makeText(getApplication(), "Please, fill all fields", Toast.LENGTH_SHORT).show()
         }else if(newPassword != retypeNewPassword){
             Toast.makeText(getApplication(), "Password and password confirmation do not match", Toast.LENGTH_SHORT ).show()
         }else if(newPassword.length<6 || retypeNewPassword.length<6){
             Toast.makeText(getApplication(), "The password must contain at least 6 characters", Toast.LENGTH_SHORT ).show()
         }else{
             val user = FirebaseAuth.getInstance().currentUser
-            user?.updatePassword(newPassword)
-                ?.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.d("myTag", "User password updated.")
-                        isChangePasswordViewsVisible?.value = false
-                    }
+            val credential: AuthCredential= EmailAuthProvider.getCredential(user?.email!!, oldPassword)
+            user.reauthenticate(credential).addOnCompleteListener {task ->
+                if (task.isSuccessful){
+                    user?.updatePassword(newPassword)
+                        ?.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Log.d("myTag", "User password updated.")
+                                isChangePasswordViewsVisible?.value = false
+                                Toast.makeText(getApplication(), "Password was changed", Toast.LENGTH_SHORT ).show()
+                            }
+                        }
+
+                }else{
+                    Toast.makeText(getApplication(), "You entered the current password incorrectly", Toast.LENGTH_SHORT ).show()
                 }
+            }
+
         }
     }
 
