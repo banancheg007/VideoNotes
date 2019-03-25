@@ -13,7 +13,7 @@ import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.views.PageActivity
 
-class ConspectusViewModel(application: Application):FirebaseViewModel(application), OnViewClickListener {
+class ConspectusViewModel(application: Application):BaseNavigationDrawerViewModel(application), OnViewClickListener {
 
     val navigationEvent = LiveMessageEvent<ViewNavigation>()
     private lateinit var currentClickedConspectus: Conspectus

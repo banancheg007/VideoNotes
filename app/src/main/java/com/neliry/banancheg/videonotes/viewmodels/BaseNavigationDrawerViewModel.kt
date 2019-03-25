@@ -7,7 +7,7 @@ import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
 import java.lang.Exception
 
-open class FirebaseViewModel(application: Application): BaseViewModel(application){
+open class BaseNavigationDrawerViewModel(application: Application): BaseViewModel(application){
     lateinit var repository: FirebaseDatabaseRepository<BaseItem>
     private var items: MutableLiveData<List<BaseItem>>? = null
 
@@ -24,13 +24,9 @@ open class FirebaseViewModel(application: Application): BaseViewModel(applicatio
             override fun onSuccess(result: List<BaseItem>) {
                 items!!.value = result
             }
-
             override fun onError(e: Exception) {
                 items!!.value = null
             }
-
         })
-
-
     }
 }

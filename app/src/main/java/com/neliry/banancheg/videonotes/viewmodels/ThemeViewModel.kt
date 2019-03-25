@@ -13,7 +13,7 @@ import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.views.ConspectusActivity
 
-class ThemeViewModel(application: Application):FirebaseViewModel(application), OnViewClickListener {
+class ThemeViewModel(application: Application):BaseNavigationDrawerViewModel(application), OnViewClickListener {
 
     val navigationEvent = LiveMessageEvent<ViewNavigation>()
     private lateinit var currentClickedTheme: Theme
