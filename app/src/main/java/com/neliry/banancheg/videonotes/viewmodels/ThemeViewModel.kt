@@ -15,7 +15,7 @@ import com.neliry.banancheg.videonotes.views.ConspectusActivity
 
 class ThemeViewModel(application: Application):BaseNavigationDrawerViewModel(application), OnViewClickListener {
 
-    val navigationEvent = LiveMessageEvent<ViewNavigation>()
+
     private lateinit var currentClickedTheme: Theme
 
     init{

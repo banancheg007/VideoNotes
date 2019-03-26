@@ -41,9 +41,10 @@ class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
 
 
         themeViewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java)
+        setViewModel(themeViewModel)
         registerCallBack(themeViewModel)
         registerCallBack2(themeViewModel)
-        themeViewModel.navigationEvent.setEventReceiver(this, this)
+        baseNavigationDrawerViewModel.navigationEvent.setEventReceiver(this, this)
        themeViewModel.getItems().observe(this,
            Observer<List<BaseItem>> { items ->
                Log.d("myTag", "ON CHANGED")

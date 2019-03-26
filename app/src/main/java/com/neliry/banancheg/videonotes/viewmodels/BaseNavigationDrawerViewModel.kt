@@ -10,25 +10,33 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
+import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
 import com.neliry.banancheg.videonotes.utils.OnItemMenuClickListener
+import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.views.ConspectusActivity
 import com.neliry.banancheg.videonotes.views.ThemeActivity
 import com.neliry.banancheg.videonotes.views.UserProfileActivity
 import java.lang.Exception
 
 open class BaseNavigationDrawerViewModel(application: Application): BaseViewModel(application), OnItemMenuClickListener{
+
+    val navigationEvent = LiveMessageEvent<ViewNavigation>()
+
     override fun onMenuItemClicked(menuItem: MenuItem) {
         when (menuItem.itemId) {
             com.neliry.banancheg.videonotes.R.id.nav_all_conspectuses -> {
                 //startActivity(Intent(this, ConspectusActivity::class.java))
+                navigationEvent.sendEvent{ startActivity(Intent(getApplication(), ConspectusActivity::class.java))}
                 Log.d("myTag", "on item menu clicked")
             }
             com.neliry.banancheg.videonotes.R.id.nav_themes -> {
                 //startActivity(Intent(this, ThemeActivity::class.java))
+                navigationEvent.sendEvent{ startActivity(Intent(getApplication(), ThemeActivity::class.java))}
                 Log.d("myTag", "on item menu clicked")
             }
             com.neliry.banancheg.videonotes.R.id.nav_account -> {
                // startActivity(Intent(this, UserProfileActivity::class.java))
+                navigationEvent.sendEvent{ startActivity(Intent(getApplication(), UserProfileActivity::class.java))}
                 Log.d("myTag", "on item menu clicked")
             }
             /*com.neliry.banancheg.videonotes.R.id.nav_settings -> {
@@ -43,10 +51,11 @@ open class BaseNavigationDrawerViewModel(application: Application): BaseViewMode
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub)
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody)
                 //startActivity(Intent.createChooser(sharingIntent, "Share using"))
+                navigationEvent.sendEvent{ startActivity(Intent.createChooser(sharingIntent, "Share using"))}
                 Log.d("myTag", "on item menu clicked")
             }
             com.neliry.banancheg.videonotes.R.id.nav_send -> {
-               // sendEmail()
+                sendEmail()
                 Log.d("myTag", "on item menu clicked")
             }
         }
@@ -60,6 +69,7 @@ open class BaseNavigationDrawerViewModel(application: Application): BaseViewMode
 
         try {
            // startActivity(Intent.createChooser(emailIntent, "Send email using..."))
+            navigationEvent.sendEvent{ startActivity(Intent.createChooser(emailIntent, "Send email using..."))}
         } catch (ex: android.content.ActivityNotFoundException) {
             Toast.makeText(getApplication(), "No email clients installed.", Toast.LENGTH_SHORT).show()
         }

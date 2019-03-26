@@ -31,6 +31,7 @@ class PageActivity : BaseNavigationDrawerActivity(), ViewNavigation {
         recycler_view_pages.addItemDecoration(ItemDecorator(20))
 
         pageViewModel = ViewModelProviders.of(this).get(PageViewModel::class.java)
+        registerCallBack2(pageViewModel)
         pageViewModel.navigationEvent.setEventReceiver(this, this)
         val intent: Intent = intent
         pageViewModel.parseIntent(intent)

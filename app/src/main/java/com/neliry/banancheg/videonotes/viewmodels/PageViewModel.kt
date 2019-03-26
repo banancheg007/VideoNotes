@@ -16,7 +16,6 @@ import com.neliry.banancheg.videonotes.utils.ViewNavigation
 class PageViewModel(application: Application):BaseNavigationDrawerViewModel(application), OnViewClickListener {
 
     private lateinit var currentClickedPage: Page
-    val navigationEvent = LiveMessageEvent<ViewNavigation>()
 
     init{
         @Suppress("UNCHECKED_CAST")

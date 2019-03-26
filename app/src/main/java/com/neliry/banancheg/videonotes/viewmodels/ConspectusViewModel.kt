@@ -15,7 +15,7 @@ import com.neliry.banancheg.videonotes.views.PageActivity
 
 class ConspectusViewModel(application: Application):BaseNavigationDrawerViewModel(application), OnViewClickListener {
 
-    val navigationEvent = LiveMessageEvent<ViewNavigation>()
+
     private lateinit var currentClickedConspectus: Conspectus
 
     init{
