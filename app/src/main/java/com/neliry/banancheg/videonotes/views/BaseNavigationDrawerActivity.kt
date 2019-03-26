@@ -15,9 +15,17 @@ import kotlinx.android.synthetic.main.app_bar_base_navigation_drawer.*
 import android.content.Intent
 import android.widget.Toast
 import android.net.Uri
+import com.neliry.banancheg.videonotes.utils.OnItemMenuClickListener
+import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 
 
 abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private lateinit var callback2: OnItemMenuClickListener
+
+     fun registerCallBack2(callback: OnItemMenuClickListener) {
+        this.callback2 = callback
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,46 +86,11 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
-        when (item.itemId) {
-            com.neliry.banancheg.videonotes.R.id.nav_all_conspectuses -> {
-                startActivity(Intent(this, ConspectusActivity::class.java))
-            }
-            com.neliry.banancheg.videonotes.R.id.nav_themes -> {
-                startActivity(Intent(this, ThemeActivity::class.java))
-            }
-            com.neliry.banancheg.videonotes.R.id.nav_account -> {
-                startActivity(Intent(this, UserProfileActivity::class.java))
-
-            }
-            com.neliry.banancheg.videonotes.R.id.nav_share -> {
-                val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
-                sharingIntent.type = "text/plain"
-                val shareBody = "I use VideoNotes app. Download this app from google play market"
-                val shareSub = "VideoNotes"
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub)
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody)
-                startActivity(Intent.createChooser(sharingIntent, "Share using"))
-            }
-            com.neliry.banancheg.videonotes.R.id.nav_send -> {
-                sendEmail()
-            }
-        }
+       callback2.onMenuItemClicked(item)
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
 
-    private fun sendEmail() {
 
-        val emailIntent = Intent(Intent.ACTION_SENDTO)
-        emailIntent.data = Uri.parse("mailto:" + "littletester007@gmail.com")
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "VideoNotes")
-
-        try {
-            startActivity(Intent.createChooser(emailIntent, "Send email using..."))
-        } catch (ex: android.content.ActivityNotFoundException) {
-            Toast.makeText(this@BaseNavigationDrawerActivity, "No email clients installed.", Toast.LENGTH_SHORT).show()
-        }
-
-    }
 }

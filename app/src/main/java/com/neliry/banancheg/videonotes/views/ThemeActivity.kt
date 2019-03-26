@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_theme.*
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 
 
-class ThemeActivity : BaseNavigationDrawerActivity() , View.OnClickListener, ViewNavigation {
+class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
 
     private lateinit var callback: OnViewClickListener
     private lateinit var themeViewModel:ThemeViewModel
@@ -28,8 +28,7 @@ class ThemeActivity : BaseNavigationDrawerActivity() , View.OnClickListener, Vie
         return com.neliry.banancheg.videonotes.R.layout.activity_theme
     }
 
-    override fun onClick(view: View?) {
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
@@ -43,6 +42,7 @@ class ThemeActivity : BaseNavigationDrawerActivity() , View.OnClickListener, Vie
 
         themeViewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java)
         registerCallBack(themeViewModel)
+        registerCallBack2(themeViewModel)
         themeViewModel.navigationEvent.setEventReceiver(this, this)
        themeViewModel.getItems().observe(this,
            Observer<List<BaseItem>> { items ->

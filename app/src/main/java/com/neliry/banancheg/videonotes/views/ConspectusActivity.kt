@@ -15,10 +15,7 @@ import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.viewmodels.ConspectusViewModel
 import kotlinx.android.synthetic.main.activity_conspectus.*
 
-class ConspectusActivity : BaseNavigationDrawerActivity() , View.OnClickListener, ViewNavigation {
-    override fun onClick(v: View?) {
-        //
-    }
+class ConspectusActivity : BaseNavigationDrawerActivity(), ViewNavigation {
 
     private lateinit var conspectusViewModel: ConspectusViewModel
 
