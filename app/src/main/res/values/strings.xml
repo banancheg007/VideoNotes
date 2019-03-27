@@ -34,4 +34,7 @@
     <string name="send">Send</string>
     <string name="save_password">Save password</string>
     <string name="old_password">Old password</string>
+    <string name="search">Search</string>
+    <string name="failed">Failed to initialize Youtube Player</string>
+
 </resources>
