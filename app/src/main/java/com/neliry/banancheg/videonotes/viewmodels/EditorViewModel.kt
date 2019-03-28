@@ -1,14 +1,15 @@
-package com.neliry.banancheg.videonotes
+package com.neliry.banancheg.videonotes.viewmodels
 
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.Fragment
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewManager
 import android.widget.*
+import androidx.fragment.app.Fragment
+import com.neliry.banancheg.videonotes.entities.*
 import kotlinx.android.synthetic.main.editor_activity.view.*
 import kotlinx.android.synthetic.main.fragment_shape_editor.*
 
@@ -20,7 +21,7 @@ class EditorViewModel(application: Application) : BaseViewModel(application) {
     internal val imageBlockController = ImageBlockController(this)
     private val textBlock = TextBlock(textBlockController)
     private val imageBox = ImageBlock(imageBlockController)
-    val isDrawMode = false
+    var maxHeight = dpToPx(16f, getApplication()).toFloat()
     var pointX = 0f
     var pointY = 0f
 
@@ -35,11 +36,13 @@ class EditorViewModel(application: Application) : BaseViewModel(application) {
     }
 
     internal fun createTextBlock(layerWidth: Int): EditText {
+        disableDraw()
         imageBlockController.removeImageFocus()
         return textBlock.createTextBlock(getApplication(), checkMaxHeight(), layerWidth)
     }
 
     internal fun createImageBlock(imageLayout: RelativeLayout, resultCode: Int, data: Intent?) {
+        disableDraw()
         textBlockController.removeFocus(getApplication())
         val imageView: ImageView? = imageBox.setImage( resultCode, data, getApplication(), imageBox.createImageBlock(getApplication(), checkMaxHeight(),imageLayout.width))
         if(imageView != null)
@@ -51,7 +54,7 @@ class EditorViewModel(application: Application) : BaseViewModel(application) {
         val canvasLayer = textBlockController.controllerLayout.parent.parent as RelativeLayout
         val textLayer = canvasLayer.text_layer
         val imageLayer = canvasLayer.image_layer
-        var maxHeight= dpToPx(16f, getApplication()).toFloat()
+        maxHeight = dpToPx(16f, getApplication()).toFloat()
         var childCount = textLayer.childCount
         for (i in 0 until childCount){
             val v = textLayer.getChildAt(i)
@@ -68,14 +71,23 @@ class EditorViewModel(application: Application) : BaseViewModel(application) {
 
         val canvas = textLayer.parent as RelativeLayout
         canvas.layoutParams.height = (maxHeight + dpToPx(1000f, getApplication())).toInt()
+        canvas.draw_event_layer.layoutParams.height =  canvas.layoutParams.height
         return maxHeight
+    }
+
+    internal fun setDrawLayerHeight(){
+        val canvasLayer = textBlockController.controllerLayout.parent.parent as RelativeLayout
+        val textLayer = canvasLayer.text_layer
+        val canvas = textLayer.parent as RelativeLayout
+        canvas.paint_layer.layoutParams.height = (maxHeight + dpToPx(1000f, getApplication())).toInt()
+        canvas.paint_layer.requestLayout()
     }
 
     internal fun startDraw(fragment: Fragment, relativeLayout: RelativeLayout){
         if(fragment.shape_select.visibility == View.VISIBLE){
             fragment.shape_select.visibility = View.GONE
             fragment.advanced_shape_editor.visibility = View.GONE
-            disableDraw()
+            fragment.disable_draw_btn.callOnClick()
         }
         else{
             removeFocus()
@@ -102,9 +114,12 @@ class EditorViewModel(application: Application) : BaseViewModel(application) {
         relativeLayout.addView(shapeView)
         shapeView!!.postInvalidate()
         this.shapeView = shapeView
+        checkMaxHeight()
     }
 
     private fun setShapeFocus(context: Context, shapeView: ShapeView) {
+        disableDraw()
+//        shapeView.bringToFront()
         imageBlockController.removeImageFocus()
         changeControllerPosition(context, shapeView)
         imageBlockController.setBlock(shapeView)
@@ -117,6 +132,17 @@ class EditorViewModel(application: Application) : BaseViewModel(application) {
         params.height = imageView.height+dpToPx(30f, context)
         params.setMargins(imageView.x.toInt()- dpToPx(15f, context), imageView.y.toInt()- dpToPx(15f, context), 0, 0)
         imageBlockController.controllerLayout.requestLayout()
+    }
+
+    fun drawEvent(event: MotionEvent, canvasLayer: RelativeLayout, fragment: Fragment): Boolean{
+        return if(fragment.shape_preview.shapeType == 1 || fragment.shape_preview.shapeType == 2){
+            createShapeEvent(event, canvasLayer, fragment)
+        } else if(fragment.shape_preview.shapeType == 3 || fragment.shape_preview.shapeType == 4){
+//            canvasLayer.paint_layer.onTouchEvent(event)
+            false
+        } else {
+            false
+        }
     }
 
     fun createShapeEvent(event: MotionEvent, v: RelativeLayout, fragment: Fragment): Boolean{
@@ -173,7 +199,7 @@ class EditorViewModel(application: Application) : BaseViewModel(application) {
                 MotionEvent.ACTION_UP -> {
                     val scrollView = v.parent as ScrollView
                     scrollView.requestDisallowInterceptTouchEvent(false)
-                    createShape(fragment, v.draw_shape_layer)
+                    createShape(fragment, v.image_layer)
                 }
                 else -> return false
             }
@@ -190,6 +216,33 @@ class EditorViewModel(application: Application) : BaseViewModel(application) {
             (shapeView!!.parent as ViewManager).removeView(shapeView)
         shapeView = null
     }
+
+//    fun selectColorButton(colorButton: ImageButton?, linearLayout: LinearLayout){
+//        var childCount = linearLayout.childCount
+//        for (i in 1 until childCount){
+//            val v = linearLayout.getChildAt(i)
+//            v.setPadding(dpToPx(0.5f, getApplication()!!), dpToPx(0.5f, getApplication()), dpToPx(0.5f, getApplication()), dpToPx(0.5f, getApplication()))
+//            v.setBackgroundColor(-0x5E5E5E)
+//        }
+//        if(colorButton != null) {
+//            colorButton!!.setBackgroundResource(R.drawable.btn_selected_border)
+//            colorButton!!.setPadding(
+//                dpToPx(3.5f, getApplication()),
+//                dpToPx(3.5f, getApplication()),
+//                dpToPx(3.5f, getApplication()),
+//                dpToPx(3.5f, getApplication())
+//            )
+//        }
+//    }
+//
+//    fun selectShapeButton(colorButton: ImageButton, linearLayout: LinearLayout){
+//        var childCount = linearLayout.childCount
+//        for (i in 0 until childCount){
+//            val v = linearLayout.getChildAt(i)
+//            v.setBackgroundColor(Color.parseColor("#fbfbfb"))
+//        }
+//        colorButton.setBackgroundResource( R.drawable.btn_selected_border)
+//    }
 
     internal fun dpToPx(dp: Float, context: Context): Int {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()

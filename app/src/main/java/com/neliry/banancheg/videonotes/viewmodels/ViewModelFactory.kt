@@ -1,8 +1,8 @@
-package com.neliry.banancheg.videonotes
+package com.neliry.banancheg.videonotes.viewmodels
 
 import android.app.Application
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 
 
 class ViewModelFactory(private val application: Application) : ViewModelProvider.Factory {

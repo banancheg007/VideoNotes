@@ -1,11 +1,9 @@
-package com.neliry.banancheg.videonotes
+package com.neliry.banancheg.videonotes.fragments
 
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +11,14 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.SeekBar
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
+import com.neliry.banancheg.videonotes.R
+import com.neliry.banancheg.videonotes.entities.SimpleDrawingView
+import com.neliry.banancheg.videonotes.viewmodels.EditorViewModel
 import kotlinx.android.synthetic.main.editor_activity.view.*
 import kotlinx.android.synthetic.main.fragment_shape_editor.*
+import kotlinx.android.synthetic.main.fragment_shape_editor.view.*
 
 class ShapeEditorFragment : Fragment() {
 
@@ -129,7 +133,7 @@ class ShapeEditorFragment : Fragment() {
             paintLayer.shapeType = 1
             shape_preview.postInvalidate()
             editorViewModel.disableDraw()
-            editorViewModel.createShape(this, canvasLayer.editor_scroll_view.canvas_layer.draw_shape_layer)
+            editorViewModel.createShape(this, canvasLayer.editor_scroll_view.canvas_layer.image_layer )
         }
 
         draw_circle_editor_btn.setOnClickListener {
@@ -139,13 +143,20 @@ class ShapeEditorFragment : Fragment() {
             paintLayer.shapeType = 2
             shape_preview.postInvalidate()
             editorViewModel.disableDraw()
-            editorViewModel.createShape(this, canvasLayer.editor_scroll_view.canvas_layer.draw_shape_layer)
+            editorViewModel.createShape(this, canvasLayer.editor_scroll_view.canvas_layer.image_layer)
         }
         draw_line_editor_btn.setOnClickListener {
             selectShapeButton(draw_line_editor_btn, shape_editor_layout)
             selectShapeButton(draw_line_btn, shape_select)
             shape_preview.shapeType = 3
             paintLayer.shapeType = 3
+            shape_preview.postInvalidate()
+        }
+        eraser_editor_btn.setOnClickListener {
+            selectShapeButton(eraser_editor_btn, shape_editor_layout)
+            selectShapeButton(eraser_btn, shape_select)
+            shape_preview.shapeType = 4
+            paintLayer.shapeType = 4
             shape_preview.postInvalidate()
         }
         draw_square_btn.setOnClickListener {
@@ -155,7 +166,7 @@ class ShapeEditorFragment : Fragment() {
             paintLayer.shapeType = 1
             shape_preview.postInvalidate()
             editorViewModel.disableDraw()
-            editorViewModel.createShape(this, canvasLayer.editor_scroll_view.canvas_layer.draw_shape_layer)
+            editorViewModel.createShape(this, canvasLayer.editor_scroll_view.canvas_layer.image_layer)
         }
         draw_circle_btn.setOnClickListener {
             selectShapeButton(draw_circle_btn, shape_select)
@@ -164,7 +175,7 @@ class ShapeEditorFragment : Fragment() {
             paintLayer.shapeType = 2
             shape_preview.postInvalidate()
             editorViewModel.disableDraw()
-            editorViewModel.createShape(this, canvasLayer.editor_scroll_view.canvas_layer.draw_shape_layer)
+            editorViewModel.createShape(this, canvasLayer.editor_scroll_view.canvas_layer.image_layer)
         }
         draw_line_btn.setOnClickListener {
             selectShapeButton(draw_line_btn, shape_select)
@@ -172,14 +183,16 @@ class ShapeEditorFragment : Fragment() {
             shape_preview.shapeType = 3
             paintLayer.shapeType = 3
             shape_preview.postInvalidate()
+            editorViewModel.setDrawLayerHeight()
         }
 
         eraser_btn.setOnClickListener {
             selectShapeButton(eraser_btn, shape_select)
-            selectShapeButton(null, shape_editor_layout)
+            selectShapeButton(eraser_editor_btn, shape_editor_layout)
             shape_preview.shapeType = 4
             paintLayer.shapeType = 4
             editorViewModel.disableDraw()
+            shape_preview.postInvalidate()
         }
 
         disable_draw_btn.setOnClickListener {

@@ -1,4 +1,4 @@
-package com.neliry.banancheg.videonotes
+package com.neliry.banancheg.videonotes.entities
 
 import android.app.Activity
 import android.content.Context
@@ -8,8 +8,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import kotlinx.android.synthetic.main.text_block_controller_layout.view.*
 import android.view.MotionEvent
+import com.neliry.banancheg.videonotes.R
+import com.neliry.banancheg.videonotes.viewmodels.EditorViewModel
 
-class TextBlockController(private val model: EditorViewModel){
+class TextBlockController(internal val model: EditorViewModel){
 
     lateinit var viewBlock: EditText
     lateinit var controllerLayout: RelativeLayout

@@ -1,4 +1,4 @@
-package com.neliry.banancheg.videonotes
+package com.neliry.banancheg.videonotes.entities
 
 import android.content.Context
 import android.graphics.*

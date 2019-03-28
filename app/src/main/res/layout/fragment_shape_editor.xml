@@ -4,7 +4,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             tools:context=".activity.fragments.ShapeEditorFragment"
+             tools:context=".fragments.ShapeEditorFragment"
              android:elevation="20dp"
              android:background="#fafafa"
              >
@@ -45,7 +45,7 @@
                         android:src="@drawable/transparent_grid"
                         android:scaleType="matrix"
                 />
-                <com.neliry.banancheg.videonotes.ShapePreview
+                <com.neliry.banancheg.videonotes.views.ShapePreview
                         android:id="@+id/shape_preview"
                         android:layout_centerVertical="true"
                         android:layout_centerHorizontal="true"
@@ -81,6 +81,12 @@
                         android:layout_weight="0"
                         android:src="@drawable/ic_draw_line"
 />
+                <ImageButton
+                        android:id="@+id/eraser_editor_btn"
+                        style="@style/ShapeEditorButtons"
+                        android:layout_weight="0"
+                        android:src="@drawable/ic_eraser"
+                />
             </LinearLayout>
         </LinearLayout>
         <SeekBar
@@ -115,7 +121,7 @@
                     android:layout_weight="0"
                     android:src="@drawable/ic_line"
                     android:padding="4dp"
-                    android:background="@drawable/border"/>
+                    android:background="@drawable/color_btn_border"/>
             <ImageButton
                     android:id="@+id/border_color_1"
                     style="@style/ColorButtons"
@@ -183,7 +189,7 @@
                     android:layout_weight="0"
                     android:src="@drawable/ic_format_color_fill"
                     android:padding="4dp"
-                    android:background="@drawable/border"/>
+                    android:background="@drawable/color_btn_border"/>
             <ImageButton
                     android:id="@+id/background_color_1"
                     style="@style/ColorButtons"

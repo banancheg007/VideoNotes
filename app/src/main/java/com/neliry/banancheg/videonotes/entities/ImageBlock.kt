@@ -1,4 +1,4 @@
-package com.neliry.banancheg.videonotes
+package com.neliry.banancheg.videonotes.entities
 
 import android.app.Activity
 import android.content.Context
@@ -66,6 +66,8 @@ class ImageBlock(private val blockController: ImageBlockController)  {
     }
 
     private fun setFocus(context: Context, imageView: ImageView) {
+        blockController.model.disableDraw()
+//        imageView.bringToFront()
         blockController.removeImageFocus()
         changeControllerPosition(context, imageView)
         blockController.setBlock(imageView)

@@ -1,11 +1,6 @@
-package com.neliry.banancheg.videonotes
+package com.neliry.banancheg.videonotes.viewmodels
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.AndroidViewModel
 
-open class BaseViewModel(application: Application) : AndroidViewModel(application) {
-
-
-}
+open class BaseViewModel(application: Application) : AndroidViewModel(application)

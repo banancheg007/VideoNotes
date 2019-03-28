@@ -1,13 +1,16 @@
-package com.neliry.banancheg.videonotes
+package com.neliry.banancheg.videonotes.entities
 
+import android.app.Application
 import android.content.Context
 import android.util.TypedValue
 import android.view.*
 import android.widget.*
 import android.view.MotionEvent
+import com.neliry.banancheg.videonotes.R
+import com.neliry.banancheg.videonotes.viewmodels.EditorViewModel
 import kotlinx.android.synthetic.main.image_block_controller_layout.view.*
 
-class ImageBlockController(private val model: EditorViewModel){
+class ImageBlockController(internal val model: EditorViewModel){
 
     lateinit var viewBlock: View
     lateinit var controllerLayout: RelativeLayout
@@ -72,7 +75,7 @@ class ImageBlockController(private val model: EditorViewModel){
 
     fun removeImageFocus(){
         if(model.textBlockController.controllerLayout.visibility == View.VISIBLE)
-            model.textBlockController.removeFocus(model.getApplication())
+            model.textBlockController.removeFocus(model.getApplication() as Application)
         if(controllerLayout.visibility == View.VISIBLE) {
             controllerLayout.visibility = View.GONE
         }

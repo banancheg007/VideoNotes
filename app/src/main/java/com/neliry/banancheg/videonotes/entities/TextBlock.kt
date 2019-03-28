@@ -1,11 +1,14 @@
-package com.neliry.banancheg.videonotes
+package com.neliry.banancheg.videonotes.entities
 
 import android.content.Context
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import com.neliry.banancheg.videonotes.fragments.ShapeEditorFragment
+import kotlinx.android.synthetic.main.editor_activity.view.*
 
 class TextBlock(private val blockController: TextBlockController) {
 
@@ -52,10 +55,12 @@ class TextBlock(private val blockController: TextBlockController) {
     }
 
     private fun setFocus(context: Context, editText:EditText) {
+        blockController.model.disableDraw()
         blockController.removeFocus(context)
         changeControllerPosition(context, editText)
         blockController.setBlock(editText)
         blockController.controllerLayout.visibility = View.VISIBLE
+
     }
 
     private fun changeControllerPosition(context: Context, editText: EditText){

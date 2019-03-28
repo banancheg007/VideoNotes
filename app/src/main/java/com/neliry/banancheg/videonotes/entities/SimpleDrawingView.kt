@@ -1,11 +1,18 @@
-package com.neliry.banancheg.videonotes
+package com.neliry.banancheg.videonotes.entities
 
 import android.content.Context
 import android.graphics.*
+import android.os.AsyncTask
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.widget.RelativeLayout
 import android.widget.ScrollView
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+
 
 class SimpleDrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
@@ -31,8 +38,30 @@ class SimpleDrawingView(context: Context, attrs: AttributeSet) : View(context, a
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-        mCanvas = Canvas(mBitmap!!)
+        if( ::mBitmap.isInitialized){
+            changeMaxHeight(h)
+        }
+        else{
+            mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            mCanvas = Canvas(mBitmap!!)
+//            val newBitmap = Bitmap.createBitmap(mBitmap.width, h, Bitmap.Config.ARGB_8888)
+//            mCanvas = Canvas(newBitmap)
+////            canvas!!.drawBitmap(mBitmap, 0f, 0f, mBitmapPaint)
+//            mBitmap = newBitmap
+//            mCanvas = Canvas(newBitmap!!)
+//            mCanvas!!.drawBitmap(mBitmap, 0f, 0f, mBitmapPaint)
+//            mBitmap = newBitmap
+        }
+    }
+
+    fun changeMaxHeight(h: Int)= GlobalScope.async { // this: CoroutineScope
+        launch {
+
+            val newBitmap = Bitmap.createBitmap(mBitmap.width, h, Bitmap.Config.ARGB_8888)
+            mCanvas = Canvas (newBitmap)
+            mCanvas!!.drawBitmap(mBitmap, 0f, 0f, mBitmapPaint)
+            mBitmap = newBitmap
+        }
     }
 
     private fun setupPaint() {
@@ -47,14 +76,13 @@ class SimpleDrawingView(context: Context, attrs: AttributeSet) : View(context, a
 //        drawPaint!!.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OVER)
     }
 
+
     override fun onDraw(canvas: Canvas) {
-//        canvas.drawColor(-0x555556)
         canvas.drawBitmap(mBitmap!!, 0f, 0f, mBitmapPaint)
         canvas.drawPath(mPath, mPaint!!)
-//                for (path in pathList) {
-//                    canvas.drawPath(path, drawPaint!!)
-//                }
     }
+
+
 
     private fun touch_start(x: Float, y: Float) {
         if(shapeType == 4){
@@ -97,6 +125,7 @@ class SimpleDrawingView(context: Context, attrs: AttributeSet) : View(context, a
         mCanvas!!.drawPath(mPath, mPaint!!)
         // kill this so we don't double draw
         mPath.reset()
+
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
