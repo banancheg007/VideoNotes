@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">VideoNotes</string>
     <string name="sign_in_with_facebook">Sign in with Facebook</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="facebook_app_id">385978722180561</string>
@@ -34,4 +33,8 @@
     <string name="send">Send</string>
     <string name="save_password">Save password</string>
     <string name="old_password">Old password</string>
+    <string name="search">Search</string>
+    <string name="failed">Failed to initialize Youtube Player</string>
+    <string name="app_name">VideoNotes</string>
+
 </resources>
