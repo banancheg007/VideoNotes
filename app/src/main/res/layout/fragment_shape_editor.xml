@@ -4,7 +4,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             tools:context=".fragments.ShapeEditorFragment"
+             tools:context=".activity.fragments.ShapeEditorFragment"
              android:elevation="20dp"
              android:background="#fafafa"
              >
@@ -45,7 +45,7 @@
                         android:src="@drawable/transparent_grid"
                         android:scaleType="matrix"
                 />
-                <com.neliry.banancheg.videonotes.views.ShapePreview
+                <com.example.ghproject.activity.ShapePreview
                         android:id="@+id/shape_preview"
                         android:layout_centerVertical="true"
                         android:layout_centerHorizontal="true"
