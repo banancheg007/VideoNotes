@@ -1,9 +1,12 @@
 package com.neliry.banancheg.videonotes.adapter
 
 
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.neliry.banancheg.videonotes.models.Theme
@@ -12,6 +15,7 @@ import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Conspectus
 import com.neliry.banancheg.videonotes.models.Page
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
+import com.squareup.picasso.Picasso
 
 class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
                       private val list: List<BaseItem>
@@ -87,10 +91,17 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
 
 
         internal var name: TextView = itemView.findViewById(R.id.conspectus_name_textview)
+        internal var preview_url: ImageView = itemView.findViewById(R.id.conspectus_preview_image_view)
 
 
         fun bind(conspectus: Conspectus) {
             name.text = conspectus.name
+            //Log.d("myLog", conspectus.previewUrl)
+            Picasso.with(itemView.context)
+
+                .load(Uri.parse("https://ninjacdn.blob.core.windows.net/cdn/img/newwebsite/teamlogos/about_ninjamock_svetlana.png"))
+                .placeholder(R.mipmap.user_profile_placeholder)
+                .into(preview_url!!)
         }
 
         init{

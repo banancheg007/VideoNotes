@@ -56,6 +56,7 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener, ViewNavig
                 Log.d("myTag", "ON CHANGED")
                 textView_user_display_name.text = currentUser?.displayName
                 textView_user_email.text = currentUser?.email
+                Log.d("photo", currentUser?.photoUrl.toString())
                 Picasso.with(this)
                     .load(currentUser?.photoUrl)
                     .placeholder(R.mipmap.user_profile_placeholder)

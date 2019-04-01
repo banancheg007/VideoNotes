@@ -21,7 +21,7 @@ class PlayerActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListene
         super.onCreate(savedInstanceState)
         setContentView(com.neliry.banancheg.videonotes.R.layout.activity_player)
 
-        playerView = findViewById(com.neliry.banancheg.videonotes.R.id.player_view) as YouTubePlayerView
+        playerView = findViewById<YouTubePlayerView>(com.neliry.banancheg.videonotes.R.id.player_view)
         playerView!!.initialize(YoutubeConnector.KEY, this)
     }
 
