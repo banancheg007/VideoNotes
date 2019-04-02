@@ -242,7 +242,7 @@ class EditorViewModel(application: Application) : BaseViewModel(application) {
 //        colorButton.setBackgroundResource( R.drawable.btn_selected_border)
 //    }
 
-    internal fun dpToPx(dp: Float, context: Context): Int {
+    private fun dpToPx(dp: Float, context: Context): Int {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()
     }
 }
