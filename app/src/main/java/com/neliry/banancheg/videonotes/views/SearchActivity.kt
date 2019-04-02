@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Handler
 
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
@@ -71,6 +72,7 @@ class SearchActivity : AppCompatActivity() {
 
                 val searchResult = searchResults!![position]
 
+                Log.d("myTag", searchResult.thumbnailURL)
                 Picasso.with(applicationContext).load(searchResult.thumbnailURL).into(thumbnail)
                 title.text = searchResult.description
                 description.text = searchResult.description

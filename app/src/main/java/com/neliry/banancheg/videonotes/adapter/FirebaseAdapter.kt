@@ -97,11 +97,13 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
         fun bind(conspectus: Conspectus) {
             name.text = conspectus.name
             //Log.d("myLog", conspectus.previewUrl)
-            Picasso.with(itemView.context)
 
-                .load(Uri.parse("https://ninjacdn.blob.core.windows.net/cdn/img/newwebsite/teamlogos/about_ninjamock_svetlana.png"))
-                .placeholder(R.mipmap.user_profile_placeholder)
-                .into(preview_url!!)
+                Picasso.with(itemView.context)
+
+                    .load(conspectus.previewUrl)
+                    .placeholder(R.mipmap.user_profile_placeholder)
+                    .into(preview_url!!)
+
         }
 
         init{

@@ -6,7 +6,7 @@
               android:background="@drawable/border"
                 android:padding="15dp">
 
-        <ImageView android:layout_width="20dp" android:layout_height="20dp"
+        <ImageView android:layout_width="70dp" android:layout_height="70dp"
         android:id="@+id/conspectus_preview_image_view"/>
 
         <TextView
