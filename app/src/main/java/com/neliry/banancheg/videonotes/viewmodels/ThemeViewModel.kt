@@ -38,6 +38,6 @@ class ThemeViewModel(application: Application):BaseNavigationDrawerViewModel(app
         var key = myRef.push().key!!
         var theme = Theme(key, name)
         myRef.child(key).setValue(theme)
-        hideDialog()
+
     }
 }

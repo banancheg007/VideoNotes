@@ -35,6 +35,7 @@ class ConspectusActivity : BaseNavigationDrawerActivity(), ViewNavigation {
         conspectusViewModel.parseIntent(intent)
        conspectusViewModel.navigationEvent.setEventReceiver(this, this)
         registerCallBack2(conspectusViewModel)
+        setViewModel(conspectusViewModel)
         conspectusViewModel.getItems().observe(this, Observer<List<BaseItem>> { items ->
                 Log.d("myTag", "ON CHANGED")
                 recycler_view_conspectuses.adapter = (FirebaseAdapter(conspectusViewModel,items!!))

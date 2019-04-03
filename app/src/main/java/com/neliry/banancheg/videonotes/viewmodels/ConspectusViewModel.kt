@@ -12,6 +12,7 @@ import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.views.PageActivity
+import com.neliry.banancheg.videonotes.views.SearchActivity
 
 class ConspectusViewModel(application: Application):BaseNavigationDrawerViewModel(application), OnViewClickListener {
 
@@ -37,5 +38,9 @@ class ConspectusViewModel(application: Application):BaseNavigationDrawerViewMode
         else
             repository.setDatabaseReference("all_conspectuses")
     }
-
+    override fun showDialog(){
+        navigationEvent.sendEvent {
+            val intent = Intent(getApplication(), SearchActivity::class.java)
+            startActivity(intent) }
+    }
 }

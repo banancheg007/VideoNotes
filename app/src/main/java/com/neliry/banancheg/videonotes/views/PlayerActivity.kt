@@ -9,8 +9,7 @@ import android.widget.Toast
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.neliry.banancheg.videonotes.utils.YoutubeConnector
 import com.google.android.youtube.player.YouTubePlayerView
-
-
+import com.neliry.banancheg.videonotes.models.VideoItem
 
 
 class PlayerActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListener {
@@ -27,7 +26,8 @@ class PlayerActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListene
 
     override fun onInitializationSuccess(provider: YouTubePlayer.Provider, youTubePlayer: YouTubePlayer, b: Boolean) {
         if (!b) {
-            youTubePlayer.cueVideo(intent.getStringExtra("VIDEO_ID"))
+            val videoItem = intent.getSerializableExtra("VIDEO_ITEM") as VideoItem
+            youTubePlayer.cueVideo(videoItem.id)
         }
     }
 

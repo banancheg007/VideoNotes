@@ -46,9 +46,7 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
         setContentView(com.neliry.banancheg.videonotes.R.layout.activity_base_navigation_drawer)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            baseNavigationDrawerViewModel.showDialog()
-        }
+
 
         val toggle = ActionBarDrawerToggle(
             this, drawer_layout, toolbar, com.neliry.banancheg.videonotes.R.string.navigation_drawer_open, com.neliry.banancheg.videonotes.R.string.navigation_drawer_close
@@ -57,7 +55,7 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
-
+        addActionToFab()
         addMainContentLayout(getMainContentLayout())
     }
 
@@ -77,6 +75,11 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
         }
     }
 
+    private fun addActionToFab() {
+        fab.setOnClickListener {
+            baseNavigationDrawerViewModel.showDialog()
+        }
+    }
 
 
 

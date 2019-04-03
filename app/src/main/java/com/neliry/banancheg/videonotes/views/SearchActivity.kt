@@ -75,7 +75,7 @@ class SearchActivity : AppCompatActivity() {
                 Log.d("myTag", searchResult.thumbnailURL)
                 Picasso.with(applicationContext).load(searchResult.thumbnailURL).into(thumbnail)
                 title.text = searchResult.description
-                description.text = searchResult.description
+                //description.text = searchResult.description
                 return convertView
             }
         }
@@ -85,7 +85,7 @@ class SearchActivity : AppCompatActivity() {
     private fun addClickListener() {
         videosFound!!.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val intent = Intent(application, PlayerActivity::class.java)
-            intent.putExtra("VIDEO_ID", searchResults!![position].id)
+            intent.putExtra("VIDEO_ITEM", searchResults!![position])
             startActivity(intent)
         }
     }

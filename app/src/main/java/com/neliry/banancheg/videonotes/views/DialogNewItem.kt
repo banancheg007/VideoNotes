@@ -17,8 +17,12 @@ class DialogNewItem: DialogFragment(),View.OnClickListener{
     private lateinit var themeViewModel:ThemeViewModel
     override fun onClick(v: View?) {
         when(v?.id){
-            R.id.dialog_button_confirm ->{ themeViewModel.addNewItem(dialog_editText_name.text.toString()) }
-            R.id.dialog_button_cancel-> {themeViewModel.hideDialog()}
+            R.id.dialog_button_confirm ->{
+                themeViewModel.addNewItem(dialog_editText_name.text.toString())
+                dismiss()
+            }
+            R.id.dialog_button_cancel-> {
+            dismiss()}
         }
     }
 
