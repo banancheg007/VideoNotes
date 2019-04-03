@@ -1,3 +1,4 @@
 package com.neliry.banancheg.videonotes.models
 
-class Theme:BaseItem()
+class Theme(id:String? = null,
+            name:String? = null):BaseItem(id, name)

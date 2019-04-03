@@ -25,7 +25,7 @@ open class BaseNavigationDrawerViewModel(application: Application): BaseViewMode
 
     val navigationEvent = LiveMessageEvent<ViewNavigation>()
 
-    val showDialog = SingleLiveEvent<Boolean>()
+    val showDialog = MutableLiveData<Boolean>()
 
     override fun onMenuItemClicked(menuItem: MenuItem) {
         when (menuItem.itemId) {
@@ -105,6 +105,10 @@ open class BaseNavigationDrawerViewModel(application: Application): BaseViewMode
 
     fun showDialog() {
         showDialog.value = true
+    }
+
+    fun hideDialog(){
+        showDialog.value = false
     }
 
 

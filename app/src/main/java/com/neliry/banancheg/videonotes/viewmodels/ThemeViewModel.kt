@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Intent
 import android.util.Log
 import android.view.View
+import com.google.firebase.database.FirebaseDatabase
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
@@ -30,5 +31,13 @@ class ThemeViewModel(application: Application):BaseNavigationDrawerViewModel(app
         navigationEvent.sendEvent {  val intent = Intent(getApplication(), ConspectusActivity::class.java)
             intent.putExtra("currentTheme", currentClickedTheme)
             navigationEvent.sendEvent{ startActivity(intent)} }
+    }
+
+    fun addNewItem(name: String) {
+        val myRef = FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2").child("themes")
+        var key = myRef.push().key!!
+        var theme = Theme(key, name)
+        myRef.child(key).setValue(theme)
+        hideDialog()
     }
 }

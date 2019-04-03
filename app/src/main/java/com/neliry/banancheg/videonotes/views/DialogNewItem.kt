@@ -7,12 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProviders
 import com.neliry.banancheg.videonotes.R
+import com.neliry.banancheg.videonotes.viewmodels.ThemeViewModel
+import kotlinx.android.synthetic.main.new_item_dialog.*
 
 
 class DialogNewItem: DialogFragment(),View.OnClickListener{
+    private lateinit var themeViewModel:ThemeViewModel
     override fun onClick(v: View?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        when(v?.id){
+            R.id.dialog_button_confirm ->{ themeViewModel.addNewItem(dialog_editText_name.text.toString()) }
+            R.id.dialog_button_cancel-> {themeViewModel.hideDialog()}
+        }
     }
 
     @SuppressLint("InflateParams")
@@ -23,5 +30,9 @@ class DialogNewItem: DialogFragment(),View.OnClickListener{
         (dialogWindow.findViewById(R.id.dialog_button_confirm) as Button).setOnClickListener(this)
 
         return dialogWindow
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        themeViewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java)
     }
 }
