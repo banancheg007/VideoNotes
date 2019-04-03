@@ -19,7 +19,6 @@
             android:id="@+id/video_player_rl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             >
         <ProgressBar
                 style="?android:attr/progressBarStyleHorizontal"
@@ -116,32 +115,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
     >
-        <LinearLayout
-                android:id="@+id/time_mark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
- >
-            <ImageView
-                    android:layout_width="2dp"
-                    android:layout_height="16dp"
-                    android:background="@color/accent"
-            />
-            <ImageButton
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="@drawable/nore_mark_btn"
-            />
-        </LinearLayout>
+        <!--<LinearLayout-->
+                <!--android:id="@+id/time_mark"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:gravity="center_horizontal"-->
+ <!--&gt;-->
+            <!--<ImageView-->
+                    <!--android:layout_width="2dp"-->
+                    <!--android:layout_height="16dp"-->
+                    <!--android:background="@color/accent"-->
+            <!--/>-->
+            <!--<ImageButton-->
+                    <!--android:layout_width="16dp"-->
+                    <!--android:layout_height="16dp"-->
+                    <!--android:background="@drawable/note_mark_btn"-->
+            <!--/>-->
+        <!--</LinearLayout>-->
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/notes_list_recycler_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:visibility="gone"
             android:layout_below="@+id/marks_rl"
+            android:layout_marginTop="4dp"
     />
 
 

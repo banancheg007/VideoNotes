@@ -53,4 +53,21 @@
         <item name="android:padding">0.5dp</item>
         <item name="android:background">#5E5E5E</item>
     </style>
+
+    <style name="TimeMarkLayout">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+    <style name="TimeMarkLine">
+        <item name="android:layout_width">2dp</item>
+        <item name="android:layout_height">16dp</item>
+        <item name="android:background">@color/accent</item>
+    </style>
+    <style name="TimeMarkButton">
+        <item name="android:layout_width">16dp</item>
+        <item name="android:layout_height">16dp</item>
+        <item name="android:background">@drawable/note_mark_btn</item>
+    </style>
 </resources>

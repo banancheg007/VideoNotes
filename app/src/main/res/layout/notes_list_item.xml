@@ -4,7 +4,7 @@
               android:orientation="vertical"
               android:layout_width="300dp"
               android:layout_height="match_parent"
-              android:layout_margin="16dp">
+              android:layout_marginLeft="16dp">
     <TextView
             android:id="@+id/notes_name"
             android:background="@color/accent"

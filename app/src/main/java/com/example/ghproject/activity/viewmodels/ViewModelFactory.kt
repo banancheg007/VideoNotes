@@ -12,6 +12,9 @@ class ViewModelFactory(private val application: Application) : ViewModelProvider
         modelClass.isAssignableFrom(EditorViewModel::class.java) -> {
             EditorViewModel(application) as T
         }
+        modelClass.isAssignableFrom(VideoViewModel::class.java) -> {
+            VideoViewModel(application) as T
+        }
         else -> throw IllegalArgumentException()
     }
 }

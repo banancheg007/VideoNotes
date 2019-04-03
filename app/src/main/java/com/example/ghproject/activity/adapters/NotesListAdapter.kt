@@ -6,9 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
 import com.example.ghproject.R
+import com.example.ghproject.activity.entities.Note
 import kotlinx.android.synthetic.main.notes_list_item.view.*
 
 class NotesListAdapter (val windowWidth: Int) : RecyclerView.Adapter<NotesListAdapter.ViewHolder>() {
+
+    lateinit var notes: List<Note>
 
     inner class ViewHolder internal constructor(view: View) : RecyclerView.ViewHolder(view) {
         internal val nameView: TextView = view.findViewById(R.id.notes_name)
@@ -24,11 +27,15 @@ class NotesListAdapter (val windowWidth: Int) : RecyclerView.Adapter<NotesListAd
     }
 
     override fun getItemCount(): Int {
-        return 5
+        return notes.size
     }
 
     override fun onBindViewHolder(holder: NotesListAdapter.ViewHolder, position: Int) {
-        holder.nameView.text = position.toString()
+        holder.nameView.text = notes[position].name
     }
 
+    fun setMessages(notes: List<Note>) {
+        this.notes = notes
+        notifyDataSetChanged()
+    }
 }
