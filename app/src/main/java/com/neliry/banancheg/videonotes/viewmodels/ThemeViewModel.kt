@@ -14,7 +14,7 @@ import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.views.ConspectusActivity
 
-class ThemeViewModel(application: Application):BaseNavigationDrawerViewModel(application), OnViewClickListener {
+open class ThemeViewModel(application: Application):BaseNavigationDrawerViewModel(application), OnViewClickListener {
 
 
     private lateinit var currentClickedTheme: Theme

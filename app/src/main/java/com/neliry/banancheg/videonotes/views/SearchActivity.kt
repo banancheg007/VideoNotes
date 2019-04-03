@@ -16,15 +16,28 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.neliry.banancheg.videonotes.R
+import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
+import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.VideoItem
 import com.neliry.banancheg.videonotes.utils.YoutubeConnector
+import com.neliry.banancheg.videonotes.viewmodels.LoginViewModel
+import com.neliry.banancheg.videonotes.viewmodels.SearchViewModel
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_theme.*
+import android.widget.Spinner
+import android.R.attr.data
+
+
 
 class SearchActivity : AppCompatActivity() {
+    var list= ArrayList<String>()
     private var searchInput: EditText? = null
     private var videosFound: ListView? = null
     private var handler: Handler? = null
+    lateinit var searchViewModel: SearchViewModel
 
     private var searchResults: List<VideoItem>? = null
 
@@ -46,6 +59,25 @@ class SearchActivity : AppCompatActivity() {
         })
 
         addClickListener()
+
+        searchViewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
+        searchViewModel.getItems().observe(this,
+            Observer<List<BaseItem>> { items ->
+                Log.d("myTag", "ON CHANGED")
+                // адаптер
+
+                for (item in items){
+                    list.add(item.name as String)
+                    Log.d("myTag", item.name)
+                }
+
+                //val spinner = findViewById<Spinner>(R.id.spinner)
+                //spinner.adapter = adapter
+                // заголовок
+                // spinner.prompt = "Change theme"
+                // выделяем элемент
+                //spinner.setSelection(2)
+            })
     }
 
     private fun searchOnYoutube(keywords: String) {
@@ -86,6 +118,7 @@ class SearchActivity : AppCompatActivity() {
         videosFound!!.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val intent = Intent(application, PlayerActivity::class.java)
             intent.putExtra("VIDEO_ITEM", searchResults!![position])
+            intent.putExtra("list", list)
             startActivity(intent)
         }
     }
