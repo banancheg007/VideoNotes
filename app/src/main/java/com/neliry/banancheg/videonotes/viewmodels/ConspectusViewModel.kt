@@ -35,7 +35,7 @@ class ConspectusViewModel(application: Application):BaseNavigationDrawerViewMode
             repository.setDatabaseReference("conspectuses", theme.id.toString())
         }
         else
-            repository.setDatabaseReference("conspectuses")
+            repository.setDatabaseReference("all_conspectuses")
     }
 
 }

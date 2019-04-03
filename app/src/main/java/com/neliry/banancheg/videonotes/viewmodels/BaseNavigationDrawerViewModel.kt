@@ -6,14 +6,17 @@ import android.net.Uri
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
 import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
 import com.neliry.banancheg.videonotes.utils.OnItemMenuClickListener
+import com.neliry.banancheg.videonotes.utils.SingleLiveEvent
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.views.ConspectusActivity
+import com.neliry.banancheg.videonotes.views.DialogNewItem
 import com.neliry.banancheg.videonotes.views.ThemeActivity
 import com.neliry.banancheg.videonotes.views.UserProfileActivity
 import java.lang.Exception
@@ -21,6 +24,8 @@ import java.lang.Exception
 open class BaseNavigationDrawerViewModel(application: Application): BaseViewModel(application), OnItemMenuClickListener{
 
     val navigationEvent = LiveMessageEvent<ViewNavigation>()
+
+    val showDialog = SingleLiveEvent<Boolean>()
 
     override fun onMenuItemClicked(menuItem: MenuItem) {
         when (menuItem.itemId) {
@@ -97,4 +102,10 @@ open class BaseNavigationDrawerViewModel(application: Application): BaseViewMode
             }
         })
     }
+
+    fun showDialog() {
+        showDialog.value = true
+    }
+
+
 }

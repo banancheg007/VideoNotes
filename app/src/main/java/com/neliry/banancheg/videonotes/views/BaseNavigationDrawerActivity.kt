@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.app_bar_base_navigation_drawer.*
 import android.content.Intent
 import android.widget.Toast
 import android.net.Uri
+import androidx.lifecycle.Observer
 import com.neliry.banancheg.videonotes.utils.OnItemMenuClickListener
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.neliry.banancheg.videonotes.viewmodels.BaseNavigationDrawerViewModel
@@ -38,6 +39,7 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         addElements()
+
     }
 
     private fun addElements(){
@@ -45,8 +47,7 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            baseNavigationDrawerViewModel.showDialog()
         }
 
         val toggle = ActionBarDrawerToggle(
@@ -86,6 +87,8 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
+
+
 
 
 }

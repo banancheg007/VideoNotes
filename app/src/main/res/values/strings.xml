@@ -36,5 +36,8 @@
     <string name="search">Search</string>
     <string name="failed">Failed to initialize Youtube Player</string>
     <string name="app_name">VideoNotes</string>
+    <string name="enter_name">Enter name</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

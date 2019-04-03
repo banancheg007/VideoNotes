@@ -41,9 +41,13 @@ class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
 
 
         themeViewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java)
+
         setViewModel(themeViewModel)
         registerCallBack(themeViewModel)
         registerCallBack2(themeViewModel)
+        baseNavigationDrawerViewModel.showDialog.observe(this, Observer { isVisible ->  if (isVisible == true) {
+            DialogNewItem().show(supportFragmentManager, "New Item")
+        }})
         baseNavigationDrawerViewModel.navigationEvent.setEventReceiver(this, this)
        themeViewModel.getItems().observe(this,
            Observer<List<BaseItem>> { items ->
