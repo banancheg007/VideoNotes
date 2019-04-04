@@ -23,8 +23,7 @@ import com.neliry.banancheg.videonotes.repositories.ThemeRepository
 import com.neliry.banancheg.videonotes.viewmodels.SearchViewModel
 import android.widget.Spinner
 import com.neliry.banancheg.videonotes.R
-
-
+import com.neliry.banancheg.videonotes.adapter.FireBaseCustomSpinnerAdapter
 
 
 class PlayerActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListener {
@@ -40,18 +39,21 @@ class PlayerActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListene
 
         playerView = findViewById(com.neliry.banancheg.videonotes.R.id.player_view)
         playerView!!.initialize(YoutubeConnector.KEY, this)
-        val list = intent.getStringArrayListExtra("list")
-        for(item in list){
+        val list = intent.getSerializableExtra("list") as List<BaseItem>
+        /*for(item in list){
             Log.d("myTag", item)
-        }
-        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list)
+        }*/
+        val adapter = FireBaseCustomSpinnerAdapter(this, android.R.layout.simple_spinner_item,list )
+        //val adapter2 = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         val spinner = findViewById<Spinner>(R.id.spinner)
         spinner.adapter = adapter
         // заголовок
-        spinner.prompt = "Title"
+        spinner.prompt = "Choose parent theme"
+        val currentItem= spinner.selectedItem as BaseItem
+        Log.d("myTag", currentItem.name)
         // выделяем элемент
-        spinner.setSelection(2)
+        //spinner.setSelection(2)
     }
 
     override fun onInitializationSuccess(provider: YouTubePlayer.Provider, youTubePlayer: YouTubePlayer, b: Boolean) {

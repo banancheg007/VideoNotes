@@ -33,7 +33,7 @@ import android.R.attr.data
 
 
 class SearchActivity : AppCompatActivity() {
-    var list= ArrayList<String>()
+    var list= ArrayList<BaseItem>()
     private var searchInput: EditText? = null
     private var videosFound: ListView? = null
     private var handler: Handler? = null
@@ -67,7 +67,7 @@ class SearchActivity : AppCompatActivity() {
                 // адаптер
 
                 for (item in items){
-                    list.add(item.name as String)
+                    list.add(item)
                     Log.d("myTag", item.name)
                 }
 
