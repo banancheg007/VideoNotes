@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Intent
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.google.firebase.database.FirebaseDatabase
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Theme
@@ -34,10 +35,16 @@ open class ThemeViewModel(application: Application):BaseNavigationDrawerViewMode
     }
 
     fun addNewItem(name: String) {
-        val myRef = FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2").child("themes")
-        var key = myRef.push().key!!
-        var theme = Theme(key, name)
-        myRef.child(key).setValue(theme)
+        if(name.isEmpty()){
+            Toast.makeText(getApplication(),"Please input theme name", Toast.LENGTH_SHORT).show()
+        }else {
+            val myRef = FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2")
+                .child("themes")
+            var key = myRef.push().key!!
+            var theme = Theme(key, name)
+            myRef.child(key).setValue(theme)
+            Toast.makeText(getApplication(),"Adding theme successfully", Toast.LENGTH_SHORT).show()
+        }
 
     }
 }

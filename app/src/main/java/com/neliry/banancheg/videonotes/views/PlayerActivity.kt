@@ -4,6 +4,7 @@ package com.neliry.banancheg.videonotes.views
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import com.google.android.youtube.player.YouTubeBaseActivity
 import com.google.android.youtube.player.YouTubePlayer
@@ -24,9 +25,20 @@ import com.neliry.banancheg.videonotes.viewmodels.SearchViewModel
 import android.widget.Spinner
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.adapter.FireBaseCustomSpinnerAdapter
+import kotlinx.android.synthetic.main.activity_player.*
 
 
-class PlayerActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListener {
+class PlayerActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListener, View.OnClickListener {
+    override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.button_confirm_search_activity->{
+
+            }
+            R.id.button_cancel_search_activity->{
+                finish()
+            }
+        }
+    }
 
     private var playerView: YouTubePlayerView? = null
 
@@ -54,6 +66,8 @@ class PlayerActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListene
         Log.d("myTag", currentItem.name)
         // выделяем элемент
         //spinner.setSelection(2)
+       button_confirm_search_activity.setOnClickListener(this)
+        button_cancel_search_activity.setOnClickListener(this)
     }
 
     override fun onInitializationSuccess(provider: YouTubePlayer.Provider, youTubePlayer: YouTubePlayer, b: Boolean) {
