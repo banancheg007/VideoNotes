@@ -3,6 +3,7 @@ package com.neliry.banancheg.videonotes.viewmodels
 import android.app.Application
 import android.content.Intent
 import android.view.View
+import androidx.lifecycle.MutableLiveData
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Conspectus
 import com.neliry.banancheg.videonotes.models.Theme
@@ -18,6 +19,7 @@ class ConspectusViewModel(application: Application):BaseNavigationDrawerViewMode
 
 
     private lateinit var currentClickedConspectus: Conspectus
+    var themeList: MutableLiveData<List<BaseItem>> = MutableLiveData<List<BaseItem>>()
 
     init{
         @Suppress("UNCHECKED_CAST")
@@ -33,6 +35,8 @@ class ConspectusViewModel(application: Application):BaseNavigationDrawerViewMode
     fun parseIntent(intent: Intent){
         if (intent.getSerializableExtra("currentTheme") !=null) {
         val theme:Theme = intent.getSerializableExtra("currentTheme") as Theme
+        val allThemesList: List<BaseItem> = intent.getSerializableExtra("allThemesList") as ArrayList<BaseItem>
+            themeList.value = allThemesList
             repository.setDatabaseReference("conspectuses", theme.id.toString())
         }
         else

@@ -4,10 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Spinner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.neliry.banancheg.videonotes.R
+import com.neliry.banancheg.videonotes.adapter.FireBaseCustomSpinnerAdapter
 import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
 import com.neliry.banancheg.videonotes.adapter.ItemDecorator
 import com.neliry.banancheg.videonotes.models.BaseItem
@@ -54,6 +56,7 @@ class ConspectusActivity : BaseNavigationDrawerActivity(), ViewNavigation {
 
             }
         })
+
 
     }
 }

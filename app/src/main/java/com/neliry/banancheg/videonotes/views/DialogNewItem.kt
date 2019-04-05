@@ -14,6 +14,11 @@ import kotlinx.android.synthetic.main.new_item_dialog.*
 import android.graphics.drawable.ColorDrawable
 import android.graphics.Color
 import android.opengl.Visibility
+import android.util.Log
+import android.widget.Spinner
+import androidx.lifecycle.Observer
+import com.neliry.banancheg.videonotes.adapter.FireBaseCustomSpinnerAdapter
+import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.viewmodels.BaseNavigationDrawerViewModel
 import com.neliry.banancheg.videonotes.viewmodels.ConspectusViewModel
 
@@ -23,8 +28,14 @@ class DialogNewItem: DialogFragment(),View.OnClickListener{
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.dialog_button_confirm ->{
-                viewModel.addNewItem(dialog_editText_name.text.toString(), "themes")
-                dismiss()
+                if (viewModel is ConspectusViewModel){
+                    viewModel.addNewItem(dialog_editText_name.text.toString(), "conspectuses")
+                    viewModel.addNewItem(dialog_editText_name.text.toString(), "all_conspectuses")
+                    dismiss()
+                }else {
+                    viewModel.addNewItem(dialog_editText_name.text.toString(), "themes")
+                    dismiss()
+                }
             }
             R.id.dialog_button_cancel-> {
             dismiss()}
@@ -49,12 +60,22 @@ class DialogNewItem: DialogFragment(),View.OnClickListener{
         super.onStart()
 
         val dialog = dialog
-        if (dialog != null) {
-            dialog.window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            //dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        }
+        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         if (viewModel is ConspectusViewModel){
             dialog_linear_layout_with_youtube_search_views.visibility = View.VISIBLE
+            (viewModel as ConspectusViewModel).themeList.observe(this , Observer {
+                    themes->
+                val adapter = FireBaseCustomSpinnerAdapter(activity?.baseContext, android.R.layout.simple_spinner_item,themes )
+                //val adapter2 = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list)
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                val spinner = view?.findViewById<Spinner>(R.id.spinner)
+                spinner?.adapter = adapter
+                // заголовок
+                spinner?.prompt = "Choose parent theme"
+                val currentItem= spinner?.selectedItem as BaseItem
+                Log.d("myTag", currentItem.name)
+
+            })
         }
     }
 

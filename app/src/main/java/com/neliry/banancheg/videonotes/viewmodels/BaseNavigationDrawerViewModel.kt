@@ -109,12 +109,17 @@ open class BaseNavigationDrawerViewModel(application: Application): BaseViewMode
     open fun showDialog() {
         showDialog.value = true
     }
-    fun addNewItem(name: String, childReference: String) {
+    fun addNewItem(name: String, childReference: String, themeId: String? = null) {
         if(name.isEmpty()){
             Toast.makeText(getApplication(),"Please input theme name", Toast.LENGTH_SHORT).show()
         }else {
-            val myRef = FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2")
-                .child(childReference)
+
+
+            var myRef = FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2").child(childReference)
+            if(themeId != null){
+                myRef = myRef.child(themeId)
+            }
+
             var key = myRef.push().key!!
             var theme = Theme(key, name)
             myRef.child(key).setValue(theme)
