@@ -5,21 +5,24 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.activitys.YoutubeVideoActivity">
-
+        tools:context=".activities.YoutubeVideoActivity">
     <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
             android:id="@+id/youtube_player_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:videoId="wrnWituGHTA"
             app:showFullScreenButton="false"
-            app:showYouTubeButton="false"/>
+            app:showYouTubeButton="false"
+            android:elevation="4dp"
+            android:background="@drawable/myrect"
+    />
+    <!--app:videoId="_3aF8O0AHFk"-->
+
 
     <RelativeLayout
             android:id="@+id/video_player_rl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+            android:elevation="4dp">
         <ProgressBar
                 style="?android:attr/progressBarStyleHorizontal"
                 android:max="100"
@@ -48,7 +51,7 @@
                     android:id="@+id/pause_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_pause"
+                    android:src="@drawable/ic_play_arrow"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
                     android:background="?android:selectableItemBackground"
@@ -95,53 +98,31 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginBottom="8dp"
         />
-            <ProgressBar
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:paddingStart="6dp"
-                    android:paddingEnd="6dp"
-                    android:id="@+id/video_progressBar"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="8dp"
-                    android:progressTint="@color/accent"
-                    android:progressBackgroundTint="#3C000000"/>
+        <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:id="@+id/video_progressBar"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="8dp"
+                android:progressTint="@color/accent"
+                android:progressBackgroundTint="#3C000000"/>
 
     </RelativeLayout>
-
-    <RelativeLayout
-            android:layout_below="@+id/youtube_player_view"
-            android:id="@+id/marks_rl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-    >
-        <!--<LinearLayout-->
-                <!--android:id="@+id/time_mark"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="vertical"-->
-                <!--android:gravity="center_horizontal"-->
- <!--&gt;-->
-            <!--<ImageView-->
-                    <!--android:layout_width="2dp"-->
-                    <!--android:layout_height="16dp"-->
-                    <!--android:background="@color/accent"-->
-            <!--/>-->
-            <!--<ImageButton-->
-                    <!--android:layout_width="16dp"-->
-                    <!--android:layout_height="16dp"-->
-                    <!--android:background="@drawable/note_mark_btn"-->
-            <!--/>-->
-        <!--</LinearLayout>-->
-    </RelativeLayout>
-
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/notes_list_recycler_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_below="@+id/marks_rl"
-            android:layout_marginTop="4dp"
     />
+    <RelativeLayout
+            android:id="@+id/marks_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/youtube_player_view">
+    </RelativeLayout>
 
 
 

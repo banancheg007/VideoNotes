@@ -1,15 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/note_relative_layout"
-              android:orientation="vertical"
-              android:layout_width="300dp"
-              android:layout_height="match_parent"
-              android:layout_marginLeft="16dp">
-    <TextView
-            android:id="@+id/notes_name"
-            android:background="@color/accent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColor="@color/primary_light"
-            android:textSize="48dp"/>
-</RelativeLayout>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="8dp"
+        android:background="@drawable/myrect"
+        android:scrollbars="none">
+    <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/note_relative_layout"
+            android:orientation="vertical"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:paddingTop="8dp"
+    >
+
+        <TextView
+                android:id="@+id/notes_name"
+                android:text="Name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="#2B3D4D"
+                android:paddingStart="16dp"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="#AEB6BD"
+                android:text="05.11.2019 10:07 AM"
+                android:paddingStart="16dp"
+        />
+        <ImageView
+                android:layout_width="match_parent" android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="#AEB6BD"/>
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="100dp"></RelativeLayout>
+    </LinearLayout>
+
+
+</ScrollView>
