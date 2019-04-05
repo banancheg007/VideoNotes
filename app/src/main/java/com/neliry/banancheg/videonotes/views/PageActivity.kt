@@ -31,6 +31,7 @@ class PageActivity : BaseNavigationDrawerActivity(), ViewNavigation {
         recycler_view_pages.addItemDecoration(ItemDecorator(20))
 
         pageViewModel = ViewModelProviders.of(this).get(PageViewModel::class.java)
+        registerCallBack2(pageViewModel)
         pageViewModel.navigationEvent.setEventReceiver(this, this)
         val intent: Intent = intent
         pageViewModel.parseIntent(intent)
@@ -40,14 +41,5 @@ class PageActivity : BaseNavigationDrawerActivity(), ViewNavigation {
                 Log.d("myTag", "ON CHANGED")
                 recycler_view_pages.adapter = (FirebaseAdapter(pageViewModel,items!!))
             })
-
-       /* pageViewModel.getClickedPage().observe(this,
-            Observer<Page> { currentClickedPage ->
-                Log.d("myTag", "clicked on conspectus_item")
-                if (currentClickedPage != null){
-                    Log.d("myTag", "clicked on page")
-                }
-
-            })*/
     }
 }

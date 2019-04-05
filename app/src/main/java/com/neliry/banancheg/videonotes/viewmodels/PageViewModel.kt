@@ -13,22 +13,16 @@ import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 
-class PageViewModel(application: Application):FirebaseViewModel(application), OnViewClickListener {
+class PageViewModel(application: Application):BaseNavigationDrawerViewModel(application), OnViewClickListener {
 
-    //private var currentClickedPage: MutableLiveData<Page>? = null
     private lateinit var currentClickedPage: Page
-    val navigationEvent = LiveMessageEvent<ViewNavigation>()
 
     init{
         @Suppress("UNCHECKED_CAST")
         repository = PageRepository() as FirebaseDatabaseRepository<BaseItem>
     }
     override fun onViewClicked(view: View?, baseItem: BaseItem?) {
-       // currentClickedPage?.value = baseItem as Page
         currentClickedPage = baseItem as Page
-       /* navigationEvent.sendEvent {  val intent = Intent(getApplication(), PageActivity::class.java)
-            intent.putExtra("currentConspectus", currentClickedConspectus)
-            navigationEvent.sendEvent{ startActivity(intent)} }*/
         Log.d("myTag", "clicked on page")
     }
 
@@ -38,12 +32,5 @@ class PageViewModel(application: Application):FirebaseViewModel(application), On
             repository.setDatabaseReference("pages", conspectus.id.toString())
         }
     }
-
-   /* fun getClickedPage(): LiveData<Page> {
-        if (currentClickedPage == null) {
-            currentClickedPage = MutableLiveData()
-        }
-        return currentClickedPage!!
-    }*/
 
 }

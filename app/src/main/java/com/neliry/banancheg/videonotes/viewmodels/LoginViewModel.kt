@@ -36,15 +36,11 @@ class LoginViewModel(application: Application): BaseViewModel(application), OnVi
     private  var auth: FirebaseAuth = FirebaseAuth.getInstance()
     val navigationEvent = LiveMessageEvent<ViewNavigation>()
     private lateinit var googleSignInClient: GoogleSignInClient
-   // private var currentUser: MutableLiveData<FirebaseUser> = MutableLiveData()
+
     companion object {
        const val GOOGLE_SIGN_IN : Int = 9001
     }
-    /*fun getCurrentUser(): LiveData<FirebaseUser> {
-        currentUser.value = auth.currentUser
-        return currentUser
 
-    }*/
 
     fun getCurrentUser(){
         if (auth.currentUser != null)

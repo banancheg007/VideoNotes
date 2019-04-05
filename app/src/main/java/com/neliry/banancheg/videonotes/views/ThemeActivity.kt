@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_theme.*
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 
 
-class ThemeActivity : BaseNavigationDrawerActivity() , View.OnClickListener, ViewNavigation {
+class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
 
     private lateinit var callback: OnViewClickListener
     private lateinit var themeViewModel:ThemeViewModel
@@ -28,41 +28,37 @@ class ThemeActivity : BaseNavigationDrawerActivity() , View.OnClickListener, Vie
         return com.neliry.banancheg.videonotes.R.layout.activity_theme
     }
 
-    override fun onClick(view: View?) {
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
-                //button_logout.setOnClickListener(this)
 
 
-        val numberOfColumns =  1
+        val numberOfColumns =  2
         val layoutManager =  GridLayoutManager (this, numberOfColumns)
-        //val layoutManager=  LinearLayoutManager(this)
         recycler_view_themes.layoutManager = layoutManager
         recycler_view_themes.addItemDecoration(ItemDecorator(20))
 
 
         themeViewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java)
+
+        setViewModel(themeViewModel)
         registerCallBack(themeViewModel)
-        themeViewModel.navigationEvent.setEventReceiver(this, this)
+        registerCallBack2(themeViewModel)
+        baseNavigationDrawerViewModel.showDialog.observe(this, Observer {
+
+                isVisible ->
+            val currentDialog = DialogNewItem()
+            if (isVisible == true) {
+            currentDialog.show(supportFragmentManager, "New Item")
+        }
+        })
+        baseNavigationDrawerViewModel.navigationEvent.setEventReceiver(this, this)
        themeViewModel.getItems().observe(this,
            Observer<List<BaseItem>> { items ->
                Log.d("myTag", "ON CHANGED")
                recycler_view_themes.adapter = (FirebaseAdapter(themeViewModel,items))
            })
-
-       /* themeViewModel.getClickedTheme().observe(this,
-            Observer<Theme> { currentClickedTheme ->
-            Log.d("myTag", "clicked on theme")
-                if (currentClickedTheme != null){
-                    val intent = Intent(this@ThemeActivity, ConspectusActivity::class.java)
-                    intent.putExtra("currentTheme", currentClickedTheme)
-                    startActivity(intent)
-                }
-
-        })*/
-
     }
 
 }

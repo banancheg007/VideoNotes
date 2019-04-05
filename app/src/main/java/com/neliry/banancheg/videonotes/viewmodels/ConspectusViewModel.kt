@@ -12,11 +12,11 @@ import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.views.PageActivity
+import com.neliry.banancheg.videonotes.views.SearchActivity
 
-class ConspectusViewModel(application: Application):FirebaseViewModel(application), OnViewClickListener {
+class ConspectusViewModel(application: Application):BaseNavigationDrawerViewModel(application), OnViewClickListener {
 
-    //private var currentClickedConspectus: MutableLiveData<Conspectus>? = null
-    val navigationEvent = LiveMessageEvent<ViewNavigation>()
+
     private lateinit var currentClickedConspectus: Conspectus
 
     init{
@@ -24,7 +24,6 @@ class ConspectusViewModel(application: Application):FirebaseViewModel(applicatio
         repository = ConspectusRepository() as FirebaseDatabaseRepository<BaseItem>
     }
     override fun onViewClicked(view: View?, baseItem: BaseItem?) {
-        //currentClickedConspectus?.value = baseItem as Conspectus
         currentClickedConspectus = baseItem as Conspectus
         navigationEvent.sendEvent {  val intent = Intent(getApplication(), PageActivity::class.java)
             intent.putExtra("currentConspectus", currentClickedConspectus)
@@ -37,14 +36,11 @@ class ConspectusViewModel(application: Application):FirebaseViewModel(applicatio
             repository.setDatabaseReference("conspectuses", theme.id.toString())
         }
         else
-            repository.setDatabaseReference("conspectuses")
+            repository.setDatabaseReference("all_conspectuses")
     }
-
-    /*fun getClickedConspectus(): LiveData<Conspectus> {
-        if (currentClickedConspectus == null) {
-            currentClickedConspectus = MutableLiveData()
-        }
-        return currentClickedConspectus!!
-    }*/
-
+    override fun showDialog(){
+        navigationEvent.sendEvent {
+            val intent = Intent(getApplication(), SearchActivity::class.java)
+            startActivity(intent) }
+    }
 }
