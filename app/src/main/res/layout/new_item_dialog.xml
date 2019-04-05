@@ -4,31 +4,64 @@
               android:gravity="center"
               android:id="@+id/new_item_dialog_linear_layout"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="match_parent">
+    <TextView android:layout_width="match_parent"
+              android:gravity="center"
+              android:hint="Adding new item" android:layout_height="40dp"/>
 
     <EditText
             android:id="@+id/dialog_editText_name"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:layout_height="40dp"
     android:hint="@string/enter_name"
     android:gravity="center"/>
+<LinearLayout
+        android:id="@+id/dialog_linear_layout_with_youtube_search_views"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+    <EditText
+            android:id="@+id/dialog_video_url"
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_marginLeft="30dp"
+            android:layout_height="40dp"
+            android:hint="@string/enter_video_url_from_youtube"
+            android:gravity="center"/>
 
+    <ImageButton
+            android:id="@+id/dialog_image_button_find_video"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:src="@mipmap/image_search"/>
+</LinearLayout>
+    <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    </Spinner>
     <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <Button
-                android:id="@+id/dialog_button_confirm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="@string/confirm">
-        </Button>
-        <Button
                 android:id="@+id/dialog_button_cancel"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="@string/cancel">
+        </Button>
+        <Button
+                android:id="@+id/dialog_button_confirm"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/ok">
         </Button>
     </LinearLayout>
 </LinearLayout>
