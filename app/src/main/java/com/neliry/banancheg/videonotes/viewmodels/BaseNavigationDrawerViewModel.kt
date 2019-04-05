@@ -9,7 +9,10 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.neliry.banancheg.videonotes.models.BaseItem
+import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
 import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
 import com.neliry.banancheg.videonotes.utils.OnItemMenuClickListener
@@ -106,7 +109,19 @@ open class BaseNavigationDrawerViewModel(application: Application): BaseViewMode
     open fun showDialog() {
         showDialog.value = true
     }
+    fun addNewItem(name: String, childReference: String) {
+        if(name.isEmpty()){
+            Toast.makeText(getApplication(),"Please input theme name", Toast.LENGTH_SHORT).show()
+        }else {
+            val myRef = FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2")
+                .child(childReference)
+            var key = myRef.push().key!!
+            var theme = Theme(key, name)
+            myRef.child(key).setValue(theme)
+            Toast.makeText(getApplication(),"Adding theme successfully", Toast.LENGTH_SHORT).show()
+        }
 
+    }
 
 
 

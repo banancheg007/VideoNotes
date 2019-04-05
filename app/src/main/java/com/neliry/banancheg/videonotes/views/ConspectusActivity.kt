@@ -14,6 +14,7 @@ import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.viewmodels.ConspectusViewModel
 import kotlinx.android.synthetic.main.activity_conspectus.*
+import kotlinx.android.synthetic.main.new_item_dialog.*
 
 class ConspectusActivity : BaseNavigationDrawerActivity(), ViewNavigation {
 
@@ -40,6 +41,19 @@ class ConspectusActivity : BaseNavigationDrawerActivity(), ViewNavigation {
                 Log.d("myTag", "ON CHANGED")
                 recycler_view_conspectuses.adapter = (FirebaseAdapter(conspectusViewModel,items!!))
             })
+
+        conspectusViewModel.showDialog.observe(this, Observer {
+
+                isVisible ->
+            val currentDialog = DialogNewItem()
+            currentDialog.setViewModel(conspectusViewModel)
+            if (isVisible == true) {
+                currentDialog.show(supportFragmentManager, "New Item")
+
+                //dialog_linear_layout_with_youtube_search_views.visibility = View.VISIBLE
+
+            }
+        })
 
     }
 }

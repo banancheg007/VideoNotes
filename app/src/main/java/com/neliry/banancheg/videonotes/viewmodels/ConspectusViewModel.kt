@@ -38,9 +38,9 @@ class ConspectusViewModel(application: Application):BaseNavigationDrawerViewMode
         else
             repository.setDatabaseReference("all_conspectuses")
     }
-    override fun showDialog(){
+    /*override fun showDialog(){
         navigationEvent.sendEvent {
             val intent = Intent(getApplication(), SearchActivity::class.java)
             startActivity(intent) }
-    }
+    }*/
 }

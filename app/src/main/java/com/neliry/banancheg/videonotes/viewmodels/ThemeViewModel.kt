@@ -34,17 +34,5 @@ open class ThemeViewModel(application: Application):BaseNavigationDrawerViewMode
             navigationEvent.sendEvent{ startActivity(intent)} }
     }
 
-    fun addNewItem(name: String) {
-        if(name.isEmpty()){
-            Toast.makeText(getApplication(),"Please input theme name", Toast.LENGTH_SHORT).show()
-        }else {
-            val myRef = FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2")
-                .child("themes")
-            var key = myRef.push().key!!
-            var theme = Theme(key, name)
-            myRef.child(key).setValue(theme)
-            Toast.makeText(getApplication(),"Adding theme successfully", Toast.LENGTH_SHORT).show()
-        }
 
-    }
 }
