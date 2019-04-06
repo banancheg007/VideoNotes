@@ -13,6 +13,7 @@ import com.neliry.banancheg.videonotes.adapter.FireBaseCustomSpinnerAdapter
 import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
 import com.neliry.banancheg.videonotes.adapter.ItemDecorator
 import com.neliry.banancheg.videonotes.models.BaseItem
+import com.neliry.banancheg.videonotes.models.VideoItem
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.viewmodels.ConspectusViewModel
 import kotlinx.android.synthetic.main.activity_conspectus.*
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.new_item_dialog.*
 
 class ConspectusActivity : BaseNavigationDrawerActivity(), ViewNavigation {
 
-    private lateinit var conspectusViewModel: ConspectusViewModel
+
 
     override fun getMainContentLayout(): Int {
         return R.layout.activity_conspectus
@@ -31,24 +32,24 @@ class ConspectusActivity : BaseNavigationDrawerActivity(), ViewNavigation {
         recycler_view_conspectuses.layoutManager = layoutManager
         recycler_view_conspectuses.addItemDecoration(ItemDecorator(20))
 
+        baseNavigationDrawerViewModel = ViewModelProviders.of(this).get(ConspectusViewModel::class.java)
 
-        conspectusViewModel = ViewModelProviders.of(this).get(ConspectusViewModel::class.java)
 
         val intent: Intent = intent
-        conspectusViewModel.parseIntent(intent)
-       conspectusViewModel.navigationEvent.setEventReceiver(this, this)
-        registerCallBack2(conspectusViewModel)
-        setViewModel(conspectusViewModel)
-        conspectusViewModel.getItems().observe(this, Observer<List<BaseItem>> { items ->
+        (baseNavigationDrawerViewModel as ConspectusViewModel).parseIntent(intent)
+        baseNavigationDrawerViewModel.navigationEvent.setEventReceiver(this, this)
+
+        setViewModel(baseNavigationDrawerViewModel)
+        baseNavigationDrawerViewModel.getItems().observe(this, Observer<List<BaseItem>> { items ->
                 Log.d("myTag", "ON CHANGED")
-                recycler_view_conspectuses.adapter = (FirebaseAdapter(conspectusViewModel,items!!))
+                recycler_view_conspectuses.adapter = (FirebaseAdapter((baseNavigationDrawerViewModel as ConspectusViewModel),items!!))
             })
 
-        conspectusViewModel.showDialog.observe(this, Observer {
+        baseNavigationDrawerViewModel.showDialog.observe(this, Observer {
 
                 isVisible ->
             val currentDialog = DialogNewItem()
-            currentDialog.setViewModel(conspectusViewModel)
+            currentDialog.setViewModel(baseNavigationDrawerViewModel)
             if (isVisible == true) {
                 currentDialog.show(supportFragmentManager, "New Item")
 
@@ -58,5 +59,13 @@ class ConspectusActivity : BaseNavigationDrawerActivity(), ViewNavigation {
         })
 
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (data == null) {
+            return
+        }
+        val videoItem = data.getSerializableExtra("VIDEO_ITEM") as VideoItem
+        Log.d("myTag", "video id " + videoItem.id)
     }
 }

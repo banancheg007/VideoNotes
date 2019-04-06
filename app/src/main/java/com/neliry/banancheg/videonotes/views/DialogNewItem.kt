@@ -1,6 +1,7 @@
 package com.neliry.banancheg.videonotes.views
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,6 +22,7 @@ import android.widget.Spinner
 import androidx.lifecycle.Observer
 import com.neliry.banancheg.videonotes.adapter.FireBaseCustomSpinnerAdapter
 import com.neliry.banancheg.videonotes.models.BaseItem
+import com.neliry.banancheg.videonotes.models.VideoItem
 import com.neliry.banancheg.videonotes.viewmodels.BaseNavigationDrawerViewModel
 import com.neliry.banancheg.videonotes.viewmodels.ConspectusViewModel
 import java.text.SimpleDateFormat
@@ -50,7 +52,7 @@ class DialogNewItem: DialogFragment(),View.OnClickListener{
     }
 
     fun setViewModel(baseNavigationDrawerViewModel: BaseNavigationDrawerViewModel){
-        this.viewModel = baseNavigationDrawerViewModel
+        //this.viewModel = (activity as BaseNavigationDrawerActivity).baseNavigationDrawerViewModel
     }
     @SuppressLint("InflateParams")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -63,16 +65,16 @@ class DialogNewItem: DialogFragment(),View.OnClickListener{
     }
 
 
-
     override fun onStart() {
         super.onStart()
 
         val dialog = dialog
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        this.viewModel = (activity as BaseNavigationDrawerActivity).baseNavigationDrawerViewModel
         if (viewModel is ConspectusViewModel){
             dialog_linear_layout_with_youtube_search_views.visibility = View.VISIBLE
             spinner.visibility= View.VISIBLE
-            (viewModel as ConspectusViewModel).themeList.observe(this , Observer {
+            (viewModel as ConspectusViewModel).getAllThemes().observe(this , Observer {
                     themes->
                 val adapter = FireBaseCustomSpinnerAdapter(activity?.baseContext, android.R.layout.simple_spinner_item,themes )
                 //val adapter2 = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list)
@@ -96,6 +98,14 @@ class DialogNewItem: DialogFragment(),View.OnClickListener{
 
             })
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (data == null) {
+            return
+        }
+        val videoItem = data.getSerializableExtra("VIDEO_ITEM") as VideoItem
+        Log.d("myTag", "video id " + videoItem.id)
     }
 
 }

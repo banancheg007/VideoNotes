@@ -31,7 +31,6 @@ open class ThemeViewModel(application: Application):BaseNavigationDrawerViewMode
         currentClickedTheme = baseItem as Theme
         navigationEvent.sendEvent {  val intent = Intent(getApplication(), ConspectusActivity::class.java)
             intent.putExtra("currentTheme", currentClickedTheme)
-            intent.putExtra("allThemesList", repository.list)
             navigationEvent.sendEvent{ startActivity(intent)} }
     }
 

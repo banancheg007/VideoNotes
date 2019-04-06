@@ -17,15 +17,11 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener, ViewNavigation {
 
-    private lateinit var callback: OnViewClickListener
+
     private lateinit var loginViewModel: LoginViewModel
 
-    private fun registerCallBack(callback: OnViewClickListener) {
-        this.callback = callback
-    }
-
     override fun onClick(view: View?) {
-        callback.onViewClicked(view)
+        loginViewModel.onViewClicked(view)
         when(view?.id){
             R.id.button_login-> {
                     loginViewModel.emailPasswordSignIn(editText_your_email.text.toString(),editText_your_password.text.toString())
@@ -38,7 +34,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ViewNavigation 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-        registerCallBack(loginViewModel)
         sign_in_google_button.setOnClickListener(this)
         sign_in_facebook_button.setOnClickListener(this)
         button_login.setOnClickListener(this)
@@ -51,8 +46,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, ViewNavigation 
     private fun subscribeUi() {
         loginViewModel.addGoogleSignInClient()
         loginViewModel.navigationEvent.setEventReceiver(this, this)
-
-
     }
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

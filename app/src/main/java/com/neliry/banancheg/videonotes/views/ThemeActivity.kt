@@ -17,12 +17,8 @@ import com.neliry.banancheg.videonotes.utils.ViewNavigation
 
 class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
 
-    private lateinit var callback: OnViewClickListener
-    private lateinit var themeViewModel:ThemeViewModel
 
-    private fun registerCallBack(callback: OnViewClickListener) {
-        this.callback = callback
-    }
+
 
     override fun getMainContentLayout(): Int {
         return com.neliry.banancheg.videonotes.R.layout.activity_theme
@@ -40,13 +36,10 @@ class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
         recycler_view_themes.addItemDecoration(ItemDecorator(20))
 
 
-        themeViewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java)
+        baseNavigationDrawerViewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java)
 
-        setViewModel(themeViewModel)
-        registerCallBack(themeViewModel)
-        registerCallBack2(themeViewModel)
-        themeViewModel.showDialog.observe(this, Observer {
-
+        setViewModel(baseNavigationDrawerViewModel)
+        baseNavigationDrawerViewModel.showDialog.observe(this, Observer {
                 isVisible ->
             val currentDialog = DialogNewItem()
             currentDialog.setViewModel(baseNavigationDrawerViewModel)
@@ -54,11 +47,11 @@ class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
             currentDialog.show(supportFragmentManager, "New Item")
         }
         })
-        themeViewModel.navigationEvent.setEventReceiver(this, this)
-       themeViewModel.getItems().observe(this,
+        baseNavigationDrawerViewModel.navigationEvent.setEventReceiver(this, this)
+        baseNavigationDrawerViewModel.getItems().observe(this,
            Observer<List<BaseItem>> { items ->
                Log.d("myTag", "ON CHANGED")
-               recycler_view_themes.adapter = (FirebaseAdapter(themeViewModel,items))
+               recycler_view_themes.adapter = (FirebaseAdapter(baseNavigationDrawerViewModel as ThemeViewModel,items))
            })
     }
 
