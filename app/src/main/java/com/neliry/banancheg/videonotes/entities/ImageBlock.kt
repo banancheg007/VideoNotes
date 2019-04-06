@@ -3,6 +3,7 @@ package com.neliry.banancheg.videonotes.entities
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.TypedValue
 import android.view.View
@@ -63,6 +64,35 @@ class ImageBlock(private val blockController: ImageBlockController)  {
             Toast.makeText(context, "You haven't picked Image", Toast.LENGTH_LONG).show()
             return null
         }
+    }
+
+    fun loadImageBlock(context: Context, content: Bitmap, width: Int, height: Int, x: Int, y: Int): ImageView {
+        val imageView = ImageView(context)
+        imageView.scaleType = ImageView.ScaleType.FIT_XY
+        val params = RelativeLayout.LayoutParams(
+            width,
+            height
+        )
+        params.setMargins(
+            x,
+            y,
+            0,
+            0
+        )
+        imageView.layoutParams = params
+        imageView.background = null
+        imageView.setImageBitmap(content)
+        imageView.addOnLayoutChangeListener { view, i, i1, i2, i3, i4, i5, i6, i7 ->
+            view.post {
+                changeControllerPosition(context, view as ImageView)
+            }
+        }
+
+        imageView.setOnClickListener{
+            setFocus(context, imageView)
+        }
+
+        return imageView
     }
 
     private fun setFocus(context: Context, imageView: ImageView) {

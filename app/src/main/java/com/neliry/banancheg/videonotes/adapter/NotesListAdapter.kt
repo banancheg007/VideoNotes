@@ -1,24 +1,35 @@
 package com.neliry.banancheg.videonotes.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
 import com.neliry.banancheg.videonotes.R
-import com.neliry.banancheg.videonotes.entities.Note
 import com.neliry.banancheg.videonotes.models.BaseItem
+import com.neliry.banancheg.videonotes.models.Page
+import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import kotlinx.android.synthetic.main.notes_list_item.view.*
 
-class NotesListAdapter (val windowWidth: Int) : RecyclerView.Adapter<NotesListAdapter.ViewHolder>() {
+class NotesListAdapter (private val onViewClickListener: OnViewClickListener, val windowWidth: Int) : RecyclerView.Adapter<NotesListAdapter.ViewHolder>() {
 
-    lateinit var notesList: List<BaseItem>
+    lateinit var notesList: List<Page>
 
-    inner class ViewHolder internal constructor(view: View) : RecyclerView.ViewHolder(view) {
-        internal val nameView: TextView = view.findViewById(R.id.notes_name)
+    inner class ViewHolder internal constructor(pageView: View) : RecyclerView.ViewHolder(pageView), View.OnClickListener {
+        internal val nameView: TextView = pageView.findViewById(R.id.notes_name)
+        internal val timeView: TextView = pageView.findViewById(R.id.notes_time)
             init {
-                view.note_relative_layout.layoutParams.width = windowWidth
+                pageView.note_linear_layout.layoutParams.width = windowWidth
+//                pageView.setOnClickListener{
+//                    onViewClickListener.onViewClicked(pageView, notesList[layoutPosition])
+//                }
+                pageView.note_linear_layout.setOnClickListener(this)
             }
+        override fun onClick(view: View) {
+
+            onViewClickListener.onViewClicked(view, notesList[layoutPosition])
+        }
     }
 
 
@@ -33,9 +44,10 @@ class NotesListAdapter (val windowWidth: Int) : RecyclerView.Adapter<NotesListAd
 
     override fun onBindViewHolder(holder: NotesListAdapter.ViewHolder, position: Int) {
         holder.nameView.text = notesList[position].name
+//        holder.timeView.text = notesList[position].time
     }
 
-    fun setNotes(notes: List<BaseItem>) {
+    fun setNotes(notes: List<Page>) {
         this.notesList = notes
         notifyDataSetChanged()
     }

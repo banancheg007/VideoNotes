@@ -41,5 +41,7 @@
     <string name="cancel">Cancel</string>
     <string name="ok">Ok</string>
     <string name="enter_video_url_from_youtube">Enter video url from youtube</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_save">Save</string>
 
 </resources>

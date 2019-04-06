@@ -96,6 +96,8 @@
                 android:layout_marginRight="46dp"
                 android:layout_marginLeft="46dp"
                 android:layout_marginTop="8dp"
+                android:progressTint="@color/accent"
+                android:thumbTint="@color/accent"
                 android:min="1"
                 android:max="90"
                 android:progress="15"/>
@@ -258,7 +260,6 @@
                 android:id="@+id/draw_square_btn"
                 style="@style/ShapeButtons"
                 android:src="@drawable/ic_square"
-                android:background="@drawable/btn_selected_border"
                 />
         <ImageButton
                 android:id="@+id/draw_circle_btn"
@@ -279,6 +280,7 @@
                 android:id="@+id/disable_draw_btn"
                 style="@style/ShapeButtons"
                 android:src="@drawable/ic_disable_draw"
+                android:background="@drawable/btn_selected_border"
         />
     </LinearLayout>
 

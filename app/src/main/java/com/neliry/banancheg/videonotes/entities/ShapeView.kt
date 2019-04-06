@@ -11,10 +11,9 @@ class ShapeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val mFillPaint: Paint = Paint()
     private val mStrokePaint: Paint = Paint()
     private val rectF: RectF = RectF()
-    var isFillColor: Boolean = true
 
     var shapeType = 0
-
+    var isFillColor: Boolean = true
     var strokeWidth = 0f
     var fillColor = Color.RED
     var strokeColor = Color.YELLOW
@@ -34,7 +33,7 @@ class ShapeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             when (shapeType) {
                 1 -> canvas.drawRect(rectF, mFillPaint)
                 2 -> canvas.drawOval(rectF, mFillPaint)
-                else -> { // Note the block
+                else -> {
                 }
             }
         }

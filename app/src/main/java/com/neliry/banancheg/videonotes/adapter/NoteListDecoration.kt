@@ -11,7 +11,7 @@ internal class NoteListDecoration(context: Context): RecyclerView.ItemDecoration
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         val position = parent.getChildAdapterPosition(view)
-        outRect.set(16.px, 6.px, 16.px, 0)
+        outRect.set(16.px, 6.px, 16.px, 16.px)
     }
 
     init {

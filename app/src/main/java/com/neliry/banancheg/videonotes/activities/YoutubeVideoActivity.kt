@@ -10,6 +10,7 @@ import android.graphics.Point
 import android.util.Log
 import android.util.TypedValue
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
@@ -19,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.adapter.NotesListAdapter
 import com.neliry.banancheg.videonotes.models.Page
+import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.viewmodels.ViewModelFactory
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -27,11 +29,9 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTube
 import kotlinx.android.synthetic.main.activity_youtube_video.*
 
 
-class YoutubeVideoActivity : AppCompatActivity(){
+class YoutubeVideoActivity : AppCompatActivity(), ViewNavigation {
 
     private val videoViewModel: VideoViewModel by lazy { ViewModelProviders.of(this, ViewModelFactory(application)).get( VideoViewModel::class.java)}
-    lateinit var adapter: NotesListAdapter
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +47,12 @@ class YoutubeVideoActivity : AppCompatActivity(){
         youtube_player_view.inflateCustomPlayerUi(R.layout.custom_player_ui)
 
         val videoUrl: String = videoViewModel.parseIntent(intent, supportActionBar!!)!!
+        videoViewModel.navigationEvent.setEventReceiver(this, this)
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
 
-        adapter = NotesListAdapter(width - dpToPx(30f, this@YoutubeVideoActivity))
+        videoViewModel.adapter = NotesListAdapter(videoViewModel, width - dpToPx(30f, this@YoutubeVideoActivity))
         notes_list_recycler_view.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         notes_list_recycler_view.addItemDecoration(
             NoteListDecoration(
@@ -59,10 +61,9 @@ class YoutubeVideoActivity : AppCompatActivity(){
         )
 
         videoViewModel.getItems().observe(this, Observer { notes ->
-            Log.d("myTag", "yob tvoyu mat")
-            adapter.setNotes(notes)
-            notes_list_recycler_view.adapter = adapter
-            videoViewModel.allNotes =  videoViewModel.getItems() as MutableLiveData<List<Page>>
+            videoViewModel.adapter.setNotes(notes as  List<Page>)
+            notes_list_recycler_view.adapter = videoViewModel.adapter
+            videoViewModel.allNotes =  notes
             videoViewModel.createMark(marks_rl, notes_list_recycler_view, pause_btn)
         })
 
@@ -129,6 +130,7 @@ class YoutubeVideoActivity : AppCompatActivity(){
             }
 
             override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
+                videoViewModel.stateChange(state, pause_btn)
             }
         })
     }
@@ -140,5 +142,15 @@ class YoutubeVideoActivity : AppCompatActivity(){
 
     internal fun dpToPx(dp: Float, context: Context): Int {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId === android.R.id.home) {
+            finish()
+        }
+        if (item.itemId === R.id.action_save_note) {
+
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
