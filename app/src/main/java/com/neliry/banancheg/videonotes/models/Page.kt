@@ -1,3 +1,3 @@
 package com.neliry.banancheg.videonotes.models
 
-class Page(time: Int? = null): BaseItem()
+class Page(var time: Int? = null): BaseItem()

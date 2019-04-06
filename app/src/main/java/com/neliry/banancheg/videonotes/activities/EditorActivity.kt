@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 
 import android.view.inputmethod.InputMethodManager
-import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.neliry.banancheg.videonotes.viewmodels.EditorViewModel
@@ -25,8 +24,6 @@ class EditorActivity : AppCompatActivity() {
         editorViewModel.createTextBlockController()
         controller_layer.addView(editorViewModel.textBlockController.controllerLayout)
         controller_layer.addView(editorViewModel.imageBlockController.controllerLayout)
-
-
 
         editor_scroll_view.viewTreeObserver.addOnScrollChangedListener {
             editorViewModel.checkMaxHeight()

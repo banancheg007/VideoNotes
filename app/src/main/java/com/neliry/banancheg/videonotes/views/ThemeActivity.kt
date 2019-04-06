@@ -30,6 +30,8 @@ class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
 
 
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
 
@@ -45,15 +47,18 @@ class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
         setViewModel(themeViewModel)
         registerCallBack(themeViewModel)
         registerCallBack2(themeViewModel)
-        baseNavigationDrawerViewModel.showDialog.observe(this, Observer {
+
+        themeViewModel.showDialog.observe(this, Observer {
 
                 isVisible ->
             val currentDialog = DialogNewItem()
+            currentDialog.setViewModel(baseNavigationDrawerViewModel)
             if (isVisible == true) {
             currentDialog.show(supportFragmentManager, "New Item")
         }
         })
-        baseNavigationDrawerViewModel.navigationEvent.setEventReceiver(this, this)
+
+        themeViewModel.navigationEvent.setEventReceiver(this, this)
        themeViewModel.getItems().observe(this,
            Observer<List<BaseItem>> { items ->
                Log.d("myTag", "ON CHANGED")

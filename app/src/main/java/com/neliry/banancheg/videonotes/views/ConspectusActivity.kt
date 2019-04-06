@@ -4,16 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Spinner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.neliry.banancheg.videonotes.R
+import com.neliry.banancheg.videonotes.adapter.FireBaseCustomSpinnerAdapter
 import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
 import com.neliry.banancheg.videonotes.adapter.ItemDecorator
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.viewmodels.ConspectusViewModel
 import kotlinx.android.synthetic.main.activity_conspectus.*
+import kotlinx.android.synthetic.main.new_item_dialog.*
 
 class ConspectusActivity : BaseNavigationDrawerActivity(), ViewNavigation {
 
@@ -41,5 +44,17 @@ class ConspectusActivity : BaseNavigationDrawerActivity(), ViewNavigation {
                 recycler_view_conspectuses.adapter = (FirebaseAdapter(conspectusViewModel,items!!))
             })
 
+        conspectusViewModel.showDialog.observe(this, Observer {
+
+                isVisible ->
+            val currentDialog = DialogNewItem()
+            currentDialog.setViewModel(conspectusViewModel)
+            if (isVisible == true) {
+                currentDialog.show(supportFragmentManager, "New Item")
+
+                //dialog_linear_layout_with_youtube_search_views.visibility = View.VISIBLE
+
+            }
+        })
     }
 }
