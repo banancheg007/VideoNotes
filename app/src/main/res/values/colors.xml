@@ -12,6 +12,10 @@
     <color name="red">#FF0000</color>
     <color name="black">#000000</color>
     <color name="green">#30FA00</color>
-
+    <color name="primary">#292929</color>
+    <color name="primary_dark">#141414</color>
+    <color name="primary_light">#B2EBF2</color>
+    <color name="accent">#448AFF</color>
+    <color name="accent_lite">#AEB6BD</color>
     <color name="default_layout_background">#FAFAFA</color>
 </resources>

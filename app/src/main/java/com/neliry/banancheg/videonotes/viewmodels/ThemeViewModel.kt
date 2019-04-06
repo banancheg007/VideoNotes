@@ -35,5 +35,5 @@ open class ThemeViewModel(application: Application):BaseNavigationDrawerViewMode
             navigationEvent.sendEvent{ startActivity(intent)} }
     }
 
-
+    }
 }

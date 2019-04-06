@@ -42,9 +42,11 @@ class DialogNewItem: DialogFragment(),View.OnClickListener{
         }
     }
 
+
     fun setViewModel(baseNavigationDrawerViewModel: BaseNavigationDrawerViewModel){
         this.viewModel = baseNavigationDrawerViewModel
     }
+
     @SuppressLint("InflateParams")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog?.setTitle("New item")
@@ -78,5 +80,4 @@ class DialogNewItem: DialogFragment(),View.OnClickListener{
             })
         }
     }
-
 }

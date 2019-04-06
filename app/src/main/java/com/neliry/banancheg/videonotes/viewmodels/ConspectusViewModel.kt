@@ -27,7 +27,7 @@ class ConspectusViewModel(application: Application):BaseNavigationDrawerViewMode
     }
     override fun onViewClicked(view: View?, baseItem: BaseItem?) {
         currentClickedConspectus = baseItem as Conspectus
-        navigationEvent.sendEvent {  val intent = Intent(getApplication(), PageActivity::class.java)
+        navigationEvent.sendEvent {  val intent = Intent(getApplication(), YoutubeVideoActivity::class.java)
             intent.putExtra("currentConspectus", currentClickedConspectus)
             navigationEvent.sendEvent{ startActivity(intent)} }
     }

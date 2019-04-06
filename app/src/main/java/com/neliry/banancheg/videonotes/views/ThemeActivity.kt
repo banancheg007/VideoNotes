@@ -30,6 +30,8 @@ class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
 
 
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
 
@@ -45,6 +47,7 @@ class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
         setViewModel(themeViewModel)
         registerCallBack(themeViewModel)
         registerCallBack2(themeViewModel)
+
         themeViewModel.showDialog.observe(this, Observer {
 
                 isVisible ->
@@ -54,6 +57,7 @@ class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
             currentDialog.show(supportFragmentManager, "New Item")
         }
         })
+
         themeViewModel.navigationEvent.setEventReceiver(this, this)
        themeViewModel.getItems().observe(this,
            Observer<List<BaseItem>> { items ->

@@ -56,7 +56,5 @@ class ConspectusActivity : BaseNavigationDrawerActivity(), ViewNavigation {
 
             }
         })
-
-
     }
 }

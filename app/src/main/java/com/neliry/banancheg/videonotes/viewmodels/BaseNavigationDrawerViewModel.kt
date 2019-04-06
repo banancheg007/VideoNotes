@@ -128,6 +128,4 @@ open class BaseNavigationDrawerViewModel(application: Application): BaseViewMode
 
     }
 
-
-
 }

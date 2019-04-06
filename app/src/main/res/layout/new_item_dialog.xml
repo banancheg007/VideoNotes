@@ -64,5 +64,4 @@
                 android:text="@string/ok">
         </Button>
     </LinearLayout>
-
 </LinearLayout>
