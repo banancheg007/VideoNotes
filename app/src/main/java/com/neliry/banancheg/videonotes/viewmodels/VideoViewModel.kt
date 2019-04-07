@@ -258,8 +258,8 @@ class VideoViewModel (application: Application):BaseNavigationDrawerViewModel(ap
             val conspectus: Conspectus = intent.getSerializableExtra("currentConspectus") as Conspectus
             repository.setDatabaseReference("pages", conspectus.id.toString())
             supportActionBar.title = conspectus.name
-            conspectus.video_url
-            return conspectus.video_url
+            conspectus.videoUrl
+            return conspectus.videoUrl
         }
         return  ""
     }

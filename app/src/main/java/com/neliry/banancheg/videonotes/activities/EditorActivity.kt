@@ -11,7 +11,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.firebase.database.FirebaseDatabase
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.viewmodels.EditorViewModel
 import com.neliry.banancheg.videonotes.viewmodels.ViewModelFactory
@@ -36,6 +35,7 @@ class EditorActivity : AppCompatActivity() {
 
         editorViewModel.getItems().observe(this, Observer { notes ->
             editorViewModel.loadPage(text_layer, image_layer, paint_layer, fragment_shape_editor, notes)
+            editor_loading_indicator.visibility = View.GONE
         })
 
         editor_scroll_view.viewTreeObserver.addOnScrollChangedListener {
@@ -97,7 +97,8 @@ class EditorActivity : AppCompatActivity() {
             finish()
         }
         if (item.itemId === R.id.action_save_note) {
-            editorViewModel.savePage()
+
+            editorViewModel.saveData()
         }
         return super.onOptionsItemSelected(item)
     }

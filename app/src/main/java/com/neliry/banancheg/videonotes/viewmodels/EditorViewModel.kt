@@ -1,29 +1,34 @@
 package com.neliry.banancheg.videonotes.viewmodels
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.os.AsyncTask
+import android.text.SpannableStringBuilder
+import android.util.Base64
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewManager
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.neliry.banancheg.videonotes.entities.*
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Page
 import com.neliry.banancheg.videonotes.models.PageItem
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
+import com.neliry.banancheg.videonotes.repositories.PageItemsRepository
 import kotlinx.android.synthetic.main.editor_activity.view.*
 import kotlinx.android.synthetic.main.fragment_shape_editor.*
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.Bitmap
-import android.text.SpannableStringBuilder
-import android.util.Base64
-import com.neliry.banancheg.videonotes.repositories.PageItemsRepository
+import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
-import android.graphics.BitmapFactory
+import java.lang.Thread.currentThread
 
 
 
@@ -235,7 +240,10 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
         shapeView = null
     }
 
-    fun savePage(){
+    private val uiScope = CoroutineScope(Dispatchers.Main)
+
+    fun saveData() = uiScope.launch {
+
         disableDraw()
         val canvasLayer = textBlockController.controllerLayout.parent.parent as RelativeLayout
         val textLayer = canvasLayer.text_layer
@@ -243,35 +251,55 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
         val paintLayer = canvasLayer.paint_layer
         var myRef = FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2").child("views").child(pageId)
         myRef.removeValue()
-        var childCount = textLayer.childCount
-        for (i in 0 until childCount){
-            val v = textLayer.getChildAt(i) as EditText
-            if(v.text.toString() != ""){
-                var item = PageItem( v.text.toString(), "EditText", v.width, v.height, v.x.toInt(), v.y.toInt())
-                myRef.push().setValue(item)
+
+        async {
+            var childCount = textLayer.childCount
+            for (i in 0 until childCount){
+                val v = textLayer.getChildAt(i) as EditText
+                saveTextAsync(v, myRef)
             }
         }
-        childCount = imageLayer.childCount
-        for (i in 0 until childCount){
-            val v = imageLayer.getChildAt(i)
-            if(v is ImageView){
-                val bitmap = (v.drawable as BitmapDrawable).bitmap
-                var item = PageItem( bitMapToString(bitmap), "ImageView", v.width, v.height, v.x.toInt(), v.y.toInt())
-                myRef.push().setValue(item)
-            }
-            if(v is ShapeView){
-                if(v.width!=0 && v.height!=0){
-                    val content: String = "shapeType:"+v.shapeType+";isFillColor:"+v.isFillColor+";strokeWidth:"+v.strokeWidth+";fillColor:"+v.fillColor+";strokeColor:"+v.strokeColor
-                    var item = PageItem( content, "ShapeView", v.width, v.height, v.x.toInt(), v.y.toInt())
-                    myRef.push().setValue(item)
+        async {
+            var childCount = imageLayer.childCount
+            for (i in 0 until childCount){
+                val v = imageLayer.getChildAt(i)
+                if(v is ImageView){
+                    saveImageAsync(v, myRef)
+                }
+                if(v is ShapeView){
+                    saveShapeAsync(v, myRef)
                 }
             }
         }
+        async {
+            savePaintAsync(paintLayer, myRef)
+        }
+    }
 
+    private fun saveTextAsync(v: TextView, myRef: DatabaseReference)= GlobalScope.async { // this: CoroutineScope
+        if(v.text.toString() != ""){
+            var item = PageItem( v.text.toString(), "EditText", v.width, v.height, v.x.toInt(), v.y.toInt())
+            myRef.push().setValue(item)
+        }
+    }
+
+    private fun saveImageAsync(v: ImageView, myRef: DatabaseReference)= GlobalScope.async { // this: CoroutineScope
+
+        val bitmap = (v.drawable as BitmapDrawable).bitmap
+        var item = PageItem( bitMapToString(bitmap), "ImageView", v.width, v.height, v.x.toInt(), v.y.toInt())
+        myRef.push().setValue(item)
+    }
+    private fun saveShapeAsync(v: ShapeView, myRef: DatabaseReference)= GlobalScope.async { // this: CoroutineScope
+        if(v.width!=0 && v.height!=0){
+            val content: String = "shapeType:"+v.shapeType+";isFillColor:"+v.isFillColor+";strokeWidth:"+v.strokeWidth+";fillColor:"+v.fillColor+";strokeColor:"+v.strokeColor
+            var item = PageItem( content, "ShapeView", v.width, v.height, v.x.toInt(), v.y.toInt())
+            myRef.push().setValue(item)
+        }
+    }
+    private fun savePaintAsync(paintLayer: SimpleDrawingView, myRef: DatabaseReference)= GlobalScope.async { // this: CoroutineScope
         val bitmap = paintLayer.mBitmap
         var item = PageItem( bitMapToString(bitmap), "PaintView", paintLayer.width, paintLayer.height, 0, 0)
         myRef.push().setValue(item)
-
     }
 
     fun loadPage(textLayout: RelativeLayout, imageLayout: RelativeLayout, simpleDrawingView: SimpleDrawingView, fragment: Fragment, notes: List<BaseItem>){
@@ -393,4 +421,5 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
     internal fun dpToPx(dp: Float, context: Context): Int {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()
     }
+
 }
