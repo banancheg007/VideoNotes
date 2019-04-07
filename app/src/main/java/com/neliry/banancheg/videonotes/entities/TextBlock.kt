@@ -59,7 +59,7 @@ class TextBlock(private val blockController: TextBlockController) {
         val editText = EditText(context)
         val params = RelativeLayout.LayoutParams(
             width,
-            height
+            RelativeLayout.LayoutParams.WRAP_CONTENT
         )
         params.setMargins(
             x,

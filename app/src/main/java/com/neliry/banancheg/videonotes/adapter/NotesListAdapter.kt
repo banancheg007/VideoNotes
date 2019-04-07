@@ -19,13 +19,10 @@ class NotesListAdapter (private val onViewClickListener: OnViewClickListener, va
     inner class ViewHolder internal constructor(pageView: View) : RecyclerView.ViewHolder(pageView), View.OnClickListener {
         internal val nameView: TextView = pageView.findViewById(R.id.notes_name)
         internal val timeView: TextView = pageView.findViewById(R.id.notes_time)
-            init {
-                pageView.note_linear_layout.layoutParams.width = windowWidth
-//                pageView.setOnClickListener{
-//                    onViewClickListener.onViewClicked(pageView, notesList[layoutPosition])
-//                }
-                pageView.note_linear_layout.setOnClickListener(this)
-            }
+        init {
+            pageView.note_linear_layout.layoutParams.width = windowWidth
+            pageView.note_linear_layout.setOnClickListener(this)
+        }
         override fun onClick(view: View) {
 
             onViewClickListener.onViewClicked(view, notesList[layoutPosition])

@@ -34,8 +34,7 @@ class EditorActivity : AppCompatActivity() {
         controller_layer.addView(editorViewModel.imageBlockController.controllerLayout)
 
         editorViewModel.getItems().observe(this, Observer { notes ->
-            editorViewModel.loadPage(text_layer, image_layer, paint_layer, fragment_shape_editor, notes)
-            editor_loading_indicator.visibility = View.GONE
+            editorViewModel.loadPage(text_layer, image_layer, paint_layer, fragment_shape_editor, notes, editor_loading_indicator)
         })
 
         editor_scroll_view.viewTreeObserver.addOnScrollChangedListener {
@@ -70,11 +69,6 @@ class EditorActivity : AppCompatActivity() {
             editorViewModel.startDraw(fragment_shape_editor, image_layer)
         }
 
-//        val params = RelativeLayout.LayoutParams(
-//            RelativeLayout.LayoutParams.MATCH_PARENT,
-//            RelativeLayout.LayoutParams.MATCH_PARENT
-//        )
-//        draw_event_layer.layoutParams = params
         draw_event_layer.setOnTouchListener { v, event ->
             editorViewModel.drawEvent(event, canvas_layer, fragment_shape_editor)
         }
@@ -87,7 +81,7 @@ class EditorActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.player_activity_menu, menu)
+        menuInflater.inflate(R.menu.editor_activity_manu, menu)
         return true
     }
 
@@ -96,9 +90,9 @@ class EditorActivity : AppCompatActivity() {
         if (item.itemId === android.R.id.home) {
             finish()
         }
-        if (item.itemId === R.id.action_save_note) {
+        if (item.itemId === R.id.action_save_page) {
 
-            editorViewModel.saveData()
+            editorViewModel.YourAsyncTask(editor_loading_indicator).execute()
         }
         return super.onOptionsItemSelected(item)
     }

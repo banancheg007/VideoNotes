@@ -113,6 +113,7 @@ class YoutubeVideoActivity : AppCompatActivity(), ViewNavigation {
 
             override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {
                 videoViewModel.setVideoDuration(video_seekBar, video_progressBar, custom_ui, video_duration, duration, marks_rl, notes_list_recycler_view, pause_btn, this@YoutubeVideoActivity)
+                player_loading_indicator.visibility = View.GONE
             }
 
             override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
@@ -147,9 +148,6 @@ class YoutubeVideoActivity : AppCompatActivity(), ViewNavigation {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId === android.R.id.home) {
             finish()
-        }
-        if (item.itemId === R.id.action_save_note) {
-
         }
         return super.onOptionsItemSelected(item)
     }
