@@ -4,16 +4,13 @@ import android.app.Application
 import android.content.Intent
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import com.neliry.banancheg.videonotes.activities.YoutubeVideoActivity
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Conspectus
 import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.repositories.ConspectusRepository
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
-import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
-import com.neliry.banancheg.videonotes.utils.ViewNavigation
-import com.neliry.banancheg.videonotes.views.PageActivity
-import com.neliry.banancheg.videonotes.views.SearchActivity
 
 class ConspectusViewModel(application: Application):BaseNavigationDrawerViewModel(application), OnViewClickListener {
 

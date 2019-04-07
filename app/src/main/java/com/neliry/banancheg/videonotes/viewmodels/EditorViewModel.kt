@@ -1,20 +1,39 @@
 package com.neliry.banancheg.videonotes.viewmodels
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.os.AsyncTask
+import android.text.SpannableStringBuilder
+import android.util.Base64
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewManager
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.neliry.banancheg.videonotes.entities.*
+import com.neliry.banancheg.videonotes.models.BaseItem
+import com.neliry.banancheg.videonotes.models.Page
+import com.neliry.banancheg.videonotes.models.PageItem
+import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
+import com.neliry.banancheg.videonotes.repositories.PageItemsRepository
 import kotlinx.android.synthetic.main.editor_activity.view.*
 import kotlinx.android.synthetic.main.fragment_shape_editor.*
+import kotlinx.coroutines.*
+import java.io.ByteArrayOutputStream
+import java.lang.Thread.currentThread
 
 
-class EditorViewModel(application: Application) : BaseViewModel(application) {
+
+
+class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(application) {
 
     private var shapeView: ShapeView? = null
     internal val textBlockController = TextBlockController(this)
@@ -24,6 +43,12 @@ class EditorViewModel(application: Application) : BaseViewModel(application) {
     var maxHeight = dpToPx(16f, getApplication()).toFloat()
     var pointX = 0f
     var pointY = 0f
+    var pageId: String =""
+    var isLoaded = false
+    init{
+        @Suppress("UNCHECKED_CAST")
+        repository = PageItemsRepository() as FirebaseDatabaseRepository<BaseItem>
+    }
 
     internal fun removeFocus() {
         textBlockController.removeFocus(getApplication())
@@ -114,7 +139,6 @@ class EditorViewModel(application: Application) : BaseViewModel(application) {
         relativeLayout.addView(shapeView)
         shapeView!!.postInvalidate()
         this.shapeView = shapeView
-        checkMaxHeight()
     }
 
     private fun setShapeFocus(context: Context, shapeView: ShapeView) {
@@ -148,7 +172,6 @@ class EditorViewModel(application: Application) : BaseViewModel(application) {
     fun createShapeEvent(event: MotionEvent, v: RelativeLayout, fragment: Fragment): Boolean{
         if(shapeView!=null) {
             val p = shapeView!!.layoutParams as RelativeLayout.LayoutParams
-
             shapeView?.layoutParams = p
             // Checks for the event that occurs
             when (event.action) {
@@ -217,6 +240,148 @@ class EditorViewModel(application: Application) : BaseViewModel(application) {
         shapeView = null
     }
 
+    private val uiScope = CoroutineScope(Dispatchers.Main)
+
+    fun saveData() = uiScope.launch {
+
+        disableDraw()
+        val canvasLayer = textBlockController.controllerLayout.parent.parent as RelativeLayout
+        val textLayer = canvasLayer.text_layer
+        val imageLayer = canvasLayer.image_layer
+        val paintLayer = canvasLayer.paint_layer
+        var myRef = FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2").child("views").child(pageId)
+        myRef.removeValue()
+
+        async {
+            var childCount = textLayer.childCount
+            for (i in 0 until childCount){
+                val v = textLayer.getChildAt(i) as EditText
+                saveTextAsync(v, myRef)
+            }
+        }
+        async {
+            var childCount = imageLayer.childCount
+            for (i in 0 until childCount){
+                val v = imageLayer.getChildAt(i)
+                if(v is ImageView){
+                    saveImageAsync(v, myRef)
+                }
+                if(v is ShapeView){
+                    saveShapeAsync(v, myRef)
+                }
+            }
+        }
+        async {
+            savePaintAsync(paintLayer, myRef)
+        }
+    }
+
+    private fun saveTextAsync(v: TextView, myRef: DatabaseReference)= GlobalScope.async { // this: CoroutineScope
+        if(v.text.toString() != ""){
+            var item = PageItem( v.text.toString(), "EditText", v.width, v.height, v.x.toInt(), v.y.toInt())
+            myRef.push().setValue(item)
+        }
+    }
+
+    private fun saveImageAsync(v: ImageView, myRef: DatabaseReference)= GlobalScope.async { // this: CoroutineScope
+
+        val bitmap = (v.drawable as BitmapDrawable).bitmap
+        var item = PageItem( bitMapToString(bitmap), "ImageView", v.width, v.height, v.x.toInt(), v.y.toInt())
+        myRef.push().setValue(item)
+    }
+    private fun saveShapeAsync(v: ShapeView, myRef: DatabaseReference)= GlobalScope.async { // this: CoroutineScope
+        if(v.width!=0 && v.height!=0){
+            val content: String = "shapeType:"+v.shapeType+";isFillColor:"+v.isFillColor+";strokeWidth:"+v.strokeWidth+";fillColor:"+v.fillColor+";strokeColor:"+v.strokeColor
+            var item = PageItem( content, "ShapeView", v.width, v.height, v.x.toInt(), v.y.toInt())
+            myRef.push().setValue(item)
+        }
+    }
+    private fun savePaintAsync(paintLayer: SimpleDrawingView, myRef: DatabaseReference)= GlobalScope.async { // this: CoroutineScope
+        val bitmap = paintLayer.mBitmap
+        var item = PageItem( bitMapToString(bitmap), "PaintView", paintLayer.width, paintLayer.height, 0, 0)
+        myRef.push().setValue(item)
+    }
+
+    fun loadPage(textLayout: RelativeLayout, imageLayout: RelativeLayout, simpleDrawingView: SimpleDrawingView, fragment: Fragment, notes: List<BaseItem>){
+        if (notes != null && !isLoaded){
+            val items = notes as List<PageItem>
+            for(i in items){
+                when (i.type){
+                    "EditText" -> {
+                        loadEditText(textLayout, i)
+                    }
+                    "ImageView" -> {
+                        loadImageView(imageLayout, i)
+                    }
+                    "ShapeView" -> {
+                        loadShapeView(imageLayout, fragment, i)
+                    }
+                    "PaintView" -> {
+                        loadDrawingView(simpleDrawingView, i)
+                    }
+                }
+            }
+            textBlockController.removeFocus(getApplication())
+            isLoaded = true
+            fragment.shape_preview.shapeType = 0
+            checkMaxHeight()
+        }
+    }
+
+    private fun loadEditText(textLayout: RelativeLayout, item: PageItem){
+        textLayout.addView(textBlock.loadTextBlock(getApplication(), SpannableStringBuilder(item.content), item.width!!, item.height!!, item.x!!, item.y!!))
+    }
+
+    private fun loadImageView(imageLayout: RelativeLayout, item: PageItem){
+        imageLayout.addView(imageBox.loadImageBlock(getApplication(), stringToBitMap(item.content!!)!!, item.width!!, item.height!!, item.x!!, item.y!!))
+    }
+
+    private fun loadShapeView(imageLayout: RelativeLayout, fragment: Fragment, item: PageItem){
+        val separated = item.content!!.split(";")
+        fragment.shape_preview.shapeType = separated[0].split(":")[1].toInt()
+        fragment.shape_preview.isFillColor = separated[1].split(":")[1].toBoolean()
+        fragment.shape_preview.strokeWidth = separated[2].split(":")[1].toFloat()
+        fragment.shape_preview.fillColor = separated[3].split(":")[1].toInt()
+        fragment.shape_preview.strokeColor = separated[4].split(":")[1].toInt()
+        createShape(fragment, imageLayout)
+        shapeView!!.shapeType = fragment.shape_preview.shapeType
+        shapeView!!.isFillColor = fragment.shape_preview.isFillColor
+        shapeView!!.strokeColor = fragment.shape_preview.strokeColor
+        shapeView!!.fillColor = fragment.shape_preview.fillColor
+        shapeView!!.strokeWidth = fragment.shape_preview.strokeWidth
+        val p = shapeView!!.layoutParams as RelativeLayout.LayoutParams
+        p.width = item.width!!
+        p.height = item.height!!
+        p.leftMargin = item.x!!
+        p.topMargin = item.y!!
+        shapeView?.layoutParams = p
+    }
+
+    private fun loadDrawingView(simpleDrawingView: SimpleDrawingView, item: PageItem){
+        simpleDrawingView.layoutParams.width = item.width!!
+        simpleDrawingView.layoutParams.height = item.height!!
+        simpleDrawingView.postInvalidate()
+        simpleDrawingView.loadBitmap(stringToBitMap(item.content!!)!!, item.width!!, item.height!!)
+    }
+
+    fun bitMapToString(bitmap: Bitmap): String {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
+    }
+
+    fun stringToBitMap(encodedString: String): Bitmap? {
+        try {
+            val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
+            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+        } catch (e: Exception) {
+            e.message
+            return null
+        }
+
+    }
+
 //    fun selectColorButton(colorButton: ImageButton?, linearLayout: LinearLayout){
 //        var childCount = linearLayout.childCount
 //        for (i in 1 until childCount){
@@ -244,7 +409,17 @@ class EditorViewModel(application: Application) : BaseViewModel(application) {
 //        colorButton.setBackgroundResource( R.drawable.btn_selected_border)
 //    }
 
+    fun parseIntent(intent: Intent, supportActionBar: androidx.appcompat.app.ActionBar){
+        if (intent.getSerializableExtra("currentPage") !=null) {
+            val page: Page = intent.getSerializableExtra("currentPage") as Page
+            repository.setDatabaseReference("views", page.id.toString())
+            supportActionBar.title = page.name
+            pageId = page.id.toString()
+        }
+    }
+
     internal fun dpToPx(dp: Float, context: Context): Int {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()
     }
+
 }

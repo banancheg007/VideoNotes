@@ -47,6 +47,7 @@ open class BaseNavigationDrawerViewModel(application: Application): BaseViewMode
                 navigationEvent.sendEvent{ startActivity(Intent(getApplication(), UserProfileActivity::class.java))}
                 Log.d("myTag", "on item menu clicked")
             }
+
             /*com.neliry.banancheg.videonotes.R.id.nav_settings -> {
                 // startActivity(Intent(this, UserProfileActivity::class.java))
                 Log.d("myTag", "on item menu clicked")

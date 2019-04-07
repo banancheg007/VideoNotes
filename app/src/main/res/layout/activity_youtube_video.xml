@@ -121,7 +121,8 @@
             android:id="@+id/marks_rl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/youtube_player_view">
+            android:layout_below="@+id/youtube_player_view"
+            >
     </RelativeLayout>
 
 

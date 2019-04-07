@@ -100,7 +100,7 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
 
                 Picasso.with(itemView.context)
 
-                    .load(conspectus.video_url)
+                    .load(conspectus.videoUrl)
                     .placeholder(R.mipmap.user_profile_placeholder)
                     .into(preview_url!!)
 
