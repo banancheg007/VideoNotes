@@ -69,4 +69,12 @@ open class FirebaseDatabaseRepository<Model> {
         baseItem.id = key
         databaseReference.child(key).setValue(baseItem)
     }
+
+    fun saveNewItem(baseItem: BaseItem, parentId: String){
+        var key = databaseReference.push().key!!
+        baseItem.id = key
+        databaseReference.child(key).setValue(baseItem)
+        FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2").child("conspectuses").child(parentId).child(key).setValue(baseItem)
+        FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2").child("all_conspectuses").child(key).setValue(baseItem)
+    }
 }

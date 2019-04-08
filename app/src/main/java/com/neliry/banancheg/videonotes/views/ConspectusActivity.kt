@@ -64,6 +64,10 @@ class ConspectusActivity : BaseNavigationDrawerActivity(), ViewNavigation {
             return
         }
         val videoItem = data.getSerializableExtra("VIDEO_ITEM") as VideoItem
+        //supportFragmentManager.findFragmentByTag("New Item")?.dialog_video_url?.setText("https://www.youtube.com/watch?v="+ videoItem.id)
+        //(supportFragmentManager.findFragmentByTag("New Item") as DialogNewItem).currentVideo = videoItem
+        (supportFragmentManager.findFragmentByTag("New Item") as DialogNewItem).setSelectedVideo(videoItem)
+
         Log.d("myTag", "video id " + videoItem.id)
     }
 }

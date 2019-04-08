@@ -2,13 +2,16 @@ package com.neliry.banancheg.videonotes.viewmodels
 
 import android.app.Application
 import android.content.Intent
+import android.net.Uri
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.neliry.banancheg.videonotes.activities.YoutubeVideoActivity
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Conspectus
 import com.neliry.banancheg.videonotes.models.Theme
+import com.neliry.banancheg.videonotes.models.VideoItem
 import com.neliry.banancheg.videonotes.repositories.ConspectusRepository
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
 import com.neliry.banancheg.videonotes.repositories.ThemeRepository
@@ -66,5 +69,21 @@ class ConspectusViewModel(application: Application):BaseNavigationDrawerViewMode
         loadAllThemes()
         return themeList
     }
+
+    fun addNewItem(name: String, videoUrl: String, previewUrl: String, parentId: String) {
+        if(name.isEmpty()||videoUrl.isEmpty()||previewUrl.isEmpty()){
+            Toast.makeText(getApplication(),"Please, fill all fields", Toast.LENGTH_SHORT).show()
+        }
+        else {
+            val conspectus = Conspectus()
+            val videoId = Uri.parse(videoUrl).getQueryParameter("v")
+            conspectus.name = name
+            conspectus.videoUrl = videoId
+            conspectus.previewUrl = previewUrl
+            conspectus.time = System.currentTimeMillis()
+            repository.saveNewItem(conspectus, parentId)
+        }
+    }
+
 
 }

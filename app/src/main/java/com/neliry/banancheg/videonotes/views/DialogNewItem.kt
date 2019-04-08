@@ -19,9 +19,11 @@ import android.opengl.Visibility
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.neliry.banancheg.videonotes.adapter.FireBaseCustomSpinnerAdapter
 import com.neliry.banancheg.videonotes.models.BaseItem
+import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.models.VideoItem
 import com.neliry.banancheg.videonotes.viewmodels.BaseNavigationDrawerViewModel
 import com.neliry.banancheg.videonotes.viewmodels.ConspectusViewModel
@@ -31,15 +33,25 @@ import java.util.*
 
 class DialogNewItem: DialogFragment(),View.OnClickListener{
     private lateinit var viewModel:BaseNavigationDrawerViewModel
+    var currentVideo= VideoItem()
+    lateinit var allThemes: List<BaseItem>
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.dialog_button_confirm ->{
                 if (viewModel is ConspectusViewModel){
-                    viewModel.addNewItem(dialog_editText_name.text.toString(), "conspectuses")
-                    viewModel.addNewItem(dialog_editText_name.text.toString(), "all_conspectuses")
-                    dismiss()
+                    if(currentVideo.thumbnailURL != null) {
+                        (viewModel as ConspectusViewModel).addNewItem(
+                            dialog_editText_name.text.toString(),
+                            dialog_video_url.text.toString(),
+                            currentVideo.thumbnailURL!!,
+                            allThemes[spinner.selectedItemPosition + 1].id!!
+                        )
+                        dismiss()
+                    } else{
+                        Toast.makeText(activity, "Please, fill all fields", Toast.LENGTH_SHORT).show()
+                    }
                 }else {
-                    viewModel.addNewItem(dialog_editText_name.text.toString(), "themes")
+                    (viewModel as ThemeViewModel).addNewItem(dialog_editText_name.text.toString(), "themes")
                     dismiss()
                 }
             }
@@ -76,6 +88,7 @@ class DialogNewItem: DialogFragment(),View.OnClickListener{
             spinner.visibility= View.VISIBLE
             (viewModel as ConspectusViewModel).getAllThemes().observe(this , Observer {
                     themes->
+                allThemes = themes
                 val adapter = FireBaseCustomSpinnerAdapter(activity?.baseContext, android.R.layout.simple_spinner_item,themes )
                 //val adapter2 = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list)
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -106,6 +119,11 @@ class DialogNewItem: DialogFragment(),View.OnClickListener{
         }
         val videoItem = data.getSerializableExtra("VIDEO_ITEM") as VideoItem
         Log.d("myTag", "video id " + videoItem.id)
+    }
+
+    fun  setSelectedVideo(videoItem: VideoItem){
+        currentVideo = videoItem
+        dialog_video_url?.setText("https://www.youtube.com/watch?v="+ videoItem.id)
     }
 
 }

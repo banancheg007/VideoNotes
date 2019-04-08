@@ -105,18 +105,6 @@ open class BaseNavigationDrawerViewModel(application: Application): BaseViewMode
     open fun showDialog() {
         showDialog.value = true
     }
-    fun addNewItem(name: String, childReference: String, themeId: String? = null) {
-        if(name.isEmpty()){
-            Toast.makeText(getApplication(),"Please input item name", Toast.LENGTH_SHORT).show()
-        }else {
 
-
-
-            var theme = Theme("",name)
-            repository.saveNewItem(theme)
-            Toast.makeText(getApplication(),"Adding item successfully", Toast.LENGTH_SHORT).show()
-        }
-
-    }
 
 }
