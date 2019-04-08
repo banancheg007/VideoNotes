@@ -39,17 +39,15 @@ class DialogNewItem: DialogFragment(),View.OnClickListener{
         when(v?.id){
             R.id.dialog_button_confirm ->{
                 if (viewModel is ConspectusViewModel){
-                    if(currentVideo.thumbnailURL != null) {
+
                         (viewModel as ConspectusViewModel).addNewItem(
                             dialog_editText_name.text.toString(),
                             dialog_video_url.text.toString(),
-                            currentVideo.thumbnailURL!!,
-                            allThemes[spinner.selectedItemPosition + 1].id!!
+                            currentVideo.thumbnailURL,
+                            allThemes[spinner.selectedItemPosition].id!!
                         )
                         dismiss()
-                    } else{
-                        Toast.makeText(activity, "Please, fill all fields", Toast.LENGTH_SHORT).show()
-                    }
+
                 }else {
                     (viewModel as ThemeViewModel).addNewItem(dialog_editText_name.text.toString(), "themes")
                     dismiss()

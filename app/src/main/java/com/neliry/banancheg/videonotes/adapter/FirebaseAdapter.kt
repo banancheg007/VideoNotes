@@ -95,12 +95,14 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
 
 
         fun bind(conspectus: Conspectus) {
+
+
             name.text = conspectus.name
             //Log.d("myLog", conspectus.video_url)
 
                 Picasso.with(itemView.context)
 
-                    .load(conspectus.videoUrl)
+                    .load(conspectus.previewUrl)
                     .placeholder(R.mipmap.user_profile_placeholder)
                     .into(preview_url!!)
 

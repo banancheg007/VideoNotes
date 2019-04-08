@@ -70,8 +70,8 @@ class ConspectusViewModel(application: Application):BaseNavigationDrawerViewMode
         return themeList
     }
 
-    fun addNewItem(name: String, videoUrl: String, previewUrl: String, parentId: String) {
-        if(name.isEmpty()||videoUrl.isEmpty()||previewUrl.isEmpty()){
+    fun addNewItem(name: String, videoUrl: String, previewUrl: String?, parentId: String) {
+        if(name.isEmpty()||videoUrl.isEmpty()){
             Toast.makeText(getApplication(),"Please, fill all fields", Toast.LENGTH_SHORT).show()
         }
         else {
@@ -79,7 +79,11 @@ class ConspectusViewModel(application: Application):BaseNavigationDrawerViewMode
             val videoId = Uri.parse(videoUrl).getQueryParameter("v")
             conspectus.name = name
             conspectus.videoUrl = videoId
-            conspectus.previewUrl = previewUrl
+            if (previewUrl == null){
+                conspectus.previewUrl = "https://img.youtube.com/vi/$videoId/0.jpg"
+            }else {
+                conspectus.previewUrl = previewUrl
+            }
             conspectus.time = System.currentTimeMillis()
             repository.saveNewItem(conspectus, parentId)
         }
