@@ -32,6 +32,8 @@ import android.R.attr.data
 
 
 
+
+
 class SearchActivity : AppCompatActivity() {
     var list= ArrayList<BaseItem>()
     private var searchInput: EditText? = null
@@ -119,7 +121,19 @@ class SearchActivity : AppCompatActivity() {
             val intent = Intent(application, PlayerActivity::class.java)
             intent.putExtra("VIDEO_ITEM", searchResults!![position])
             intent.putExtra("list", list)
-            startActivity(intent)
+            startActivityForResult(intent, 1)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (data == null) {
+            return
+        }
+        val videoItem = data.getSerializableExtra("VIDEO_ITEM") as VideoItem
+        Log.d("myTag", "video id " + videoItem.id)
+        val intent = Intent()
+        intent.putExtra("VIDEO_ITEM", videoItem)
+        setResult(1, intent)
+        finish()
     }
 }
