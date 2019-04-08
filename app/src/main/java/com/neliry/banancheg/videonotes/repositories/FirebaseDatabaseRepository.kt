@@ -2,6 +2,7 @@ package com.neliry.banancheg.videonotes.repositories
 
 import android.util.Log
 import com.google.firebase.database.*
+import com.neliry.banancheg.videonotes.models.*
 import java.lang.Exception
 import java.lang.reflect.ParameterizedType
 
@@ -61,5 +62,11 @@ open class FirebaseDatabaseRepository<Model> {
         Log.d("myTag",listener.toString())
         databaseReference.removeEventListener(listener!!)
         //Log.d("myTag",listener.toString())
+    }
+
+    fun saveNewItem(baseItem: BaseItem){
+        var key = databaseReference.push().key!!
+        baseItem.id = key
+        databaseReference.child(key).setValue(baseItem)
     }
 }

@@ -111,19 +111,14 @@ open class BaseNavigationDrawerViewModel(application: Application): BaseViewMode
     }
     fun addNewItem(name: String, childReference: String, themeId: String? = null) {
         if(name.isEmpty()){
-            Toast.makeText(getApplication(),"Please input theme name", Toast.LENGTH_SHORT).show()
+            Toast.makeText(getApplication(),"Please input item name", Toast.LENGTH_SHORT).show()
         }else {
 
 
-            var myRef = FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2").child(childReference)
-            if(themeId != null){
-                myRef = myRef.child(themeId)
-            }
 
-            var key = myRef.push().key!!
-            var theme = Theme(key, name)
-            myRef.child(key).setValue(theme)
-            Toast.makeText(getApplication(),"Adding theme successfully", Toast.LENGTH_SHORT).show()
+            var theme = Theme("",name)
+            repository.saveNewItem(theme)
+            Toast.makeText(getApplication(),"Adding item successfully", Toast.LENGTH_SHORT).show()
         }
 
     }
