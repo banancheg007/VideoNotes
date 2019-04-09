@@ -3,9 +3,9 @@ package com.neliry.banancheg.videonotes.viewmodels
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.AsyncTask
 import android.text.SpannableStringBuilder
 import android.util.Base64
@@ -25,11 +25,13 @@ import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
 import com.neliry.banancheg.videonotes.repositories.PageItemsRepository
 import kotlinx.android.synthetic.main.editor_activity.view.*
 import kotlinx.android.synthetic.main.fragment_shape_editor.*
-import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
 
 import android.util.DisplayMetrics
-
+import android.util.Log
+import android.webkit.MimeTypeMap
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 
 class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(application) {
@@ -44,6 +46,10 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
     var pointY = 0f
     var pageId: String =""
     var isLoaded = false
+    var pageContent: String? = null
+    lateinit var conspId: String
+    lateinit var noteBitmap: Bitmap
+
     init{
         @Suppress("UNCHECKED_CAST")
         repository = PageItemsRepository() as FirebaseDatabaseRepository<BaseItem>
@@ -232,13 +238,11 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
     }
 
     fun disableDraw(){
-        if(shapeView != null)
+        if(shapeView != null && isLoaded)
             if(shapeView!!.width == 0 || shapeView!!.height == 0)
                 (shapeView!!.parent as ViewManager).removeView(shapeView)
         shapeView = null
     }
-
-    private val uiScope = CoroutineScope(Dispatchers.Main)
 
     fun saveData() {
 
@@ -249,46 +253,103 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
         var myRef = FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2").child("views").child(pageId)
         myRef.removeValue()
 
-        var textChildCount = textLayer.childCount
-        for (i in 0 until textChildCount){
-            val v = textLayer.getChildAt(i) as EditText
-            saveTextAsync(v, myRef)
-        }
-
         var imageChildCount = imageLayer.childCount
         for (i in 0 until imageChildCount){
             val v = imageLayer.getChildAt(i)
             if(v is ImageView){
-                saveImageAsync(v, myRef)
+                saveImage(v, myRef)
             }
             if(v is ShapeView){
-                saveShapeAsync(v, myRef)
+                saveShape(v, myRef)
             }
         }
 
-        savePaintAsync(paintLayer, myRef)
+        savePaint(paintLayer, myRef)
+
+        var textChildCount = textLayer.childCount
+        for (i in 0 until textChildCount){
+            val v = textLayer.getChildAt(i) as EditText
+            saveText(v, myRef)
+        }
+
+        val stream = ByteArrayOutputStream()
+        noteBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        val byteArray = stream.toByteArray()
+
+        if(pageContent != null){
+            val contentRef = FirebaseStorage.getInstance().getReferenceFromUrl(pageContent!!)
+            contentRef.delete()
+            pageContent = null
+        }
+        val storageReference: StorageReference =
+            FirebaseStorage.getInstance().getReference("uploads").child(System.currentTimeMillis().toString()+".png")
+        storageReference.putBytes(byteArray).addOnSuccessListener {
+            storageReference.downloadUrl.addOnSuccessListener {
+                var myRef = FirebaseDatabase.getInstance().getReference("users").child("1OlV0BFqhzNzSMVI0vmoZlTHwAJ2").child("pages").child(conspId).child(pageId)
+                myRef.child("content").setValue(it.toString())
+                myRef.child("height").setValue(paintLayer.height)
+                myRef.child("width").setValue(paintLayer.width)
+                pageContent = it.toString()
+            }
+        }
     }
 
-    private fun saveTextAsync(v: TextView, myRef: DatabaseReference) { // this: CoroutineScope
+    private fun saveText(v: TextView, myRef: DatabaseReference) { // this: CoroutineScope
         if(v.text.toString() != ""){
             var item = PageItem("", v.text.toString(), "EditText", pxToDp(v.width.toFloat(), getApplication()),
                 pxToDp(v.height.toFloat(), getApplication()),
                 pxToDp(v.x, getApplication()),
                 pxToDp(v.y, getApplication()))
             myRef.push().setValue(item)
+
+            val bitmap = loadBitmapFromView(v)
+            val canvas = Canvas(noteBitmap)
+            canvas.drawBitmap(bitmap,  v.x , v.y , null)
         }
     }
 
-    private fun saveImageAsync(v: ImageView, myRef: DatabaseReference) { // this: CoroutineScope
+    private fun saveImage(v: ImageView, myRef: DatabaseReference) { // this: CoroutineScope
+        val separated = v.transitionName!!.split(";")
+        Log.i("myTag", "0: "+separated[0])
+        Log.i("myTag", "1: "+separated[1])
+        if(separated[1] != ""){
+            var item = PageItem("", separated[1], "ImageView", pxToDp(v.width.toFloat(), getApplication()),
+                pxToDp(v.height.toFloat(), getApplication()),
+                pxToDp(v.x, getApplication()),
+                pxToDp(v.y, getApplication()))
+            myRef.push().setValue(item)
+        }
+        else {
+            val myUri = Uri.parse(separated[0])
+            val storageReference: StorageReference = FirebaseStorage.getInstance().getReference("uploads").child(System.currentTimeMillis().toString() + "." + getFileExtention(myUri, getApplication()))
+            storageReference.putFile(myUri).addOnSuccessListener {
+                storageReference.downloadUrl.addOnSuccessListener {
+                    var item = PageItem("", it.toString(), "ImageView", pxToDp(v.width.toFloat(), getApplication()),
+                        pxToDp(v.height.toFloat(), getApplication()),
+                        pxToDp(v.x, getApplication()),
+                        pxToDp(v.y, getApplication()))
+                    myRef.push().setValue(item)
+                    v.transitionName = v.transitionName+item.content
+                    Log.i("myTag", "item.content: "+item.content)
+                    Log.i("myTag", "item.content: "+v.transitionName)
+                }
+
+            }
+        }
+
         val bitmap = (v.drawable as BitmapDrawable).bitmap
-        var item = PageItem("", bitMapToString(bitmap), "ImageView", pxToDp(v.width.toFloat(), getApplication()),
-            pxToDp(v.height.toFloat(), getApplication()),
-            pxToDp(v.x, getApplication()),
-            pxToDp(v.y, getApplication()))
-        myRef.push().setValue(item)
+        val canvas = Canvas(noteBitmap)
+        canvas.drawBitmap(bitmap,  v.x , v.y , null)
+
     }
 
-    private fun saveShapeAsync(v: ShapeView, myRef: DatabaseReference){ // this: CoroutineScope
+    fun getFileExtention(uri: Uri, context: Context): String{
+        val contentResolver = context.contentResolver
+        val mimeTypeMap = MimeTypeMap.getSingleton()
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri))
+    }
+
+    private fun saveShape(v: ShapeView, myRef: DatabaseReference){ // this: CoroutineScope
         if(v.width!=0 && v.height!=0){
             val content: String = "shapeType:"+v.shapeType+";isFillColor:"+v.isFillColor+";strokeWidth:"+v.strokeWidth+";fillColor:"+v.fillColor+";strokeColor:"+v.strokeColor
             var item = PageItem("", content, "ShapeView", pxToDp(v.width.toFloat(), getApplication()),
@@ -296,15 +357,31 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
                 pxToDp(v.x, getApplication()),
                 pxToDp(v.y, getApplication()))
             myRef.push().setValue(item)
+
+            val bitmap = loadBitmapFromView(v)
+            val canvas = Canvas(noteBitmap)
+            canvas.drawBitmap(bitmap,  v.x , v.y , null)
         }
     }
-    private fun savePaintAsync(paintLayer: SimpleDrawingView, myRef: DatabaseReference){ // this: CoroutineScope
+    private fun savePaint(paintLayer: SimpleDrawingView, viewsRef: DatabaseReference){ // this: CoroutineScope
         val bitmap = paintLayer.mBitmap
         var item = PageItem("", bitMapToString(bitmap), "PaintView", paintLayer.width.toFloat(), paintLayer.height.toFloat(), 0f, 0f)
-        myRef.push().setValue(item)
+        viewsRef.push().setValue(item)
+
+        val canvas = Canvas(noteBitmap)
+        val mBitmapPaint: Paint = Paint(Paint.DITHER_FLAG)
+        canvas.drawBitmap(bitmap,  0f , 0f, mBitmapPaint)
     }
 
-    fun loadPage(textLayout: RelativeLayout, imageLayout: RelativeLayout, simpleDrawingView: SimpleDrawingView, fragment: Fragment, notes: List<BaseItem>, progressBar: ProgressBar){
+    fun loadBitmapFromView (v: View): Bitmap{
+        val bitmap = Bitmap.createBitmap(v.width, v.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        v.layout(v.left, v.top, v.right, v.bottom)
+        v.draw(canvas)
+        return bitmap
+    }
+
+    fun loadPage(textLayout: RelativeLayout, imageLayout: RelativeLayout, simpleDrawingView: SimpleDrawingView, fragment: Fragment, notes: List<BaseItem>, progressBar: ProgressBar, width: Int){
 
         if (notes != null && !isLoaded){
             val items = notes as List<PageItem>
@@ -320,15 +397,15 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
                         loadShapeView(imageLayout, fragment, i)
                     }
                     "PaintView" -> {
-                        loadDrawingView(simpleDrawingView, i)
+                        loadDrawingView(simpleDrawingView, i, width)
                     }
                 }
             }
             textBlockController.removeFocus(getApplication())
-            isLoaded = true
             fragment.shape_preview.shapeType = 0
             checkMaxHeight()
             progressBar.visibility = View.GONE
+            isLoaded = true
         }
     }
 
@@ -337,7 +414,7 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
     }
 
     private fun loadImageView(imageLayout: RelativeLayout, item: PageItem){
-        imageLayout.addView(imageBox.loadImageBlock(getApplication(), stringToBitMap(item.content!!)!!, dpToPx(item.width!!, getApplication()) , dpToPx(item.height!!, getApplication()) , dpToPx(item.x!!, getApplication()) , dpToPx(item.y!!, getApplication()) ))
+        imageLayout.addView(imageBox.loadImageBlock(getApplication(), item.content!!, dpToPx(item.width!!, getApplication()) , dpToPx(item.height!!, getApplication()) , dpToPx(item.x!!, getApplication()) , dpToPx(item.y!!, getApplication()) ))
     }
 
     private fun loadShapeView(imageLayout: RelativeLayout, fragment: Fragment, item: PageItem){
@@ -361,11 +438,11 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
         shapeView?.layoutParams = p
     }
 
-    private fun loadDrawingView(simpleDrawingView: SimpleDrawingView, item: PageItem){
-        simpleDrawingView.layoutParams.width = item.width!!.toInt()
-        simpleDrawingView.layoutParams.height = item.height!!.toInt()
+    private fun loadDrawingView(simpleDrawingView: SimpleDrawingView, item: PageItem, width: Int){
+        simpleDrawingView.layoutParams.width = width
+        simpleDrawingView.layoutParams.height = (item.height!!*(width/item.width!!)).toInt()
         simpleDrawingView.postInvalidate()
-        simpleDrawingView.loadBitmap(stringToBitMap(item.content!!)!!, item.width!!.toInt(), item.height!!.toInt())
+        simpleDrawingView.loadBitmap(stringToBitMap(item.content!!)!!, width, item.height!!.toInt())
     }
 
     fun bitMapToString(bitmap: Bitmap): String {
@@ -392,10 +469,14 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
             repository.setDatabaseReference("views", page.id.toString())
             supportActionBar.title = page.name
             pageId = page.id.toString()
+            pageContent = page.content
+        }
+        if (intent.getSerializableExtra("conspId") !=null) {
+            conspId = intent.getSerializableExtra("conspId") as String
         }
     }
 
-    inner class YourAsyncTask (private val progressBar: ProgressBar): AsyncTask<Void?, Void?, Void?>() {
+    inner class YourAsyncTask (private val progressBar: ProgressBar,val paintLayer: SimpleDrawingView): AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
             super.onPreExecute()
@@ -404,6 +485,7 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
         }
 
         override fun doInBackground(vararg args: Void?): Void? {
+            noteBitmap = Bitmap.createBitmap(paintLayer.mBitmap.width, paintLayer.mBitmap.height, Bitmap.Config.ARGB_8888)
             saveData()
             return null
         }
