@@ -45,10 +45,10 @@ class VideoViewModel (application: Application):BaseNavigationDrawerViewModel(ap
         repository = PageRepository() as FirebaseDatabaseRepository<BaseItem>
     }
 
-    override fun onViewClicked(view: View?, baseItem: BaseItem?) {
+    override fun onViewClicked(view: View?, any: Any?) {
         youTubePlayer.pause()
         isPause = true
-        val currentClickedPage = baseItem as Page
+        val currentClickedPage = any as Page
         navigationEvent.sendEvent {  val intent = Intent(getApplication(), EditorActivity::class.java)
             intent.putExtra("currentPage", currentClickedPage)
             navigationEvent.sendEvent{ startActivity(intent)} }

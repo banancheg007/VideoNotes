@@ -35,8 +35,8 @@ class ConspectusViewModel(application: Application):BaseNavigationDrawerViewMode
         themeRepository = ThemeRepository()
         themeRepository.setDatabaseReference("themes")
     }
-    override fun onViewClicked(view: View?, baseItem: BaseItem?) {
-        currentClickedConspectus = baseItem as Conspectus
+    override fun onViewClicked(view: View?, any: Any?) {
+        currentClickedConspectus = any as Conspectus
         navigationEvent.sendEvent {  val intent = Intent(getApplication(), YoutubeVideoActivity::class.java)
             intent.putExtra("currentConspectus", currentClickedConspectus)
             navigationEvent.sendEvent{ startActivity(intent)} }

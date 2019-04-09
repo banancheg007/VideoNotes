@@ -21,8 +21,8 @@ class PageViewModel(application: Application):BaseNavigationDrawerViewModel(appl
         @Suppress("UNCHECKED_CAST")
         repository = PageRepository() as FirebaseDatabaseRepository<BaseItem>
     }
-    override fun onViewClicked(view: View?, baseItem: BaseItem?) {
-        currentClickedPage = baseItem as Page
+    override fun onViewClicked(view: View?, any: Any?) {
+        currentClickedPage = any as Page
         Log.d("myTag", "clicked on page")
     }
 

@@ -25,10 +25,10 @@ open class ThemeViewModel(application: Application):BaseNavigationDrawerViewMode
         repository = ThemeRepository() as FirebaseDatabaseRepository<BaseItem>
         repository.setDatabaseReference("themes" )
     }
-    override fun onViewClicked(view: View?, baseItem: BaseItem?) {
+    override fun onViewClicked(view: View?, any: Any?) {
         Log.d("myTag", "click on theme_item")
 
-        currentClickedTheme = baseItem as Theme
+        currentClickedTheme = any as Theme
         navigationEvent.sendEvent {  val intent = Intent(getApplication(), ConspectusActivity::class.java)
             intent.putExtra("currentTheme", currentClickedTheme)
             navigationEvent.sendEvent{ startActivity(intent)} }

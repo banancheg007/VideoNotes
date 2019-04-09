@@ -27,7 +27,7 @@ class UserProfileViewModel(application: Application): BaseViewModel(application)
     private var currentUser: MutableLiveData<FirebaseUser>? = null
     private var isChangePasswordViewsVisible: MutableLiveData<Boolean>? = null
 
-    override fun onViewClicked(view: View?, baseItem: BaseItem?) {
+    override fun onViewClicked(view: View?, any: Any?) {
         when(view!!.id){
             R.id.button_logout->{
                 FirebaseAuth.getInstance().signOut()
