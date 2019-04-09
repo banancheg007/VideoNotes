@@ -20,7 +20,7 @@ class SimpleDrawingView(context: Context, attrs: AttributeSet) : View(context, a
     private val mPath: Path = Path()
     var isEraseMode = false
     var pathList: MutableList<Path> = mutableListOf()
-    private lateinit var mBitmap: Bitmap
+    internal lateinit var mBitmap: Bitmap
     private lateinit var mCanvas: Canvas
     private var mX: Float = 0f
     private var mY: Float = 0f
@@ -62,6 +62,13 @@ class SimpleDrawingView(context: Context, attrs: AttributeSet) : View(context, a
             mCanvas!!.drawBitmap(mBitmap, 0f, 0f, mBitmapPaint)
             mBitmap = newBitmap
         }
+    }
+
+    fun loadBitmap(bitmap: Bitmap, w: Int, h: Int){
+        val newBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        mCanvas = Canvas (newBitmap)
+        mCanvas!!.drawBitmap(bitmap, 0f, 0f, mBitmapPaint)
+        mBitmap = newBitmap
     }
 
     private fun setupPaint() {

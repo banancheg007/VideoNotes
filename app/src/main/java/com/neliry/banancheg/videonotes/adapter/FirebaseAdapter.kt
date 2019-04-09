@@ -9,16 +9,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.R
-import com.neliry.banancheg.videonotes.models.BaseItem
-import com.neliry.banancheg.videonotes.models.Conspectus
-import com.neliry.banancheg.videonotes.models.Page
+import com.neliry.banancheg.videonotes.models.*
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.util.*
 
 class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
-                      private val list: List<BaseItem>
+                      private val list: List<Any>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
@@ -27,6 +26,7 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
         const val TYPE_THEME = 0
         const val TYPE_CONSPECTUS = 1
         const val TYPE_PAGE = 2
+        const val TYPE_VIDEO_ITEM = 3
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -43,6 +43,10 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.page_item, parent, false)
                 PageViewHolder(view)
             }
+            TYPE_VIDEO_ITEM->{
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.video_item, parent, false)
+                VideoItemViewHolder(view)
+            }
             else-> throw NullPointerException()
         }
 
@@ -53,6 +57,7 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
             is ThemeViewHolder-> holder.bind(list[position] as Theme)
             is ConspectusViewHolder -> holder.bind(list[position] as Conspectus)
             is PageViewHolder -> holder.bind(list[position] as Page)
+            is VideoItemViewHolder -> holder.bind(list[position] as VideoItem)
         }
     }
 
@@ -65,14 +70,15 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
     override fun getItemViewType(position: Int): Int {
 
            if (list[position] is Theme) return TYPE_THEME
-        return if (list[position] is Conspectus) TYPE_CONSPECTUS
+      if (list[position] is Conspectus) return TYPE_CONSPECTUS
+        return if (list[position] is VideoItem) TYPE_VIDEO_ITEM
         else TYPE_PAGE
 
     }
 
     inner class ThemeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
         override fun onClick(view: View) {
-            onViewClickListener.onViewClicked(view, list[layoutPosition])
+            onViewClickListener.onViewClicked(view, list[layoutPosition] as BaseItem)
         }
 
         init{
@@ -91,18 +97,34 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
 
 
         internal var name: TextView = itemView.findViewById(R.id.conspectus_name_textview)
-        internal var preview_url: ImageView = itemView.findViewById(R.id.conspectus_preview_image_view)
+        internal var time: TextView = itemView.findViewById(R.id.conspectus_time_textview)
+        internal var previewUrl: ImageView = itemView.findViewById(R.id.conspectus_preview_image_view)
 
 
         fun bind(conspectus: Conspectus) {
+
+
             name.text = conspectus.name
+            //time.text = conspectus.time.toString()
+            val simple = SimpleDateFormat("dd MMM yyyy HH:mm:ss")
+
+            // Creating date from milliseconds
+            // using Date() constructor
+            val result: Date
+            if (conspectus.time!=null) {
+                result = Date(conspectus.time as Long)
+                time.text = simple.format(result)
+            }else{
+                time.text = conspectus.time.toString()
+            }
+
             //Log.d("myLog", conspectus.video_url)
 
                 Picasso.with(itemView.context)
 
-                    .load(conspectus.video_url)
+                    .load(conspectus.previewUrl)
                     .placeholder(R.mipmap.user_profile_placeholder)
-                    .into(preview_url!!)
+                    .into(previewUrl)
 
         }
 
@@ -111,7 +133,7 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
         }
 
         override fun onClick(view: View) {
-            onViewClickListener.onViewClicked(view, list[layoutPosition])
+            onViewClickListener.onViewClicked(view, list[layoutPosition] as BaseItem)
         }
     }
 
@@ -128,7 +150,27 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
         }
 
         override fun onClick(view: View) {
-            onViewClickListener.onViewClicked(view, list[layoutPosition])
+            onViewClickListener.onViewClicked(view, list[layoutPosition] as BaseItem)
+        }
+
+    }
+    inner class VideoItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener{
+        private val thumbnail = itemView.findViewById<View>(R.id.video_thumbnail) as ImageView
+        private val title = itemView.findViewById<View>(R.id.video_title) as TextView
+
+
+
+        fun bind(videoItem: VideoItem) {
+            Picasso.with(itemView.context).load(videoItem.thumbnailURL).into(thumbnail)
+            title.text = videoItem.description
+        }
+
+        init{
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(view: View) {
+            onViewClickListener.onViewClicked(view, list[layoutPosition] as VideoItem)
         }
 
     }

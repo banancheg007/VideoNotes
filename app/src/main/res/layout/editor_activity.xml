@@ -1,86 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".activities.EditorActivity"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-    <ScrollView
-            android:id="@+id/editor_scroll_view"
+    <LinearLayout
+
             android:layout_width="match_parent"
-            android:layout_height="1000dp"
-            android:layout_weight="1">
-        <RelativeLayout
-                android:id="@+id/canvas_layer"
+            android:layout_height="match_parent"
+            tools:context=".activities.EditorActivity"
+            android:orientation="vertical">
+        <ScrollView
+                android:id="@+id/editor_scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="1000dp"
-                >
+                android:layout_weight="1">
             <RelativeLayout
-                    android:id="@+id/image_layer"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="15dp">
-            </RelativeLayout>
-            <com.neliry.banancheg.videonotes.entities.SimpleDrawingView
-                    android:id="@+id/paint_layer"
-                    android:layout_width="match_parent"
-                    android:layout_height="1000dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-            />
-            <RelativeLayout
-                    android:id="@+id/text_layer"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="15dp">
-            </RelativeLayout>
-            <RelativeLayout
-                    android:id="@+id/controller_layer"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-            </RelativeLayout>
-            <RelativeLayout
-                    android:id="@+id/draw_event_layer"
+                    android:id="@+id/canvas_layer"
                     android:layout_width="match_parent"
                     android:layout_height="1000dp"
             >
+                <RelativeLayout
+                        android:id="@+id/image_layer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="15dp">
+                </RelativeLayout>
+                <com.neliry.banancheg.videonotes.entities.SimpleDrawingView
+                        android:id="@+id/paint_layer"
+                        android:layout_width="match_parent"
+                        android:layout_height="1000dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                />
+                <RelativeLayout
+                        android:id="@+id/text_layer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="15dp">
+                </RelativeLayout>
+                <RelativeLayout
+                        android:id="@+id/controller_layer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                </RelativeLayout>
+                <RelativeLayout
+                        android:id="@+id/draw_event_layer"
+                        android:layout_width="match_parent"
+                        android:layout_height="1000dp"
+                >
+                </RelativeLayout>
             </RelativeLayout>
-        </RelativeLayout>
-    </ScrollView>
-<fragment
-        android:name="com.neliry.banancheg.videonotes.fragments.ShapeEditorFragment"
-        android:id="@+id/fragment_shape_editor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
+        </ScrollView>
+        <fragment
+                android:name="com.neliry.banancheg.videonotes.fragments.ShapeEditorFragment"
+                android:id="@+id/fragment_shape_editor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
 
-/>
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:elevation="20dp"
-            android:background="@android:color/white"
-    >
-        <ImageButton
-                android:id="@+id/add_text_field_btn"
-                android:src="@drawable/ic_add_text_field"
-                style="@style/EditorButtons"/>
-        <ImageButton
-                android:id="@+id/start_draw_btn"
-                android:src="@drawable/ic_paint"
-                style="@style/EditorButtons"/>
-        <ImageButton
-                android:id="@+id/add_image_btn"
-                android:src="@drawable/ic_add_image"
-                style="@style/EditorButtons"/>
-        <ImageButton
-                android:id="@+id/start_voice_recogniser_btn"
-                android:src="@drawable/ic_voice_recogniser"
-                style="@style/EditorButtons"
         />
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:elevation="20dp"
+                android:background="@android:color/white"
+        >
+            <ImageButton
+                    android:id="@+id/add_text_field_btn"
+                    android:src="@drawable/ic_add_text_field"
+                    style="@style/EditorButtons"/>
+            <ImageButton
+                    android:id="@+id/start_draw_btn"
+                    android:src="@drawable/ic_paint"
+                    style="@style/EditorButtons"/>
+            <ImageButton
+                    android:id="@+id/add_image_btn"
+                    android:src="@drawable/ic_add_image"
+                    style="@style/EditorButtons"/>
+            <ImageButton
+                    android:id="@+id/start_voice_recogniser_btn"
+                    android:src="@drawable/ic_voice_recogniser"
+                    style="@style/EditorButtons"
+            />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+    <ProgressBar
+            android:id="@+id/editor_loading_indicator"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            android:indeterminateTint="@color/accent"/>
+</RelativeLayout>

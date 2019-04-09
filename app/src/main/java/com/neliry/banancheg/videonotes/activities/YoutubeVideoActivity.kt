@@ -10,15 +10,19 @@ import android.graphics.Point
 import android.util.Log
 import android.util.TypedValue
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.adapter.NotesListAdapter
+import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Page
+import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.viewmodels.ViewModelFactory
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -27,11 +31,9 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTube
 import kotlinx.android.synthetic.main.activity_youtube_video.*
 
 
-class YoutubeVideoActivity : AppCompatActivity(){
+class YoutubeVideoActivity : AppCompatActivity(), ViewNavigation {
 
     private val videoViewModel: VideoViewModel by lazy { ViewModelProviders.of(this, ViewModelFactory(application)).get( VideoViewModel::class.java)}
-    lateinit var adapter: NotesListAdapter
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,11 +48,13 @@ class YoutubeVideoActivity : AppCompatActivity(){
 
         youtube_player_view.inflateCustomPlayerUi(R.layout.custom_player_ui)
 
-        val videoUrl: String = videoViewModel.parseIntent(intent, supportActionBar!!)!!
+        val videoUrl: String? = videoViewModel.parseIntent(intent, supportActionBar!!)!!
+        videoViewModel.navigationEvent.setEventReceiver(this, this)
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
 
-        adapter = NotesListAdapter(width - dpToPx(30f, this@YoutubeVideoActivity))
+        videoViewModel.adapter = NotesListAdapter(videoViewModel, width - dpToPx(30f, this@YoutubeVideoActivity), this@YoutubeVideoActivity)
         notes_list_recycler_view.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         notes_list_recycler_view.addItemDecoration(
             NoteListDecoration(
@@ -59,10 +63,10 @@ class YoutubeVideoActivity : AppCompatActivity(){
         )
 
         videoViewModel.getItems().observe(this, Observer { notes ->
-            Log.d("myTag", "yob tvoyu mat")
-            adapter.setNotes(notes)
-            notes_list_recycler_view.adapter = adapter
-            videoViewModel.allNotes =  videoViewModel.getItems() as MutableLiveData<List<Page>>
+
+            videoViewModel.adapter.setNotes(notes as  List<Page>)
+            notes_list_recycler_view.adapter = videoViewModel.adapter
+            videoViewModel.allNotes =  notes
             videoViewModel.createMark(marks_rl, notes_list_recycler_view, pause_btn)
         })
 
@@ -78,7 +82,7 @@ class YoutubeVideoActivity : AppCompatActivity(){
         youtube_player_view.enableAutomaticInitialization
         youtube_player_view.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
-                youTubePlayer.loadVideo(videoUrl, 0f)
+                youTubePlayer.loadVideo(videoUrl!!, 0f)
                 youTubePlayer.play()
                 videoViewModel.youTubePlayer = youTubePlayer
                 video_player_rl.layoutParams.height = youtube_player_view.height+dpToPx(8f, this@YoutubeVideoActivity)
@@ -112,6 +116,7 @@ class YoutubeVideoActivity : AppCompatActivity(){
 
             override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {
                 videoViewModel.setVideoDuration(video_seekBar, video_progressBar, custom_ui, video_duration, duration, marks_rl, notes_list_recycler_view, pause_btn, this@YoutubeVideoActivity)
+                player_loading_indicator.visibility = View.GONE
             }
 
             override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
@@ -129,8 +134,13 @@ class YoutubeVideoActivity : AppCompatActivity(){
             }
 
             override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
+                videoViewModel.stateChange(state, pause_btn)
             }
         })
+
+        fab.setOnClickListener { view ->
+//
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -140,5 +150,12 @@ class YoutubeVideoActivity : AppCompatActivity(){
 
     internal fun dpToPx(dp: Float, context: Context): Int {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId === android.R.id.home) {
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

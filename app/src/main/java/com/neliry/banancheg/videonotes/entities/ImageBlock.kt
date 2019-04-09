@@ -3,12 +3,14 @@ package com.neliry.banancheg.videonotes.entities
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
+import com.squareup.picasso.Picasso
 import java.io.FileNotFoundException
 
 class ImageBlock(private val blockController: ImageBlockController)  {
@@ -50,6 +52,7 @@ class ImageBlock(private val blockController: ImageBlockController)  {
                 val imageStream = context.contentResolver.openInputStream(imageUri!!)
                 val selectedImage = BitmapFactory.decodeStream(imageStream)
                 imageView.setImageBitmap(selectedImage)
+                imageView.transitionName = "$imageUri;"
 //                imageView.background = BitmapDrawable(context.resources, imageStream)
                 setFocus(context, imageView)
                 return imageView
@@ -65,9 +68,41 @@ class ImageBlock(private val blockController: ImageBlockController)  {
         }
     }
 
+    fun loadImageBlock(context: Context, content: String, width: Int, height: Int, x: Int, y: Int): ImageView {
+        val imageView = ImageView(context)
+        imageView.scaleType = ImageView.ScaleType.FIT_XY
+        val params = RelativeLayout.LayoutParams(
+            width,
+            height
+        )
+        params.setMargins(
+            x,
+            y,
+            0,
+            0
+        )
+        imageView.layoutParams = params
+        imageView.background = null
+        Picasso.with(context)
+            .load(content)
+            .fit()
+            .centerCrop()
+            .into(imageView)
+        imageView.addOnLayoutChangeListener { view, i, i1, i2, i3, i4, i5, i6, i7 ->
+            view.post {
+                changeControllerPosition(context, view as ImageView)
+            }
+        }
+        imageView.transitionName = ";$content"
+        imageView.setOnClickListener{
+            setFocus(context, imageView)
+        }
+
+        return imageView
+    }
+
     private fun setFocus(context: Context, imageView: ImageView) {
         blockController.model.disableDraw()
-//        imageView.bringToFront()
         blockController.removeImageFocus()
         changeControllerPosition(context, imageView)
         blockController.setBlock(imageView)

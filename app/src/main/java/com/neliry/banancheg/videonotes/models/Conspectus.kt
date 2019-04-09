@@ -1,3 +1,7 @@
 package com.neliry.banancheg.videonotes.models
 
-class Conspectus(var video_url: String? = null): BaseItem()
+class Conspectus(id:String? = null,
+                 name:String? = null,
+                 var previewUrl: String? = null,
+                 var time:  Long? = null,
+                 var videoUrl: String? = null): BaseItem(id,name)

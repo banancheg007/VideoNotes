@@ -29,7 +29,7 @@ import com.neliry.banancheg.videonotes.views.ThemeActivity
 
 
 
-class LoginViewModel(application: Application): BaseViewModel(application), OnViewClickListener {
+class LoginViewModel(application: Application): BaseViewModel(application) {
 
     private lateinit var facebookButton: LoginButton
     private var callbackManager: CallbackManager = CallbackManager.Factory.create()
@@ -48,7 +48,7 @@ class LoginViewModel(application: Application): BaseViewModel(application), OnVi
                 navigationEvent.sendEvent{ startActivity(intent)} }
     }
 
-    override fun onViewClicked(view: View?, baseItem: BaseItem?) {
+     fun onViewClicked(view: View?, baseItem: BaseItem? = null) {
         when(view?.id){
             R.id.button_login-> Log.d("myTag", "Button login")
             R.id.sign_in_facebook_button->

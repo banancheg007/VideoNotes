@@ -1,6 +1,7 @@
 package com.neliry.banancheg.videonotes.entities
 
 import android.content.Context
+import android.text.Editable
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -50,6 +51,50 @@ class TextBlock(private val blockController: TextBlockController) {
 
         setFocus(context, editText)
         editText.requestFocus()
+
+        return editText
+    }
+
+    fun loadTextBlock(context: Context, content: Editable, width: Int, height: Int, x: Int, y: Int): EditText {
+        val editText = EditText(context)
+        val params = RelativeLayout.LayoutParams(
+            width,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        )
+        params.setMargins(
+            x,
+            y,
+            0,
+            0
+        )
+        editText.layoutParams = params
+        editText.background = null
+
+        editText.text = content
+
+        setFocus(context, editText)
+        editText.requestFocus()
+
+        editText.addOnLayoutChangeListener { view, i, i1, i2, i3, i4, i5, i6, i7 ->
+            editText.post {
+                if (blockController.viewBlock == editText) {
+                    changeControllerPosition(context, view as EditText)
+                }
+            }
+        }
+
+        editText.setOnClickListener {
+
+            if (blockController.viewBlock != it || blockController.controllerLayout.visibility == View.GONE) {
+                it.isFocusable = true
+                it.isFocusableInTouchMode = true
+                it.requestFocus()
+//                isOnFocus = true
+                setFocus(context, it as EditText)
+                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+                imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+            }
+        }
 
         return editText
     }

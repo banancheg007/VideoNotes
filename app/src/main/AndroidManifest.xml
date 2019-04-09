@@ -61,7 +61,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.EditorActivity">
+        <activity android:name=".activities.EditorActivity"
+                  android:theme="@style/VideoActivityActionBar">
         </activity>
         <activity android:name=".activities.YoutubeVideoActivity"
                   android:theme="@style/VideoActivityActionBar">

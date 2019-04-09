@@ -26,13 +26,20 @@ import android.widget.Spinner
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.adapter.FireBaseCustomSpinnerAdapter
 import kotlinx.android.synthetic.main.activity_player.*
+import android.content.Intent
+
+
 
 
 class PlayerActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListener, View.OnClickListener {
+    lateinit var currentVideo: VideoItem
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.button_confirm_search_activity->{
-
+                val intent = Intent()
+                intent.putExtra("VIDEO_ITEM", currentVideo)
+                setResult(1, intent)
+                finish()
             }
             R.id.button_cancel_search_activity->{
                 finish()
@@ -51,19 +58,19 @@ class PlayerActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListene
 
         playerView = findViewById(com.neliry.banancheg.videonotes.R.id.player_view)
         playerView!!.initialize(YoutubeConnector.KEY, this)
-        val list = intent.getSerializableExtra("list") as List<BaseItem>
-        /*for(item in list){
-            Log.d("myTag", item)
-        }*/
-        val adapter = FireBaseCustomSpinnerAdapter(this, android.R.layout.simple_spinner_item,list )
-        //val adapter2 = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        val spinner = findViewById<Spinner>(R.id.spinner)
-        spinner.adapter = adapter
-        // заголовок
-        spinner.prompt = "Choose parent theme"
-        val currentItem= spinner.selectedItem as BaseItem
-        Log.d("myTag", currentItem.name)
+//        val list = intent.getSerializableExtra("list") as List<BaseItem>
+//        /*for(item in list){
+//            Log.d("myTag", item)
+//        }*/
+//        val adapter = FireBaseCustomSpinnerAdapter(this, android.R.layout.simple_spinner_item,list )
+//        //val adapter2 = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list)
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        val spinner = findViewById<Spinner>(R.id.spinner)
+//        spinner.adapter = adapter
+//        // заголовок
+//        spinner.prompt = "Choose parent theme"
+//        val currentItem= spinner.selectedItem as BaseItem
+//        Log.d("myTag", currentItem.name)
         // выделяем элемент
         //spinner.setSelection(2)
        button_confirm_search_activity.setOnClickListener(this)
@@ -72,11 +79,12 @@ class PlayerActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListene
 
     override fun onInitializationSuccess(provider: YouTubePlayer.Provider, youTubePlayer: YouTubePlayer, b: Boolean) {
         if (!b) {
-            val videoItem = intent.getSerializableExtra("VIDEO_ITEM") as VideoItem
+            currentVideo = intent.getSerializableExtra("VIDEO_ITEM") as VideoItem
 
             //youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL)
             youTubePlayer.setShowFullscreenButton(false)
-            youTubePlayer.cueVideo(videoItem.id)
+            //youTubePlayer.cueVideo(videoItem.id)
+            youTubePlayer.loadVideo(currentVideo.id)
         }
     }
 
