@@ -13,6 +13,8 @@ import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.models.*
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.util.*
 
 class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
                       private val list: List<Any>
@@ -95,6 +97,7 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
 
 
         internal var name: TextView = itemView.findViewById(R.id.conspectus_name_textview)
+        internal var time: TextView = itemView.findViewById(R.id.conspectus_time_textview)
         internal var previewUrl: ImageView = itemView.findViewById(R.id.conspectus_preview_image_view)
 
 
@@ -102,6 +105,19 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
 
 
             name.text = conspectus.name
+            //time.text = conspectus.time.toString()
+            val simple = SimpleDateFormat("dd MMM yyyy HH:mm:ss")
+
+            // Creating date from milliseconds
+            // using Date() constructor
+            val result: Date
+            if (conspectus.time!=null) {
+                result = Date(conspectus.time as Long)
+                time.text = simple.format(result)
+            }else{
+                time.text = conspectus.time.toString()
+            }
+
             //Log.d("myLog", conspectus.video_url)
 
                 Picasso.with(itemView.context)

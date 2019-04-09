@@ -42,7 +42,7 @@ class SearchActivity : AppCompatActivity(), ViewNavigation {
 
     lateinit var searchViewModel: SearchViewModel
 
-    private var searchResults: List<VideoItem>? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +66,6 @@ class SearchActivity : AppCompatActivity(), ViewNavigation {
         searchViewModel.getItems().observe(this,
             Observer<List<BaseItem>> { items ->
                 Log.d("myTag", "ON CHANGED")
-                // адаптер
 
                 for (item in items){
                     list.add(item)

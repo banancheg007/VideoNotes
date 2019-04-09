@@ -8,13 +8,26 @@
 
         <ImageView android:layout_width="70dp" android:layout_height="70dp"
         android:id="@+id/conspectus_preview_image_view"/>
-
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
         <TextView
-                android:layout_gravity="center"
+                android:layout_gravity="center_horizontal"
                 android:id="@+id/conspectus_name_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="10sp"
-        android:layout_marginLeft="10dp"/>
+                android:textSize="20sp"
+        android:layout_marginStart="15dp"/>
+
+    <TextView
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/conspectus_time_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:layout_marginStart="10dp"/>
+    </LinearLayout>
 </LinearLayout>
