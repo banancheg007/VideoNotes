@@ -29,15 +29,11 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_theme.*
 import android.widget.Spinner
 import android.R.attr.data
-
-
-
+import kotlinx.android.synthetic.main.activity_search.*
 
 
 class SearchActivity : AppCompatActivity() {
     var list= ArrayList<BaseItem>()
-    private var searchInput: EditText? = null
-    private var videosFound: ListView? = null
     private var handler: Handler? = null
     lateinit var searchViewModel: SearchViewModel
 
@@ -47,12 +43,11 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        searchInput = findViewById<View>(R.id.search_input) as EditText
-        videosFound = findViewById<View>(R.id.videos_found) as ListView
+
 
         handler = Handler()
 
-        searchInput!!.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+        search_input.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 searchOnYoutube(v.text.toString())
                 return@OnEditorActionListener false
@@ -113,11 +108,11 @@ class SearchActivity : AppCompatActivity() {
                 return convertView
             }
         }
-        videosFound!!.adapter = adapter
+        videos_found.adapter = adapter
     }
 
     private fun addClickListener() {
-        videosFound!!.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        videos_found.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val intent = Intent(application, PlayerActivity::class.java)
             intent.putExtra("VIDEO_ITEM", searchResults!![position])
             intent.putExtra("list", list)
