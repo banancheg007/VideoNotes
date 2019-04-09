@@ -34,7 +34,7 @@ import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : AppCompatActivity() {
     var list= ArrayList<BaseItem>()
-    private var handler: Handler? = null
+
     lateinit var searchViewModel: SearchViewModel
 
     private var searchResults: List<VideoItem>? = null
@@ -45,11 +45,10 @@ class SearchActivity : AppCompatActivity() {
 
 
 
-        handler = Handler()
 
         search_input.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                searchOnYoutube(v.text.toString())
+                searchViewModel.searchOnYoutube(v.text.toString())
                 return@OnEditorActionListener false
             }
             true
@@ -75,41 +74,38 @@ class SearchActivity : AppCompatActivity() {
                 // выделяем элемент
                 //spinner.setSelection(2)
             })
-    }
 
-    private fun searchOnYoutube(keywords: String) {
-        object : Thread() {
-            override fun run() {
-                val yc = YoutubeConnector(this@SearchActivity)
-                searchResults = yc.search(keywords)
-                handler!!.post { updateVideosFound() }
-            }
-        }.start()
-    }
+        searchViewModel.getSearchResults().observe(this, Observer<List<VideoItem>> {
+                searchResults-> if (searchResults!= null){
+            this.searchResults = searchResults
+            val adapter = object : ArrayAdapter<VideoItem>(applicationContext, R.layout.video_item, searchResults!!) {
+                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    var convertView = convertView
+                    if (convertView == null) {
+                        convertView = layoutInflater.inflate(R.layout.video_item, parent, false)
+                    }
 
-    private fun updateVideosFound() {
-        val adapter = object : ArrayAdapter<VideoItem>(applicationContext, R.layout.video_item, searchResults!!) {
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                var convertView = convertView
-                if (convertView == null) {
-                    convertView = layoutInflater.inflate(R.layout.video_item, parent, false)
+                    val thumbnail = convertView!!.findViewById<View>(R.id.video_thumbnail) as ImageView
+                    val title = convertView.findViewById<View>(R.id.video_title) as TextView
+                    val description = convertView.findViewById<View>(R.id.video_description) as TextView
+
+                    val searchResult = searchResults!![position]
+
+                    Log.d("myTag", searchResult.thumbnailURL)
+                    Picasso.with(applicationContext).load(searchResult.thumbnailURL).into(thumbnail)
+                    title.text = searchResult.description
+                    //description.text = searchResult.description
+                    return convertView
                 }
-
-                val thumbnail = convertView!!.findViewById<View>(R.id.video_thumbnail) as ImageView
-                val title = convertView.findViewById<View>(R.id.video_title) as TextView
-                val description = convertView.findViewById<View>(R.id.video_description) as TextView
-
-                val searchResult = searchResults!![position]
-
-                Log.d("myTag", searchResult.thumbnailURL)
-                Picasso.with(applicationContext).load(searchResult.thumbnailURL).into(thumbnail)
-                title.text = searchResult.description
-                //description.text = searchResult.description
-                return convertView
             }
+            videos_found.adapter = adapter
         }
-        videos_found.adapter = adapter
+        })
     }
+
+
+
+
 
     private fun addClickListener() {
         videos_found.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
