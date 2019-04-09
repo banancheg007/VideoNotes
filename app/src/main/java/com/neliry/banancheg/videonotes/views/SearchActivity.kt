@@ -29,42 +29,43 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_theme.*
 import android.widget.Spinner
 import android.R.attr.data
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.neliry.banancheg.videonotes.adapter.ItemDecorator
+import com.neliry.banancheg.videonotes.utils.ViewNavigation
+import com.neliry.banancheg.videonotes.viewmodels.ThemeViewModel
+import kotlinx.android.synthetic.main.activity_search.*
 
 
-
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(), ViewNavigation {
     var list= ArrayList<BaseItem>()
-    private var searchInput: EditText? = null
-    private var videosFound: ListView? = null
-    private var handler: Handler? = null
+
     lateinit var searchViewModel: SearchViewModel
 
-    private var searchResults: List<VideoItem>? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        searchInput = findViewById<View>(R.id.search_input) as EditText
-        videosFound = findViewById<View>(R.id.videos_found) as ListView
 
-        handler = Handler()
 
-        searchInput!!.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+
+        search_input.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                searchOnYoutube(v.text.toString())
+                searchViewModel.searchOnYoutube(v.text.toString())
                 return@OnEditorActionListener false
             }
             true
         })
 
-        addClickListener()
+
 
         searchViewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
+        searchViewModel.navigationEvent.setEventReceiver(this, this)
         searchViewModel.getItems().observe(this,
             Observer<List<BaseItem>> { items ->
                 Log.d("myTag", "ON CHANGED")
-                // адаптер
 
                 for (item in items){
                     list.add(item)
@@ -78,48 +79,32 @@ class SearchActivity : AppCompatActivity() {
                 // выделяем элемент
                 //spinner.setSelection(2)
             })
-    }
 
-    private fun searchOnYoutube(keywords: String) {
-        object : Thread() {
-            override fun run() {
-                val yc = YoutubeConnector(this@SearchActivity)
-                searchResults = yc.search(keywords)
-                handler!!.post { updateVideosFound() }
-            }
-        }.start()
-    }
-
-    private fun updateVideosFound() {
-        val adapter = object : ArrayAdapter<VideoItem>(applicationContext, R.layout.video_item, searchResults!!) {
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                var convertView = convertView
-                if (convertView == null) {
-                    convertView = layoutInflater.inflate(R.layout.video_item, parent, false)
-                }
-
-                val thumbnail = convertView!!.findViewById<View>(R.id.video_thumbnail) as ImageView
-                val title = convertView.findViewById<View>(R.id.video_title) as TextView
-                val description = convertView.findViewById<View>(R.id.video_description) as TextView
-
-                val searchResult = searchResults!![position]
-
-                Log.d("myTag", searchResult.thumbnailURL)
-                Picasso.with(applicationContext).load(searchResult.thumbnailURL).into(thumbnail)
-                title.text = searchResult.description
-                //description.text = searchResult.description
-                return convertView
-            }
+        searchViewModel.getSearchResults().observe(this, Observer<List<VideoItem>> {
+                searchResults-> if (searchResults!= null){
+            val layoutManager =  LinearLayoutManager(this)
+            recycler_view_videos.layoutManager = layoutManager
+           // recycler_view_videos.addItemDecoration(ItemDecorator(20))
+            recycler_view_videos.adapter = (FirebaseAdapter(searchViewModel,searchResults))
         }
-        videosFound!!.adapter = adapter
+        })
     }
 
-    private fun addClickListener() {
-        videosFound!!.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            val intent = Intent(application, PlayerActivity::class.java)
-            intent.putExtra("VIDEO_ITEM", searchResults!![position])
-            intent.putExtra("list", list)
-            startActivity(intent)
+
+
+
+
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (data == null) {
+            return
         }
+        val videoItem = data.getSerializableExtra("VIDEO_ITEM") as VideoItem
+        Log.d("myTag", "video id " + videoItem.id)
+        val intent = Intent()
+        intent.putExtra("VIDEO_ITEM", videoItem)
+        setResult(1, intent)
+        finish()
     }
 }

@@ -6,31 +6,27 @@ import android.net.Uri
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
 import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
-import com.neliry.banancheg.videonotes.utils.OnItemMenuClickListener
 import com.neliry.banancheg.videonotes.utils.SingleLiveEvent
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.views.ConspectusActivity
-import com.neliry.banancheg.videonotes.views.DialogNewItem
 import com.neliry.banancheg.videonotes.views.ThemeActivity
 import com.neliry.banancheg.videonotes.views.UserProfileActivity
 import java.lang.Exception
 
-open class BaseNavigationDrawerViewModel(application: Application): BaseViewModel(application), OnItemMenuClickListener{
+open class BaseNavigationDrawerViewModel(application: Application): BaseViewModel(application){
 
     val navigationEvent = LiveMessageEvent<ViewNavigation>()
 
     val showDialog = SingleLiveEvent<Boolean>()
 
-    override fun onMenuItemClicked(menuItem: MenuItem) {
+    fun onMenuItemClicked(menuItem: MenuItem) {
         when (menuItem.itemId) {
             com.neliry.banancheg.videonotes.R.id.nav_all_conspectuses -> {
                 //startActivity(Intent(this, ConspectusActivity::class.java))
@@ -109,18 +105,6 @@ open class BaseNavigationDrawerViewModel(application: Application): BaseViewMode
     open fun showDialog() {
         showDialog.value = true
     }
-    fun addNewItem(name: String, childReference: String, themeId: String? = null) {
-        if(name.isEmpty()){
-            Toast.makeText(getApplication(),"Please input item name", Toast.LENGTH_SHORT).show()
-        }else {
 
-
-
-            var theme = Theme("",name)
-            repository.saveNewItem(theme)
-            Toast.makeText(getApplication(),"Adding item successfully", Toast.LENGTH_SHORT).show()
-        }
-
-    }
 
 }

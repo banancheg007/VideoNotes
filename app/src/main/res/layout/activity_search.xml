@@ -12,10 +12,10 @@
             android:singleLine="true"
     />
 
-    <ListView
-            android:id="@+id/videos_found"
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_videos"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:dividerHeight="5dp"
     />
 
