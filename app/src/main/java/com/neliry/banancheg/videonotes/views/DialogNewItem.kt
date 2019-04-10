@@ -79,7 +79,7 @@ class DialogNewItem: DialogFragment(),View.OnClickListener{
         super.onStart()
 
         val dialog = dialog
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        getDialog()?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         this.viewModel = (activity as BaseNavigationDrawerActivity).baseNavigationDrawerViewModel
         if (viewModel is ConspectusViewModel){
             dialog_linear_layout_with_youtube_search_views.visibility = View.VISIBLE
@@ -92,32 +92,11 @@ class DialogNewItem: DialogFragment(),View.OnClickListener{
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 val spinner = view?.findViewById<Spinner>(R.id.spinner)
                 spinner?.adapter = adapter
-                // заголовок
-                spinner?.prompt = "Choose parent theme"
-                val currentItem= spinner?.selectedItem as BaseItem
-                Log.d("myTag", currentItem.name)
-                spinner.selectedItemPosition
-
-                Log.d("myTag"," millis " + System.currentTimeMillis().toString())
-
-                val simple = SimpleDateFormat("dd MMM yyyy HH:mm:ss", java.util.Locale.getDefault())
-
-                // Creating date from milliseconds
-                // using Date() constructor
-                val result = Date(System.currentTimeMillis())
-                Log.d("myTag" , "date " + simple.format(result))
 
             })
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (data == null) {
-            return
-        }
-        val videoItem = data.getSerializableExtra("VIDEO_ITEM") as VideoItem
-        Log.d("myTag", "video id " + videoItem.id)
-    }
 
     fun  setSelectedVideo(videoItem: VideoItem){
         currentVideo = videoItem
