@@ -33,7 +33,7 @@
     <string name="send">Send</string>
     <string name="save_password">Save password</string>
     <string name="old_password">Old password</string>
-    <string name="search">Search</string>
+    <string name="search">Enter a keyword to search on YouTube</string>
     <string name="failed">Failed to initialize Youtube Player</string>
     <string name="app_name">VideoNotes</string>
     <string name="enter_name">Enter name</string>

@@ -66,32 +66,18 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener, ViewNavig
         userProfileViewModel.isChangePasswordViewsVisible().observe(this ,Observer<Boolean>{ isChangePasswordViewsVisible ->
             Log.d("myTag", "ON CHANGED")
             if(isChangePasswordViewsVisible == true){
-                editText_new_password.visibility = View.VISIBLE
-                editText_retype_new_password.visibility = View.VISIBLE
-                button_save_password.visibility = View.VISIBLE
-                editText_old_password.visibility = View.VISIBLE
+                changeVisibility(View.VISIBLE)
             }else{
-                editText_new_password.visibility = View.INVISIBLE
-                editText_retype_new_password.visibility = View.INVISIBLE
-                button_save_password.visibility = View.INVISIBLE
-                editText_old_password.visibility = View.INVISIBLE
+                changeVisibility(View.INVISIBLE)
             }
         })
-        /*if (user != null) {
-            // Name, email address, and profile photo Url
-            textView_user_display_name.text = user?.displayName
-            textView_user_email.text = user?.email
-            Picasso.with(this)
-                .load(user?.photoUrl)
-                .placeholder(R.mipmap.user_profile_placeholder)
-                .into(imageView_user_photo)
 
+    }
 
-            // The user's ID, unique to the Firebase project. Do NOT use this value to
-            // authenticate with your backend server, if you have one. Use
-            // FirebaseUser.getIdToken() instead.
-
-        }*/
-
+    fun changeVisibility(isVisible: Int){
+        editText_new_password.visibility = isVisible
+        editText_retype_new_password.visibility = isVisible
+        button_save_password.visibility = isVisible
+        editText_old_password.visibility = isVisible
     }
 }

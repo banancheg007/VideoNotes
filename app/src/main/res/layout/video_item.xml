@@ -29,7 +29,7 @@
               android:layout_height="wrap_content"
               android:layout_toRightOf="@+id/video_thumbnail"
               android:layout_below="@+id/video_title"
-              android:textSize="8sp"
+              android:textSize="12sp"
     />
 
 </RelativeLayout>

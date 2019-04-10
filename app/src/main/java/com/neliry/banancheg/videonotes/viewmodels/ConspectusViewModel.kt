@@ -42,15 +42,17 @@ class ConspectusViewModel(application: Application):BaseNavigationDrawerViewMode
             navigationEvent.sendEvent{ startActivity(intent)} }
     }
 
-    fun parseIntent(intent: Intent){
+    fun parseIntent(intent: Intent, supportActionBar: androidx.appcompat.app.ActionBar){
         if (intent.getSerializableExtra("currentTheme") !=null) {
         val theme:Theme = intent.getSerializableExtra("currentTheme") as Theme
 //        val allThemesList: List<BaseItem> = intent.getSerializableExtra("allThemesList") as ArrayList<BaseItem>
            // themeList.value = allThemesList
             repository.setDatabaseReference("conspectuses", theme.id.toString())
+            supportActionBar.title = theme.name
         }
         else {
             repository.setDatabaseReference("all_conspectuses")
+            supportActionBar.title = "Conspectuses"
         }
     }
 

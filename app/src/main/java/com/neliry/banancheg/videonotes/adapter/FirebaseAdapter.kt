@@ -15,6 +15,7 @@ import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.random.Random
 
 class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
                       private val list: List<Any>
@@ -106,7 +107,7 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
 
             name.text = conspectus.name
             //time.text = conspectus.time.toString()
-            val simple = SimpleDateFormat("dd MMM yyyy HH:mm:ss")
+            val simple = SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.getDefault() )
 
             // Creating date from milliseconds
             // using Date() constructor
@@ -157,12 +158,14 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
     inner class VideoItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener{
         private val thumbnail = itemView.findViewById<View>(R.id.video_thumbnail) as ImageView
         private val title = itemView.findViewById<View>(R.id.video_title) as TextView
+        private val description = itemView.findViewById<View>(R.id.video_description) as TextView
 
 
 
         fun bind(videoItem: VideoItem) {
             Picasso.with(itemView.context).load(videoItem.thumbnailURL).into(thumbnail)
-            title.text = videoItem.description
+            title.text = videoItem.title
+            description.text = videoItem.description
         }
 
         init{

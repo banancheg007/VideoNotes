@@ -17,7 +17,7 @@ import com.neliry.banancheg.videonotes.utils.ViewNavigation
 
 class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
 
-
+    val DIALOG_EXIT = 1
 
 
     override fun getMainContentLayout(): Int {
@@ -29,7 +29,7 @@ class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
     override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
 
-
+        supportActionBar?.title = "Themes"
         val numberOfColumns =  2
         val layoutManager =  GridLayoutManager (this, numberOfColumns)
         recycler_view_themes.layoutManager = layoutManager

@@ -36,7 +36,7 @@ class ConspectusActivity : BaseNavigationDrawerActivity(), ViewNavigation {
 
 
         val intent: Intent = intent
-        (baseNavigationDrawerViewModel as ConspectusViewModel).parseIntent(intent)
+        (baseNavigationDrawerViewModel as ConspectusViewModel).parseIntent(intent, supportActionBar!!)
         baseNavigationDrawerViewModel.navigationEvent.setEventReceiver(this, this)
 
         setViewModel(baseNavigationDrawerViewModel)

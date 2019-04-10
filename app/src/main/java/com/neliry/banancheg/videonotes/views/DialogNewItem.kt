@@ -87,7 +87,7 @@ class DialogNewItem: DialogFragment(),View.OnClickListener{
             (viewModel as ConspectusViewModel).getAllThemes().observe(this , Observer {
                     themes->
                 allThemes = themes
-                val adapter = FireBaseCustomSpinnerAdapter(activity?.baseContext, android.R.layout.simple_spinner_item,themes )
+                val adapter = FireBaseCustomSpinnerAdapter(activity?.baseContext, R.layout.spinner_item,themes )
                 //val adapter2 = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list)
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 val spinner = view?.findViewById<Spinner>(R.id.spinner)

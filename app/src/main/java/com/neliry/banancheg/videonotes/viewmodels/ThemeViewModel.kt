@@ -21,6 +21,7 @@ open class ThemeViewModel(application: Application):BaseNavigationDrawerViewMode
     private lateinit var currentClickedTheme: Theme
 
     init{
+
         @Suppress("UNCHECKED_CAST")
         repository = ThemeRepository() as FirebaseDatabaseRepository<BaseItem>
         repository.setDatabaseReference("themes" )
