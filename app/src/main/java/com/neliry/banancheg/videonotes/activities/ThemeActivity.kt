@@ -1,15 +1,14 @@
-package com.neliry.banancheg.videonotes.views
+package com.neliry.banancheg.videonotes.activities
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
 import com.neliry.banancheg.videonotes.adapter.ItemDecorator
-import com.neliry.banancheg.videonotes.models.BaseItem
-import com.neliry.banancheg.videonotes.utils.OnViewClickListener
+import com.neliry.banancheg.videonotes.entities.BaseItem
+import com.neliry.banancheg.videonotes.fragments.NewItemDialogFragment
 import com.neliry.banancheg.videonotes.viewmodels.ThemeViewModel
 import kotlinx.android.synthetic.main.activity_theme.*
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
@@ -35,10 +34,9 @@ class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
 
         baseNavigationDrawerViewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java)
 
-        setViewModel(baseNavigationDrawerViewModel)
         baseNavigationDrawerViewModel.showDialog.observe(this, Observer {
                 isVisible ->
-            val currentDialog = DialogNewItem()
+            val currentDialog = NewItemDialogFragment()
             currentDialog.setViewModel(baseNavigationDrawerViewModel)
             if (isVisible == true) {
             currentDialog.show(supportFragmentManager, "New Item")

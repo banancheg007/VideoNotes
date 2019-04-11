@@ -5,16 +5,13 @@ import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.google.firebase.database.FirebaseDatabase
 import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
-import com.neliry.banancheg.videonotes.models.BaseItem
-import com.neliry.banancheg.videonotes.models.Theme
+import com.neliry.banancheg.videonotes.entities.BaseItem
+import com.neliry.banancheg.videonotes.entities.Theme
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
 import com.neliry.banancheg.videonotes.repositories.ThemeRepository
-import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
-import com.neliry.banancheg.videonotes.utils.ViewNavigation
-import com.neliry.banancheg.videonotes.views.ConspectusActivity
+import com.neliry.banancheg.videonotes.activities.ConspectusActivity
 
 open class ThemeViewModel(application: Application):BaseNavigationDrawerViewModel(application), OnViewClickListener {
 
@@ -42,7 +39,7 @@ open class ThemeViewModel(application: Application):BaseNavigationDrawerViewMode
 
 
 
-            var theme = Theme("",name)
+            val theme = Theme("", name)
             repository.saveNewItem(theme)
             Toast.makeText(getApplication(),"Adding item successfully", Toast.LENGTH_SHORT).show()
         }

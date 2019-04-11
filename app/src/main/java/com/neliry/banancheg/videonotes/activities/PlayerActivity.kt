@@ -1,30 +1,17 @@
-package com.neliry.banancheg.videonotes.views
+package com.neliry.banancheg.videonotes.activities
 
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
 import com.google.android.youtube.player.YouTubeBaseActivity
 import com.google.android.youtube.player.YouTubePlayer
 
 import android.widget.Toast
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.neliry.banancheg.videonotes.utils.YoutubeConnector
 import com.google.android.youtube.player.YouTubePlayerView
-import com.neliry.banancheg.videonotes.models.BaseItem
-import com.neliry.banancheg.videonotes.models.Theme
-import com.neliry.banancheg.videonotes.models.VideoItem
-import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
-import com.neliry.banancheg.videonotes.repositories.ThemeRepository
-import com.neliry.banancheg.videonotes.viewmodels.SearchViewModel
-import android.widget.Spinner
+import com.neliry.banancheg.videonotes.entities.VideoItem
 import com.neliry.banancheg.videonotes.R
-import com.neliry.banancheg.videonotes.adapter.FireBaseCustomSpinnerAdapter
 import kotlinx.android.synthetic.main.activity_player.*
 import android.content.Intent
 
@@ -32,7 +19,7 @@ import android.content.Intent
 
 
 class PlayerActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListener, View.OnClickListener {
-    lateinit var currentVideo: VideoItem
+    private lateinit var currentVideo: VideoItem
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.button_confirm_search_activity->{

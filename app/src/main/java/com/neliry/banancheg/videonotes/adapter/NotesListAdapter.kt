@@ -1,7 +1,6 @@
 package com.neliry.banancheg.videonotes.adapter
 
 import android.content.Context
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,8 +9,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.neliry.banancheg.videonotes.R
-import com.neliry.banancheg.videonotes.models.BaseItem
-import com.neliry.banancheg.videonotes.models.Page
+import com.neliry.banancheg.videonotes.entities.Page
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.notes_list_item.view.*

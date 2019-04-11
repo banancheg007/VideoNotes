@@ -1,4 +1,4 @@
-package com.neliry.banancheg.videonotes.models
+package com.neliry.banancheg.videonotes.entities
 
 import java.io.Serializable
 

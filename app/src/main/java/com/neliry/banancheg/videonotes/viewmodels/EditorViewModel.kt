@@ -8,10 +8,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.*
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
-import android.media.AudioManager
-import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.speech.RecognitionListener
@@ -28,12 +25,10 @@ import android.view.View
 import android.view.ViewManager
 import android.widget.*
 import androidx.fragment.app.Fragment
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.neliry.banancheg.videonotes.entities.*
-import com.neliry.banancheg.videonotes.models.BaseItem
-import com.neliry.banancheg.videonotes.models.Page
-import com.neliry.banancheg.videonotes.models.PageItem
+import com.neliry.banancheg.videonotes.entities.BaseItem
+import com.neliry.banancheg.videonotes.entities.Page
+import com.neliry.banancheg.videonotes.entities.PageItem
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
 import com.neliry.banancheg.videonotes.repositories.PageItemsRepository
 import kotlinx.android.synthetic.main.editor_activity.view.*
@@ -42,7 +37,6 @@ import java.io.ByteArrayOutputStream
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
-import android.webkit.MimeTypeMap
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.ConfigurationCompat
@@ -55,7 +49,7 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.neliry.banancheg.videonotes.R
-import com.neliry.banancheg.videonotes.views.ShapePreview
+import com.neliry.banancheg.videonotes.activities.ShapePreview
 
 class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(application) {
 
@@ -347,10 +341,12 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
 
     private fun saveText(v: EditText) { // this: CoroutineScope
         if(v.text.toString() != ""){
-            var item = PageItem("", Html.toHtml(v.text), "EditText", pxToDp(v.width.toFloat(), getApplication()),
+            var item = PageItem(
+                "", Html.toHtml(v.text), "EditText", pxToDp(v.width.toFloat(), getApplication()),
                 pxToDp(v.height.toFloat(), getApplication()),
                 pxToDp(v.x, getApplication()),
-                pxToDp(v.y, getApplication()))
+                pxToDp(v.y, getApplication())
+            )
 
             repository.saveNewItem(item, pageId)
 
@@ -364,10 +360,12 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
 //        val separated = v.transitionName!!.split(";")
         val bitmap = loadBitmapFromView(v)
         if(v.transitionName != ""){
-            var item = PageItem("", v.transitionName, "ImageView", pxToDp(v.width.toFloat(), getApplication()),
+            var item = PageItem(
+                "", v.transitionName, "ImageView", pxToDp(v.width.toFloat(), getApplication()),
                 pxToDp(v.height.toFloat(), getApplication()),
                 pxToDp(v.x, getApplication()),
-                pxToDp(v.y, getApplication()))
+                pxToDp(v.y, getApplication())
+            )
             repository.saveNewItem(item, pageId)
         }
         else {
@@ -380,10 +378,12 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
 
             storageReference.putBytes(byteArray).addOnSuccessListener {
                 storageReference.downloadUrl.addOnSuccessListener {
-                    var item = PageItem("", it.toString(), "ImageView", pxToDp(v.width.toFloat(), getApplication()),
+                    var item = PageItem(
+                        "", it.toString(), "ImageView", pxToDp(v.width.toFloat(), getApplication()),
                         pxToDp(v.height.toFloat(), getApplication()),
                         pxToDp(v.x, getApplication()),
-                        pxToDp(v.y, getApplication()))
+                        pxToDp(v.y, getApplication())
+                    )
 //                    myRef.push().setValue(item)
                     repository.saveNewItem(item, pageId)
                     v.transitionName = v.transitionName+item.content
@@ -406,10 +406,12 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
     private fun saveShape(v: ShapeView){ // this: CoroutineScope
         if(v.width!=0 && v.height!=0){
             val content: String = "shapeType:"+v.shapeType+";isFillColor:"+v.isFillColor+";strokeWidth:"+v.strokeWidth+";fillColor:"+v.fillColor+";strokeColor:"+v.strokeColor
-            var item = PageItem("", content, "ShapeView", pxToDp(v.width.toFloat(), getApplication()),
+            var item = PageItem(
+                "", content, "ShapeView", pxToDp(v.width.toFloat(), getApplication()),
                 pxToDp(v.height.toFloat(), getApplication()),
                 pxToDp(v.x, getApplication()),
-                pxToDp(v.y, getApplication()))
+                pxToDp(v.y, getApplication())
+            )
 
             repository.saveNewItem(item, pageId)
             val bitmap = loadBitmapFromView(v)
@@ -419,7 +421,15 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
     }
     private fun savePaint(paintLayer: SimpleDrawingView){ // this: CoroutineScope
         val bitmap = paintLayer.mBitmap
-        var item = PageItem("", bitMapToString(bitmap), "PaintView", paintLayer.width.toFloat(), paintLayer.height.toFloat(), 0f, 0f)
+        var item = PageItem(
+            "",
+            bitMapToString(bitmap),
+            "PaintView",
+            paintLayer.width.toFloat(),
+            paintLayer.height.toFloat(),
+            0f,
+            0f
+        )
 
         repository.saveNewItem(item, pageId)
         val canvas = Canvas(noteBitmap)
@@ -830,7 +840,7 @@ class EditorViewModel(application: Application) :BaseNavigationDrawerViewModel(a
        return finish
     }
 
-    internal fun changeBorderColor(colorButton: ImageButton, paintLayer: SimpleDrawingView, shape_preview:ShapePreview, border_colors: LinearLayout, context: Context){
+    internal fun changeBorderColor(colorButton: ImageButton, paintLayer: SimpleDrawingView, shape_preview: ShapePreview, border_colors: LinearLayout, context: Context){
         val drawable = colorButton.drawable as ColorDrawable
         shape_preview.strokeColor = drawable.color
         paintLayer.mPaint.color = drawable.color

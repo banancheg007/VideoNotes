@@ -1,8 +1,6 @@
 package com.neliry.banancheg.videonotes.adapter
 
 
-import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +8,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.neliry.banancheg.videonotes.R
-import com.neliry.banancheg.videonotes.models.*
+import com.neliry.banancheg.videonotes.entities.*
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.random.Random
 
 class FirebaseAdapter(private var onViewClickListener: OnViewClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -102,8 +99,8 @@ class FirebaseAdapter(private var onViewClickListener: OnViewClickListener
 
 
         internal var name: TextView = itemView.findViewById(R.id.conspectus_name_textview)
-        internal var time: TextView = itemView.findViewById(R.id.conspectus_time_textview)
-        internal var previewUrl: ImageView = itemView.findViewById(R.id.conspectus_preview_image_view)
+        private var time: TextView = itemView.findViewById(R.id.conspectus_time_textview)
+        private var previewUrl: ImageView = itemView.findViewById(R.id.conspectus_preview_image_view)
 
 
         fun bind(conspectus: Conspectus) {

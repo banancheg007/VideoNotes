@@ -10,7 +10,7 @@ import android.widget.Toast
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
-import com.neliry.banancheg.videonotes.views.ThemeActivity
+import com.neliry.banancheg.videonotes.activities.ThemeActivity
 
 
 class SignUpViewModel(application: Application): BaseViewModel(application){

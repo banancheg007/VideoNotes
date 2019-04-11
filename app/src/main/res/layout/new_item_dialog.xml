@@ -25,7 +25,7 @@
             android:layout_width="0dp"
             android:layout_weight="7"
             android:layout_marginLeft="30dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:hint="@string/enter_video_url_from_youtube"
             android:gravity="center"/>
 

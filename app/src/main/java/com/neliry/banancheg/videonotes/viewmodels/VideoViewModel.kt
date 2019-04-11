@@ -12,9 +12,9 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.adapter.NotesListAdapter
-import com.neliry.banancheg.videonotes.models.BaseItem
-import com.neliry.banancheg.videonotes.models.Conspectus
-import com.neliry.banancheg.videonotes.models.Page
+import com.neliry.banancheg.videonotes.entities.BaseItem
+import com.neliry.banancheg.videonotes.entities.Conspectus
+import com.neliry.banancheg.videonotes.entities.Page
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
 import com.neliry.banancheg.videonotes.repositories.PageRepository
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
@@ -269,7 +269,13 @@ class VideoViewModel (application: Application): BaseNavigationDrawerViewModel(a
         val currentTime = timeArray[0]*3600+timeArray[1]*60+timeArray[2]
         if(currentTime<videoDuration && name != ""){
             val creationTime = getDate(System.currentTimeMillis(), "dd.MM.yyyy hh:mm a")
-            val page: Page = Page (name = name, time= currentTime, creationTime= creationTime, height = 0f, width = 0f)
+            val page: Page = Page(
+                name = name,
+                time = currentTime,
+                creationTime = creationTime,
+                height = 0f,
+                width = 0f
+            )
             repository.saveNewItem(page, conspId)
             navigationEvent.sendEvent {  val intent = Intent(getApplication(), EditorActivity::class.java)
                 intent.putExtra("currentPage", page)

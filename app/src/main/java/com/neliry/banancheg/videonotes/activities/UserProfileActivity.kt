@@ -1,24 +1,17 @@
-package com.neliry.banancheg.videonotes.views
+package com.neliry.banancheg.videonotes.activities
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.facebook.login.LoginManager
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.neliry.banancheg.videonotes.R
-import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
-import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
-import com.neliry.banancheg.videonotes.viewmodels.LoginViewModel
 import com.neliry.banancheg.videonotes.viewmodels.UserProfileViewModel
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_conspectus.*
 import kotlinx.android.synthetic.main.activity_user_profile.*
 
 
@@ -74,7 +67,7 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener, ViewNavig
 
     }
 
-    fun changeVisibility(isVisible: Int){
+    private fun changeVisibility(isVisible: Int){
         editText_new_password.visibility = isVisible
         editText_retype_new_password.visibility = isVisible
         button_save_password.visibility = isVisible

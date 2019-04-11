@@ -4,7 +4,9 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.neliry.banancheg.videonotes.models.*
+import com.neliry.banancheg.videonotes.entities.BaseItem
+import com.neliry.banancheg.videonotes.entities.Page
+import com.neliry.banancheg.videonotes.entities.PageItem
 import java.lang.Exception
 import java.lang.reflect.ParameterizedType
 

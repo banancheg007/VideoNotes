@@ -8,16 +8,14 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.database.FirebaseDatabase
-import com.neliry.banancheg.videonotes.models.BaseItem
-import com.neliry.banancheg.videonotes.models.Theme
+import com.neliry.banancheg.videonotes.entities.BaseItem
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
 import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
 import com.neliry.banancheg.videonotes.utils.SingleLiveEvent
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
-import com.neliry.banancheg.videonotes.views.ConspectusActivity
-import com.neliry.banancheg.videonotes.views.ThemeActivity
-import com.neliry.banancheg.videonotes.views.UserProfileActivity
+import com.neliry.banancheg.videonotes.activities.ConspectusActivity
+import com.neliry.banancheg.videonotes.activities.ThemeActivity
+import com.neliry.banancheg.videonotes.activities.UserProfileActivity
 import java.lang.Exception
 
 open class BaseNavigationDrawerViewModel(application: Application): BaseViewModel(application){
@@ -98,7 +96,7 @@ open class BaseNavigationDrawerViewModel(application: Application): BaseViewMode
         showDialog.value = true
     }
 
-    fun share(){
+    private fun share(){
         val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.type = "text/plain"
         val shareBody = "I use VideoNotes app. Download this app from google play market"

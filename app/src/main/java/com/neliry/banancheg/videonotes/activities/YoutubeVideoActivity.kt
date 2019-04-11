@@ -16,7 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.adapter.NotesListAdapter
-import com.neliry.banancheg.videonotes.models.Page
+import com.neliry.banancheg.videonotes.entities.Page
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.viewmodels.ViewModelFactory
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants

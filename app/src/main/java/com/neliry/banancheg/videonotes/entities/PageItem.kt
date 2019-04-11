@@ -1,4 +1,4 @@
-package com.neliry.banancheg.videonotes.models
+package com.neliry.banancheg.videonotes.entities
 
 class PageItem(id:String? = null,
                var content: String? = null,

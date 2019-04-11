@@ -1,4 +1,4 @@
-package com.neliry.banancheg.videonotes.views
+package com.neliry.banancheg.videonotes.activities
 
 import android.content.Context
 import android.os.Bundle
@@ -19,9 +19,7 @@ abstract class BaseNavigationDrawerActivity : AppCompatActivity(), NavigationVie
 
     open lateinit var baseNavigationDrawerViewModel: BaseNavigationDrawerViewModel
 
-    fun setViewModel(baseNavigationDrawerViewModel: BaseNavigationDrawerViewModel){
-        this.baseNavigationDrawerViewModel = baseNavigationDrawerViewModel
-    }
+
 
 
 

@@ -1,4 +1,4 @@
-package com.neliry.banancheg.videonotes.views
+package com.neliry.banancheg.videonotes.activities
 
 
 import android.content.Intent
@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.viewmodels.LoginViewModel
-import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import kotlinx.android.synthetic.main.activity_login.*
 
 

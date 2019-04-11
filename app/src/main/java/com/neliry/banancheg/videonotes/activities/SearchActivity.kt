@@ -1,46 +1,27 @@
-package com.neliry.banancheg.videonotes.views
+package com.neliry.banancheg.videonotes.activities
 
 import android.content.Intent
-import android.os.Handler
 
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
-import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
-import com.neliry.banancheg.videonotes.models.BaseItem
-import com.neliry.banancheg.videonotes.models.VideoItem
-import com.neliry.banancheg.videonotes.utils.YoutubeConnector
-import com.neliry.banancheg.videonotes.viewmodels.LoginViewModel
+import com.neliry.banancheg.videonotes.entities.VideoItem
 import com.neliry.banancheg.videonotes.viewmodels.SearchViewModel
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_theme.*
-import android.widget.Spinner
-import android.R.attr.data
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.neliry.banancheg.videonotes.adapter.ItemDecorator
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
-import com.neliry.banancheg.videonotes.viewmodels.ThemeViewModel
 import kotlinx.android.synthetic.main.activity_search.*
 
 
 class SearchActivity : AppCompatActivity(), ViewNavigation {
 
 
-    lateinit var searchViewModel: SearchViewModel
+    private lateinit var searchViewModel: SearchViewModel
 
 
 
@@ -52,7 +33,7 @@ class SearchActivity : AppCompatActivity(), ViewNavigation {
         val layoutManager =  LinearLayoutManager(this)
         recycler_view_videos.layoutManager = layoutManager
 
-        search_input.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+        search_input.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 searchViewModel.searchOnYoutube(v.text.toString())
                 return@OnEditorActionListener false

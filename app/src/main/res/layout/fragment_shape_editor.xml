@@ -45,7 +45,7 @@
                         android:src="@drawable/transparent_grid"
                         android:scaleType="matrix"
                 />
-                <com.neliry.banancheg.videonotes.views.ShapePreview
+                <com.neliry.banancheg.videonotes.activities.ShapePreview
                         android:id="@+id/shape_preview"
                         android:layout_centerVertical="true"
                         android:layout_centerHorizontal="true"

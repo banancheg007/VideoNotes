@@ -1,7 +1,6 @@
-package com.neliry.banancheg.videonotes.views
+package com.neliry.banancheg.videonotes.fragments
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,29 +8,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProviders
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.viewmodels.ThemeViewModel
 import kotlinx.android.synthetic.main.new_item_dialog.*
-import android.graphics.drawable.ColorDrawable
-import android.graphics.Color
-import android.opengl.Visibility
-import android.util.Log
 import android.widget.ImageButton
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.lifecycle.Observer
+import com.neliry.banancheg.videonotes.activities.BaseNavigationDrawerActivity
+import com.neliry.banancheg.videonotes.activities.SearchActivity
 import com.neliry.banancheg.videonotes.adapter.FireBaseCustomSpinnerAdapter
-import com.neliry.banancheg.videonotes.models.BaseItem
-import com.neliry.banancheg.videonotes.models.Theme
-import com.neliry.banancheg.videonotes.models.VideoItem
+import com.neliry.banancheg.videonotes.entities.BaseItem
+import com.neliry.banancheg.videonotes.entities.VideoItem
 import com.neliry.banancheg.videonotes.viewmodels.BaseNavigationDrawerViewModel
 import com.neliry.banancheg.videonotes.viewmodels.ConspectusViewModel
-import java.text.SimpleDateFormat
-import java.util.*
 
 
-class DialogNewItem: DialogFragment(),View.OnClickListener{
+class NewItemDialogFragment: DialogFragment(),View.OnClickListener{
     private lateinit var viewModel:BaseNavigationDrawerViewModel
     var currentVideo= VideoItem()
     lateinit var allThemes: List<BaseItem>
@@ -77,8 +69,6 @@ class DialogNewItem: DialogFragment(),View.OnClickListener{
 
     override fun onStart() {
         super.onStart()
-
-        val dialog = dialog
         getDialog()?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         this.viewModel = (activity as BaseNavigationDrawerActivity).baseNavigationDrawerViewModel
         if (viewModel is ConspectusViewModel){

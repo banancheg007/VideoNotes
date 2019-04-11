@@ -4,22 +4,17 @@ import android.app.Application
 import android.content.Intent
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.facebook.AccessToken
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.*
 import com.neliry.banancheg.videonotes.R
-import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
-import com.neliry.banancheg.videonotes.views.LoginActivity
+import com.neliry.banancheg.videonotes.activities.LoginActivity
 
 class UserProfileViewModel(application: Application): BaseViewModel(application), OnViewClickListener{
 

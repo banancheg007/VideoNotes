@@ -9,9 +9,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.neliry.banancheg.videonotes.activities.YoutubeVideoActivity
 import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
-import com.neliry.banancheg.videonotes.models.BaseItem
-import com.neliry.banancheg.videonotes.models.Conspectus
-import com.neliry.banancheg.videonotes.models.Theme
+import com.neliry.banancheg.videonotes.entities.BaseItem
+import com.neliry.banancheg.videonotes.entities.Conspectus
+import com.neliry.banancheg.videonotes.entities.Theme
 import com.neliry.banancheg.videonotes.repositories.ConspectusRepository
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
 import com.neliry.banancheg.videonotes.repositories.ThemeRepository
@@ -23,7 +23,7 @@ class ConspectusViewModel(application: Application):BaseNavigationDrawerViewMode
 
     private lateinit var currentClickedConspectus: Conspectus
     private var themeRepository: ThemeRepository
-    var themeList: MutableLiveData<List<BaseItem>> = MutableLiveData<List<BaseItem>>()
+    var themeList: MutableLiveData<List<BaseItem>> = MutableLiveData()
 
     init{
         @Suppress("UNCHECKED_CAST")
@@ -40,7 +40,7 @@ class ConspectusViewModel(application: Application):BaseNavigationDrawerViewMode
 
     fun parseIntent(intent: Intent, supportActionBar: androidx.appcompat.app.ActionBar){
         if (intent.getSerializableExtra("currentTheme") !=null) {
-        val theme:Theme = intent.getSerializableExtra("currentTheme") as Theme
+        val theme: Theme = intent.getSerializableExtra("currentTheme") as Theme
 
             repository.setDatabaseReference("conspectuses", theme.id.toString())
             supportActionBar.title = theme.name
@@ -51,13 +51,13 @@ class ConspectusViewModel(application: Application):BaseNavigationDrawerViewMode
         }
     }
 
-    fun loadAllThemes(){
+    private fun loadAllThemes(){
         themeRepository.addListener(object: FirebaseDatabaseRepository.FirebaseDatabaseRepositoryCallback<Theme> {
             override fun onSuccess(result: List<Theme>) {
-                themeList!!.value = result
+                themeList.value = result
             }
             override fun onError(e: Exception) {
-                themeList!!.value = null
+                themeList.value = null
             }
         })
     }

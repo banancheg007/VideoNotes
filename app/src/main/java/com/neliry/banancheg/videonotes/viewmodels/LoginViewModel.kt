@@ -19,12 +19,11 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
 import com.neliry.banancheg.videonotes.R
-import com.neliry.banancheg.videonotes.models.BaseItem
+import com.neliry.banancheg.videonotes.entities.BaseItem
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
-import com.neliry.banancheg.videonotes.utils.OnViewClickListener
-import com.neliry.banancheg.videonotes.views.SignUpActivity
-import com.neliry.banancheg.videonotes.views.ThemeActivity
+import com.neliry.banancheg.videonotes.activities.SignUpActivity
+import com.neliry.banancheg.videonotes.activities.ThemeActivity
 
 
 
