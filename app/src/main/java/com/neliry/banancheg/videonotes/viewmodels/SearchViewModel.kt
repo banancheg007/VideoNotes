@@ -7,15 +7,18 @@ import android.view.View
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.VideoItem
+import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.utils.YoutubeConnector
 import com.neliry.banancheg.videonotes.views.PlayerActivity
 
-class SearchViewModel(application: Application): ThemeViewModel(application), OnViewClickListener {
-
+class SearchViewModel(application: Application): BaseViewModel(application), OnViewClickListener {
+    val myAdapter: FirebaseAdapter by lazy { FirebaseAdapter(this) }
+    val navigationEvent = LiveMessageEvent<ViewNavigation>()
     override fun onViewClicked(view: View?, any: Any?) {
         val intent = Intent(getApplication(), PlayerActivity::class.java)
         intent.putExtra("VIDEO_ITEM", any as VideoItem)

@@ -17,17 +17,21 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random
 
-class FirebaseAdapter(private var onViewClickListener: OnViewClickListener,
-                      private val list: List<Any>
+class FirebaseAdapter(private var onViewClickListener: OnViewClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
-
+    lateinit var list: List<Any>
     companion object {
         const val TYPE_THEME = 0
         const val TYPE_CONSPECTUS = 1
         const val TYPE_PAGE = 2
         const val TYPE_VIDEO_ITEM = 3
+    }
+
+    fun setItems(items: List<Any>) {
+        this.list = items
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

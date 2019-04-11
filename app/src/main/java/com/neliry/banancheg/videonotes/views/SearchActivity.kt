@@ -38,7 +38,7 @@ import kotlinx.android.synthetic.main.activity_search.*
 
 
 class SearchActivity : AppCompatActivity(), ViewNavigation {
-    var list= ArrayList<BaseItem>()
+
 
     lateinit var searchViewModel: SearchViewModel
 
@@ -49,7 +49,8 @@ class SearchActivity : AppCompatActivity(), ViewNavigation {
         setContentView(R.layout.activity_search)
 
 
-
+        val layoutManager =  LinearLayoutManager(this)
+        recycler_view_videos.layoutManager = layoutManager
 
         search_input.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -63,29 +64,12 @@ class SearchActivity : AppCompatActivity(), ViewNavigation {
 
         searchViewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
         searchViewModel.navigationEvent.setEventReceiver(this, this)
-        searchViewModel.getItems().observe(this,
-            Observer<List<BaseItem>> { items ->
-                Log.d("myTag", "ON CHANGED")
-
-                for (item in items){
-                    list.add(item)
-                    Log.d("myTag", item.name)
-                }
-
-                //val spinner = findViewById<Spinner>(R.id.spinner)
-                //spinner.adapter = adapter
-                // заголовок
-                // spinner.prompt = "Change theme"
-                // выделяем элемент
-                //spinner.setSelection(2)
-            })
 
         searchViewModel.getSearchResults().observe(this, Observer<List<VideoItem>> {
                 searchResults-> if (searchResults!= null){
-            val layoutManager =  LinearLayoutManager(this)
-            recycler_view_videos.layoutManager = layoutManager
            // recycler_view_videos.addItemDecoration(ItemDecorator(20))
-            recycler_view_videos.adapter = (FirebaseAdapter(searchViewModel,searchResults))
+            recycler_view_videos.adapter = searchViewModel.myAdapter
+            (recycler_view_videos.adapter as FirebaseAdapter).setItems(searchResults)
         }
         })
     }

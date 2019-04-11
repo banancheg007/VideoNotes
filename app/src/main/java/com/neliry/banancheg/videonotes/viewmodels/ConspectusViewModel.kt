@@ -8,22 +8,18 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.neliry.banancheg.videonotes.activities.YoutubeVideoActivity
+import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Conspectus
 import com.neliry.banancheg.videonotes.models.Theme
-import com.neliry.banancheg.videonotes.models.VideoItem
 import com.neliry.banancheg.videonotes.repositories.ConspectusRepository
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
 import com.neliry.banancheg.videonotes.repositories.ThemeRepository
-import com.neliry.banancheg.videonotes.utils.LiveMessageEvent
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
-import com.neliry.banancheg.videonotes.utils.ViewNavigation
-import com.neliry.banancheg.videonotes.views.PageActivity
-import com.neliry.banancheg.videonotes.views.SearchActivity
 import java.lang.Exception
 
 class ConspectusViewModel(application: Application):BaseNavigationDrawerViewModel(application), OnViewClickListener {
-
+    val myAdapter: FirebaseAdapter by lazy { FirebaseAdapter(this) }
 
     private lateinit var currentClickedConspectus: Conspectus
     private var themeRepository: ThemeRepository
