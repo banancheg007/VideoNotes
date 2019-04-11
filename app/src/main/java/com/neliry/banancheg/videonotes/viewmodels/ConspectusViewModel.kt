@@ -45,8 +45,7 @@ class ConspectusViewModel(application: Application):BaseNavigationDrawerViewMode
     fun parseIntent(intent: Intent){
         if (intent.getSerializableExtra("currentTheme") !=null) {
         val theme:Theme = intent.getSerializableExtra("currentTheme") as Theme
-//        val allThemesList: List<BaseItem> = intent.getSerializableExtra("allThemesList") as ArrayList<BaseItem>
-           // themeList.value = allThemesList
+
             repository.setDatabaseReference("conspectuses", theme.id.toString())
         }
         else {

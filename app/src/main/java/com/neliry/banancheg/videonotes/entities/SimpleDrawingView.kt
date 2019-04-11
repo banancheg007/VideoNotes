@@ -44,13 +44,6 @@ class SimpleDrawingView(context: Context, attrs: AttributeSet) : View(context, a
         else{
             mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
             mCanvas = Canvas(mBitmap!!)
-//            val newBitmap = Bitmap.createBitmap(mBitmap.width, h, Bitmap.Config.ARGB_8888)
-//            mCanvas = Canvas(newBitmap)
-////            canvas!!.drawBitmap(mBitmap, 0f, 0f, mBitmapPaint)
-//            mBitmap = newBitmap
-//            mCanvas = Canvas(newBitmap!!)
-//            mCanvas!!.drawBitmap(mBitmap, 0f, 0f, mBitmapPaint)
-//            mBitmap = newBitmap
         }
     }
 

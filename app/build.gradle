@@ -78,4 +78,7 @@ dependencies {
 
     //android-youtube-player
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.3'
+
+    //Color Picker
+    implementation 'com.github.QuadFlask:colorpicker:0.0.13'
 }

@@ -62,6 +62,7 @@ class TextBlockController(internal val model: EditorViewModel){
                 viewBlock.isFocusable = false
                 viewBlock.isFocusableInTouchMode = false
             controllerLayout.visibility = View.GONE
+            model.hideTextFormatTools()
         }
     }
 

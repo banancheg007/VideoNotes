@@ -98,7 +98,10 @@
                 android:layout_marginTop="8dp"
                 android:min="1"
                 android:max="90"
-                android:progress="15"/>
+                android:progress="15"
+                android:progressTint="@color/accent"
+                android:thumbTint="@color/accent"
+                android:progressBackgroundTint="#3C000000"/>
 
         <ImageView android:layout_width="match_parent" android:layout_height="0.5dp"
                    android:background="#707070"

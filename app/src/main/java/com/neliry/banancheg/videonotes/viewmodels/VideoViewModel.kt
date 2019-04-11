@@ -5,33 +5,29 @@ import android.view.View
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.provider.AlarmClock.EXTRA_MESSAGE
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.*
-import kotlin.math.roundToInt
-import android.view.ViewGroup
-import androidx.lifecycle.MutableLiveData
-import com.google.firebase.database.*
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.adapter.NotesListAdapter
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Conspectus
 import com.neliry.banancheg.videonotes.models.Page
-import com.neliry.banancheg.videonotes.models.PageItem
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
-import com.neliry.banancheg.videonotes.repositories.PageItemsRepository
 import com.neliry.banancheg.videonotes.repositories.PageRepository
 import com.neliry.banancheg.videonotes.utils.OnViewClickListener
 import com.neliry.banancheg.videonotes.viewmodels.BaseNavigationDrawerViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import java.lang.Exception
+import kotlinx.coroutines.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.math.roundToInt
 
-class VideoViewModel (application: Application):BaseNavigationDrawerViewModel(application), OnViewClickListener {
+
+class VideoViewModel (application: Application): BaseNavigationDrawerViewModel(application), OnViewClickListener {
 
     var isSeekBarInTouch = false
     var isVideoOnFocus = false
@@ -44,7 +40,7 @@ class VideoViewModel (application: Application):BaseNavigationDrawerViewModel(ap
     lateinit var allNotes: List<Page>
     lateinit var adapter: NotesListAdapter
     lateinit var conspId: String
-    var isLoaded = false
+    var currentTime = 0f
 
     init{
         @Suppress("UNCHECKED_CAST")
@@ -53,21 +49,12 @@ class VideoViewModel (application: Application):BaseNavigationDrawerViewModel(ap
 
     override fun onViewClicked(view: View?, any: Any?) {
         youTubePlayer.pause()
-        isPause = true
         val currentClickedPage = any as Page
         navigationEvent.sendEvent {  val intent = Intent(getApplication(), EditorActivity::class.java)
             intent.putExtra("currentPage", currentClickedPage)
             intent.putExtra("conspId", conspId)
             navigationEvent.sendEvent{ startActivity(intent)} }
 
-    }
-
-    private val viewModelJob = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
     }
 
     fun showPlayerUI(custom_ui: RelativeLayout, video_progressBar : ProgressBar, context: Context){
@@ -94,7 +81,7 @@ class VideoViewModel (application: Application):BaseNavigationDrawerViewModel(ap
         }
     }
 
-    fun setPause(pause_btn: ImageButton){
+    fun setPause(){
         if(!isPause){
             youTubePlayer.pause()
             wait = 0
@@ -122,7 +109,7 @@ class VideoViewModel (application: Application):BaseNavigationDrawerViewModel(ap
         }
     }
 
-    fun setVideoDuration(video_seekBar: SeekBar, video_progressBar: ProgressBar, custom_ui: RelativeLayout, video_duration: TextView, duration: Float, marks_rl: RelativeLayout, notes_list_recycler_view: RecyclerView, pause_btn: ImageButton , context: Context){
+    fun setVideoDuration(video_seekBar: SeekBar, video_progressBar: ProgressBar, custom_ui: RelativeLayout, video_duration: TextView, duration: Float, marks_rl: RelativeLayout, notes_list_recycler_view: RecyclerView, context: Context){
         if(videoDuration == 0f){
             youTubePlayer.pause()
             video_seekBar.max = duration.toInt()
@@ -130,13 +117,14 @@ class VideoViewModel (application: Application):BaseNavigationDrawerViewModel(ap
             convertTime (duration)
             video_duration.text = convertTime(duration)
             videoDuration = duration
-            createMark(marks_rl, notes_list_recycler_view, pause_btn)
+            createMark(marks_rl, notes_list_recycler_view)
             showPlayerUI(custom_ui, video_progressBar, context)
         }
 
     }
 
     fun setCurrentSecond(video_seekBar : SeekBar, video_progressBar : ProgressBar, second : Float){
+        currentTime = second
         if(!isSeekBarInTouch){
             video_seekBar.progress = second.toInt()
         }
@@ -160,6 +148,19 @@ class VideoViewModel (application: Application):BaseNavigationDrawerViewModel(ap
             string += 0
         string = "$string$seconds"
         return string
+    }
+
+    fun getCurrentTime(cureentSecond: Float): ArrayList<Int>{
+        val list = arrayListOf<Int>()
+        var time: Float = cureentSecond
+        val ours = (time/3600).toInt()
+        time -= 60*ours
+        var minutes = (time/60).toInt()
+        time -= 60*minutes
+        val seconds = time.toInt()
+
+        list.addAll(listOf(ours, minutes, seconds))
+        return list
     }
 
     fun load()= GlobalScope.async { // this: CoroutineScope
@@ -210,14 +211,11 @@ class VideoViewModel (application: Application):BaseNavigationDrawerViewModel(ap
         horizontalMax = params.leftMargin + dpToPx(16f, getApplication())
     }
 
-    fun createMark (marks_rl: RelativeLayout, recyclerView: RecyclerView, pause_btn: ImageButton){
-        if(videoDuration != 0f && !isLoaded) {
-//            var childCount = marks_rl.childCount
-//            for (i in 0 until childCount){
-//                val v = marks_rl.getChildAt(i)
-//                marks_rl.removeView(v)
-//            }
-            isLoaded = true
+    fun createMark (marks_rl: RelativeLayout, recyclerView: RecyclerView){
+        if(videoDuration != 0f) {
+            verticalPosition = 0
+            horizontalMax = -10
+            marks_rl.removeAllViews()
             for (i in 0 until allNotes.size){
                 val markLayout = LinearLayout(getApplication())
                 val markLayoutParams = RelativeLayout.LayoutParams(
@@ -241,7 +239,7 @@ class VideoViewModel (application: Application):BaseNavigationDrawerViewModel(ap
                     recyclerView.scrollToPosition(i)
                     youTubePlayer.seekTo(allNotes[i].time!!.toFloat())
                     isPause = true
-                    setPause (pause_btn)
+                    setPause ()
                 }
 
                 markLayout.addView(markLine)
@@ -267,11 +265,34 @@ class VideoViewModel (application: Application):BaseNavigationDrawerViewModel(ap
         }
     }
 
+    fun createNewPage(name: String, timeArray: ArrayList<Int>): Boolean{
+        val currentTime = timeArray[0]*3600+timeArray[1]*60+timeArray[2]
+        if(currentTime<videoDuration && name != ""){
+            val creationTime = getDate(System.currentTimeMillis(), "dd.MM.yyyy hh:mm a")
+            val page: Page = Page (name = name, time= currentTime, creationTime= creationTime, height = 0f, width = 0f)
+            repository.saveNewItem(page, conspId)
+            navigationEvent.sendEvent {  val intent = Intent(getApplication(), EditorActivity::class.java)
+                intent.putExtra("currentPage", page)
+                intent.putExtra("conspId", conspId)
+                navigationEvent.sendEvent{ startActivity(intent)} }
+            return true
+        }
+        return false
+    }
+
+    private fun getDate(milliSeconds: Long, dateFormat: String): String {
+        val formatter = SimpleDateFormat(dateFormat)
+
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = milliSeconds
+        return formatter.format(calendar.time)
+    }
 
     fun parseIntent(intent: Intent, supportActionBar: androidx.appcompat.app.ActionBar): String?{
         if (intent.getSerializableExtra("currentConspectus") !=null) {
             val conspectus: Conspectus = intent.getSerializableExtra("currentConspectus") as Conspectus
             repository.setDatabaseReference("pages", conspectus.id.toString())
+            repository.setDatabaseReferenceOrder("time")
             supportActionBar.title = conspectus.name
             conspectus.videoUrl
             conspId = conspectus.id.toString()

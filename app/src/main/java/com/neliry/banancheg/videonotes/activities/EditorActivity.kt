@@ -2,12 +2,14 @@ package com.neliry.banancheg.videonotes.activities
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Point
 import android.os.Bundle
+import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -17,6 +19,9 @@ import com.neliry.banancheg.videonotes.viewmodels.EditorViewModel
 import com.neliry.banancheg.videonotes.viewmodels.ViewModelFactory
 import kotlinx.android.synthetic.main.editor_activity.*
 import kotlinx.android.synthetic.main.fragment_shape_editor.*
+import com.neliry.banancheg.videonotes.fragments.DeletePageDialogFragment
+import com.neliry.banancheg.videonotes.fragments.RenamePageDialogFragment
+
 
 class EditorActivity : AppCompatActivity() {
 
@@ -54,7 +59,7 @@ class EditorActivity : AppCompatActivity() {
         }
 
         add_text_field_btn.setOnClickListener {
-            text_layer.addView(editorViewModel.createTextBlock(text_layer.width))
+            editorViewModel.createTextBlock(text_layer.width, text_layer)
             // show keyboard
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
             imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
@@ -81,6 +86,50 @@ class EditorActivity : AppCompatActivity() {
             editorViewModel.drawEvent(event, canvas_layer, fragment_shape_editor)
         }
 
+        start_voice_recogniser_btn.setOnClickListener {
+            editorViewModel.startVoiceRecognicion( this@EditorActivity, voice_progress , text_layer)
+        }
+
+        bold_button.setOnClickListener {
+            editorViewModel.setSpan("bold", this@EditorActivity)
+        }
+
+        italic_button.setOnClickListener {
+            editorViewModel.setSpan("italic", this@EditorActivity)
+        }
+
+        underline_button.setOnClickListener {
+            editorViewModel.setSpan("underline", this@EditorActivity)
+        }
+
+        strikethrough_button.setOnClickListener {
+            editorViewModel.setSpan("strikethrough", this@EditorActivity)
+        }
+
+        text_color_button.setOnClickListener {
+            editorViewModel.setSpan("text color", this@EditorActivity)
+        }
+
+        fill_color_button.setOnClickListener {
+            editorViewModel.setSpan("fill color", this@EditorActivity)
+        }
+
+        align_left_button.setOnClickListener {
+            editorViewModel.setSpan("align left", this@EditorActivity)
+        }
+
+        align_center_button.setOnClickListener {
+            editorViewModel.setSpan("align center", this@EditorActivity)
+        }
+
+        align_right_button.setOnClickListener {
+            editorViewModel.setSpan("align right", this@EditorActivity)
+        }
+
+        editorViewModel.getFinish().observe( this, Observer{
+            if(it)
+                finish()
+        })
     }
 
     override fun onActivityResult(reqCode: Int, resultCode: Int, data: Intent?) {
@@ -101,6 +150,54 @@ class EditorActivity : AppCompatActivity() {
         if (item.itemId === R.id.action_save_page) {
             editorViewModel.YourAsyncTask(editor_loading_indicator, paint_layer).execute()
         }
+
+        if (item.itemId === R.id.action_delete_page){
+            showDeleteDialog()
+        }
+
+        if (item.itemId === R.id.action_rename_page){
+            showRenameDialog()
+        }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showDeleteDialog() {
+        val fm = supportFragmentManager
+        val deletePageDialogFragment = DeletePageDialogFragment()
+        deletePageDialogFragment.show(fm, "deletePageDialogFragment")
+    }
+
+    private fun showRenameDialog() {
+        val fm = supportFragmentManager
+        val renamePageDialogFragment = RenamePageDialogFragment()
+        renamePageDialogFragment.show(fm, "renamePageDialogFragment")
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            RECORD_REQUEST_CODE -> {
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.i(TAG, "Permission has been denied by user")
+                } else {
+                    Log.i(TAG, "Permission has been granted by user")
+                }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        try {
+            editorViewModel.speechRecognizer!!.destroy()
+        } catch (e: Exception) {
+            Log.e(TAG, "Exception:$e")
+        }
+
+    }
+
+    companion object {
+        private val TAG = "MyStt3Activity"
+        private val RECORD_REQUEST_CODE = 101
     }
 }

@@ -44,6 +44,7 @@
                     android:id="@+id/notes_content"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
+                    android:minHeight="100dp"
             />
         </RelativeLayout>
     </LinearLayout>

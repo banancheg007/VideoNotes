@@ -52,7 +52,7 @@ class NotesListAdapter (private val onViewClickListener: OnViewClickListener, va
             .load(notesList[position].content)
             .fit()
             .into( holder.contentView)
-//        holder.timeView.text = notesList[position].time
+        holder.timeView.text = notesList[position].creationTime
     }
 
     fun setNotes(notes: List<Page>) {

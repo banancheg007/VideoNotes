@@ -62,7 +62,82 @@
                 android:layout_weight="0"
 
         />
+        <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:id="@+id/voice_progress"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:progressTint="@color/accent"
+                android:progressBackgroundTint="#3C000000"
+                android:visibility="gone"
+                android:min="0"
+                android:max="30"/>
+        <HorizontalScrollView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tool"
+                android:id="@+id/horizontalScrollView1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true" >
+            <LinearLayout
+                    android:id="@+id/format_tools"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    android:background="@android:color/white"
+                    android:elevation="20dp"
+                    android:visibility="gone"
+                    >
+                <ImageButton
+                        style="@style/TextFormatButton"
+                        android:id="@+id/bold_button"
+                        android:src="@drawable/ic_bold_text_button"
+                />
+                <ImageButton
+                        style="@style/TextFormatButton"
+                        android:id="@+id/italic_button"
+                        android:src="@drawable/ic_italic_text_button"
+                />
+                <ImageButton
+                        style="@style/TextFormatButton"
+                        android:id="@+id/underline_button"
+                        android:src="@drawable/ic_underline_text_button"
+                />
+                <ImageButton
+                        style="@style/TextFormatButton"
+                        android:id="@+id/strikethrough_button"
+                        android:src="@drawable/ic_strikethrough_text_button"
+                />
+                <ImageButton
+                        style="@style/TextFormatButton"
+                        android:id="@+id/text_color_button"
+                        android:src="@drawable/ic_text_color_button"
+                />
+                <ImageButton
+                        style="@style/TextFormatButton"
+                        android:id="@+id/fill_color_button"
+                        android:src="@drawable/ic_fill_color_button"
+                />
+                <ImageButton
+                        style="@style/TextFormatButton"
+                        android:id="@+id/align_left_button"
+                        android:src="@drawable/ic_align_left_button"
+                />
+                <ImageButton
+                        style="@style/TextFormatButton"
+                        android:id="@+id/align_center_button"
+                        android:src="@drawable/ic_align_center_button"
+                />
+                <ImageButton
+                        style="@style/TextFormatButton"
+                        android:id="@+id/align_right_button"
+                        android:src="@drawable/ic_align_right_button"
+                />
+            </LinearLayout>
+        </HorizontalScrollView>
         <LinearLayout
+                android:id="@+id/note_tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"

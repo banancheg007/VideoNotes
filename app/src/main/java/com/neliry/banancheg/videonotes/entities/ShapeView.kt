@@ -30,7 +30,7 @@ class ShapeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         if(isFillColor) {
             mFillPaint.style = Paint.Style.FILL
             mFillPaint.color = fillColor
-            rectF.set(0f, 0f, width.toFloat(), height.toFloat())
+            rectF.set(1f, 1f, (width-0.5).toFloat(), (height-0.5).toFloat())
             when (shapeType) {
                 1 -> canvas.drawRect(rectF, mFillPaint)
                 2 -> canvas.drawOval(rectF, mFillPaint)
