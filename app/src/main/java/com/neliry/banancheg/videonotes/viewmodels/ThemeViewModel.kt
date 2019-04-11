@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.google.firebase.database.FirebaseDatabase
+import com.neliry.banancheg.videonotes.adapter.FirebaseAdapter
 import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.Theme
 import com.neliry.banancheg.videonotes.repositories.FirebaseDatabaseRepository
@@ -17,10 +18,11 @@ import com.neliry.banancheg.videonotes.views.ConspectusActivity
 
 open class ThemeViewModel(application: Application):BaseNavigationDrawerViewModel(application), OnViewClickListener {
 
-
+    val myAdapter: FirebaseAdapter by lazy { FirebaseAdapter(this) }
     private lateinit var currentClickedTheme: Theme
 
     init{
+
         @Suppress("UNCHECKED_CAST")
         repository = ThemeRepository() as FirebaseDatabaseRepository<BaseItem>
         repository.setDatabaseReference("themes" )

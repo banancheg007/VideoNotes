@@ -16,7 +16,10 @@ import com.neliry.banancheg.videonotes.models.BaseItem
 import com.neliry.banancheg.videonotes.models.VideoItem
 import com.neliry.banancheg.videonotes.utils.ViewNavigation
 import com.neliry.banancheg.videonotes.viewmodels.ConspectusViewModel
+import com.neliry.banancheg.videonotes.viewmodels.ThemeViewModel
 import kotlinx.android.synthetic.main.activity_conspectus.*
+import kotlinx.android.synthetic.main.activity_conspectus.view.*
+import kotlinx.android.synthetic.main.activity_theme.*
 import kotlinx.android.synthetic.main.new_item_dialog.*
 
 class ConspectusActivity : BaseNavigationDrawerActivity(), ViewNavigation {
@@ -36,13 +39,14 @@ class ConspectusActivity : BaseNavigationDrawerActivity(), ViewNavigation {
 
 
         val intent: Intent = intent
-        (baseNavigationDrawerViewModel as ConspectusViewModel).parseIntent(intent)
+        (baseNavigationDrawerViewModel as ConspectusViewModel).parseIntent(intent, supportActionBar!!)
         baseNavigationDrawerViewModel.navigationEvent.setEventReceiver(this, this)
 
         setViewModel(baseNavigationDrawerViewModel)
         baseNavigationDrawerViewModel.getItems().observe(this, Observer<List<BaseItem>> { items ->
                 Log.d("myTag", "ON CHANGED")
-                recycler_view_conspectuses.adapter = (FirebaseAdapter((baseNavigationDrawerViewModel as ConspectusViewModel),items!!))
+            recycler_view_conspectuses.adapter = (baseNavigationDrawerViewModel as ConspectusViewModel).myAdapter
+            (recycler_view_conspectuses.adapter as FirebaseAdapter).setItems(items)
             })
 
         baseNavigationDrawerViewModel.showDialog.observe(this, Observer {

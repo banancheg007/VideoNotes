@@ -17,9 +17,6 @@ import com.neliry.banancheg.videonotes.utils.ViewNavigation
 
 class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
 
-
-
-
     override fun getMainContentLayout(): Int {
         return com.neliry.banancheg.videonotes.R.layout.activity_theme
     }
@@ -29,7 +26,7 @@ class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
     override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
 
-
+        supportActionBar?.title = "Themes"
         val numberOfColumns =  2
         val layoutManager =  GridLayoutManager (this, numberOfColumns)
         recycler_view_themes.layoutManager = layoutManager
@@ -51,7 +48,8 @@ class ThemeActivity : BaseNavigationDrawerActivity() ,  ViewNavigation {
         baseNavigationDrawerViewModel.getItems().observe(this,
            Observer<List<BaseItem>> { items ->
                Log.d("myTag", "ON CHANGED")
-               recycler_view_themes.adapter = (FirebaseAdapter(baseNavigationDrawerViewModel as ThemeViewModel,items))
+               recycler_view_themes.adapter = (baseNavigationDrawerViewModel as ThemeViewModel).myAdapter
+               (recycler_view_themes.adapter as FirebaseAdapter).setItems(items)
            })
     }
 

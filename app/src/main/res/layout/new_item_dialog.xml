@@ -5,9 +5,6 @@
               android:id="@+id/new_item_dialog_linear_layout"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <TextView android:layout_width="match_parent"
-              android:gravity="center"
-              android:hint="Adding new item" android:layout_height="40dp"/>
 
     <EditText
             android:id="@+id/dialog_editText_name"
@@ -37,13 +34,14 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:src="@mipmap/image_search"/>
+            android:src="@mipmap/image_search"
+    />
 </LinearLayout>
     <Spinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-    android:visibility="invisible">
+    android:visibility="gone">
     </Spinner>
     <LinearLayout
             android:layout_width="match_parent"

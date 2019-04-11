@@ -48,15 +48,7 @@ open class BaseNavigationDrawerViewModel(application: Application): BaseViewMode
                 Log.d("myTag", "on item menu clicked")
             }*/
             com.neliry.banancheg.videonotes.R.id.nav_share -> {
-                val sharingIntent = Intent(Intent.ACTION_SEND)
-                sharingIntent.type = "text/plain"
-                val shareBody = "I use VideoNotes app. Download this app from google play market"
-                val shareSub = "VideoNotes"
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub)
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody)
-                //startActivity(Intent.createChooser(sharingIntent, "Share using"))
-                navigationEvent.sendEvent{ startActivity(Intent.createChooser(sharingIntent, "Share using"))}
-                Log.d("myTag", "on item menu clicked")
+                share()
             }
             com.neliry.banancheg.videonotes.R.id.nav_send -> {
                 sendEmail()
@@ -104,6 +96,18 @@ open class BaseNavigationDrawerViewModel(application: Application): BaseViewMode
 
     open fun showDialog() {
         showDialog.value = true
+    }
+
+    fun share(){
+        val sharingIntent = Intent(Intent.ACTION_SEND)
+        sharingIntent.type = "text/plain"
+        val shareBody = "I use VideoNotes app. Download this app from google play market"
+        val shareSub = "VideoNotes"
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub)
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody)
+        //startActivity(Intent.createChooser(sharingIntent, "Share using"))
+        navigationEvent.sendEvent{ startActivity(Intent.createChooser(sharingIntent, "Share using"))}
+        Log.d("myTag", "on item menu clicked")
     }
 
 
