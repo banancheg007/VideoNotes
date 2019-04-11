@@ -1,9 +1,13 @@
 package com.neliry.banancheg.videonotes.fragments
 
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Spannable
+import android.text.style.BackgroundColorSpan
+import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +17,10 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.flask.colorpicker.ColorPickerView
+import com.flask.colorpicker.OnColorSelectedListener
+import com.flask.colorpicker.builder.ColorPickerClickListener
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.neliry.banancheg.videonotes.R
 import com.neliry.banancheg.videonotes.entities.SimpleDrawingView
 import com.neliry.banancheg.videonotes.viewmodels.EditorViewModel
@@ -66,69 +74,69 @@ class ShapeEditorFragment : Fragment() {
         })
 
         border_color_1.setOnClickListener {
-            changeBorderColor(border_color_1, paintLayer)
+            editorViewModel.changeBorderColor(border_color_1, paintLayer, shape_preview, border_colors, context!!)
         }
         border_color_2.setOnClickListener {
-            changeBorderColor(border_color_2, paintLayer)
+            editorViewModel.changeBorderColor(border_color_2, paintLayer, shape_preview, border_colors, context!!)
         }
         border_color_3.setOnClickListener {
-            changeBorderColor(border_color_3, paintLayer)
+            editorViewModel.changeBorderColor(border_color_3, paintLayer, shape_preview, border_colors, context!!)
         }
         border_color_4.setOnClickListener {
-            changeBorderColor(border_color_4, paintLayer)
+            editorViewModel.changeBorderColor(border_color_4, paintLayer, shape_preview, border_colors, context!!)
         }
         border_color_5.setOnClickListener {
-            changeBorderColor(border_color_5, paintLayer)
+            editorViewModel.changeBorderColor(border_color_5, paintLayer, shape_preview, border_colors, context!!)
         }
         border_color_6.setOnClickListener {
-            changeBorderColor(border_color_6, paintLayer)
+            editorViewModel.changeBorderColor(border_color_6, paintLayer, shape_preview, border_colors, context!!)
         }
         border_color_7.setOnClickListener {
-            changeBorderColor(border_color_7, paintLayer)
+            editorViewModel.changeBorderColor(border_color_7, paintLayer, shape_preview, border_colors, context!!)
         }
         border_color_8.setOnClickListener {
-            changeBorderColor(border_color_8, paintLayer)
+            editorViewModel.changeBorderColor(border_color_8, paintLayer, shape_preview, border_colors, context!!)
         }
         border_color_9.setOnClickListener {
-            changeBorderColor(border_color_9, paintLayer)
+            editorViewModel.changeBorderColor(border_color_9, paintLayer, shape_preview, border_colors, context!!)
         }
         border_color_10.setOnClickListener {
-            changeBorderColor(border_color_10, paintLayer)
+            editorViewModel.changeBorderColor(border_color_10, paintLayer, shape_preview, border_colors, context!!)
         }
         background_color_1.setOnClickListener {
-            changeBackgroundColor(background_color_1)
+            lastColorButton = editorViewModel.changeBackgroundColor(background_color_1, shape_preview, color_fill_btn, shape_colors, context!!)
         }
         background_color_2.setOnClickListener {
-            changeBackgroundColor(background_color_2)
+            lastColorButton = editorViewModel.changeBackgroundColor(background_color_2, shape_preview, color_fill_btn, shape_colors, context!!)
         }
         background_color_3.setOnClickListener {
-            changeBackgroundColor(background_color_3)
+            lastColorButton = editorViewModel.changeBackgroundColor(background_color_3, shape_preview, color_fill_btn, shape_colors, context!!)
         }
         background_color_4.setOnClickListener {
-            changeBackgroundColor(background_color_4)
+            lastColorButton = editorViewModel.changeBackgroundColor(background_color_4, shape_preview, color_fill_btn, shape_colors, context!!)
         }
         background_color_5.setOnClickListener {
-            changeBackgroundColor(background_color_5)
+            lastColorButton = editorViewModel.changeBackgroundColor(background_color_5, shape_preview, color_fill_btn, shape_colors, context!!)
         }
         background_color_6.setOnClickListener {
-            changeBackgroundColor(background_color_6)
+            lastColorButton = editorViewModel.changeBackgroundColor(background_color_6, shape_preview, color_fill_btn, shape_colors, context!!)
         }
         background_color_7.setOnClickListener {
-            changeBackgroundColor(background_color_7)
+            lastColorButton = editorViewModel.changeBackgroundColor(background_color_7, shape_preview, color_fill_btn, shape_colors, context!!)
         }
         background_color_8.setOnClickListener {
-            changeBackgroundColor(background_color_8)
+            lastColorButton = editorViewModel.changeBackgroundColor(background_color_8, shape_preview, color_fill_btn, shape_colors, context!!)
         }
         background_color_9.setOnClickListener {
-            changeBackgroundColor(background_color_9)
+            lastColorButton = editorViewModel.changeBackgroundColor(background_color_9, shape_preview, color_fill_btn, shape_colors, context!!)
         }
         background_color_10.setOnClickListener {
-            changeBackgroundColor(background_color_10)
+            lastColorButton = editorViewModel.changeBackgroundColor(background_color_10, shape_preview, color_fill_btn, shape_colors, context!!)
         }
 
         draw_square_editor_btn.setOnClickListener {
-            selectShapeButton(draw_square_editor_btn, shape_editor_layout)
-            selectShapeButton(draw_square_btn, shape_select)
+            editorViewModel.selectShapeButton(draw_square_editor_btn, shape_editor_layout)
+            editorViewModel.selectShapeButton(draw_square_btn, shape_select)
             shape_preview.shapeType = 1
             paintLayer.shapeType = 1
             shape_preview.postInvalidate()
@@ -137,8 +145,8 @@ class ShapeEditorFragment : Fragment() {
         }
 
         draw_circle_editor_btn.setOnClickListener {
-            selectShapeButton(draw_circle_editor_btn, shape_editor_layout)
-            selectShapeButton(draw_circle_btn, shape_select)
+            editorViewModel.selectShapeButton(draw_circle_editor_btn, shape_editor_layout)
+            editorViewModel.selectShapeButton(draw_circle_btn, shape_select)
             shape_preview.shapeType = 2
             paintLayer.shapeType = 2
             shape_preview.postInvalidate()
@@ -146,22 +154,22 @@ class ShapeEditorFragment : Fragment() {
             editorViewModel.createShape(this, canvasLayer.editor_scroll_view.canvas_layer.image_layer)
         }
         draw_line_editor_btn.setOnClickListener {
-            selectShapeButton(draw_line_editor_btn, shape_editor_layout)
-            selectShapeButton(draw_line_btn, shape_select)
+            editorViewModel.selectShapeButton(draw_line_editor_btn, shape_editor_layout)
+            editorViewModel.selectShapeButton(draw_line_btn, shape_select)
             shape_preview.shapeType = 3
             paintLayer.shapeType = 3
             shape_preview.postInvalidate()
         }
         eraser_editor_btn.setOnClickListener {
-            selectShapeButton(eraser_editor_btn, shape_editor_layout)
-            selectShapeButton(eraser_btn, shape_select)
+            editorViewModel.selectShapeButton(eraser_editor_btn, shape_editor_layout)
+            editorViewModel.selectShapeButton(eraser_btn, shape_select)
             shape_preview.shapeType = 4
             paintLayer.shapeType = 4
             shape_preview.postInvalidate()
         }
         draw_square_btn.setOnClickListener {
-            selectShapeButton(draw_square_btn, shape_select)
-            selectShapeButton(draw_square_editor_btn, shape_editor_layout)
+            editorViewModel.selectShapeButton(draw_square_btn, shape_select)
+            editorViewModel.selectShapeButton(draw_square_editor_btn, shape_editor_layout)
             shape_preview.shapeType = 1
             paintLayer.shapeType = 1
             shape_preview.postInvalidate()
@@ -169,8 +177,8 @@ class ShapeEditorFragment : Fragment() {
             editorViewModel.createShape(this, canvasLayer.editor_scroll_view.canvas_layer.image_layer)
         }
         draw_circle_btn.setOnClickListener {
-            selectShapeButton(draw_circle_btn, shape_select)
-            selectShapeButton(draw_circle_editor_btn, shape_editor_layout)
+            editorViewModel.selectShapeButton(draw_circle_btn, shape_select)
+            editorViewModel.selectShapeButton(draw_circle_editor_btn, shape_editor_layout)
             shape_preview.shapeType = 2
             paintLayer.shapeType = 2
             shape_preview.postInvalidate()
@@ -178,8 +186,8 @@ class ShapeEditorFragment : Fragment() {
             editorViewModel.createShape(this, canvasLayer.editor_scroll_view.canvas_layer.image_layer)
         }
         draw_line_btn.setOnClickListener {
-            selectShapeButton(draw_line_btn, shape_select)
-            selectShapeButton(draw_line_editor_btn, shape_editor_layout)
+            editorViewModel.selectShapeButton(draw_line_btn, shape_select)
+            editorViewModel.selectShapeButton(draw_line_editor_btn, shape_editor_layout)
             shape_preview.shapeType = 3
             paintLayer.shapeType = 3
             shape_preview.postInvalidate()
@@ -187,8 +195,8 @@ class ShapeEditorFragment : Fragment() {
         }
 
         eraser_btn.setOnClickListener {
-            selectShapeButton(eraser_btn, shape_select)
-            selectShapeButton(eraser_editor_btn, shape_editor_layout)
+            editorViewModel.selectShapeButton(eraser_btn, shape_select)
+            editorViewModel.selectShapeButton(eraser_editor_btn, shape_editor_layout)
             shape_preview.shapeType = 4
             paintLayer.shapeType = 4
             editorViewModel.disableDraw()
@@ -196,8 +204,8 @@ class ShapeEditorFragment : Fragment() {
         }
 
         disable_draw_btn.setOnClickListener {
-            selectShapeButton(disable_draw_btn, shape_select)
-            selectShapeButton(null, shape_editor_layout)
+            editorViewModel.selectShapeButton(disable_draw_btn, shape_select)
+            editorViewModel.selectShapeButton(null, shape_editor_layout)
             shape_preview.shapeType = 0
             paintLayer.shapeType = 0
             shape_preview.postInvalidate()
@@ -207,11 +215,11 @@ class ShapeEditorFragment : Fragment() {
             if(shape_preview.isFillColor)
             {
                 color_fill_btn.setBackgroundColor(Color.parseColor("#fafafa"))
-                selectColorButton(null, shape_colors)
+                editorViewModel.selectColorButton(null, shape_colors, context!!)
             }
             else{
                 color_fill_btn.setBackgroundResource( R.drawable.border)
-                selectColorButton(lastColorButton, shape_colors)
+                editorViewModel.selectColorButton(lastColorButton, shape_colors, context!!)
             }
 
             shape_preview.isFillColor =!shape_preview.isFillColor
@@ -219,56 +227,4 @@ class ShapeEditorFragment : Fragment() {
         }
     }
 
-    private fun changeBorderColor(colorButton: ImageButton, paintLayer: SimpleDrawingView){
-        val drawable = colorButton.drawable as ColorDrawable
-        shape_preview.strokeColor = drawable.color
-        paintLayer.mPaint.color = drawable.color
-        shape_preview.postInvalidate()
-        selectColorButton(colorButton, border_colors)
-    }
-
-    private fun changeBackgroundColor(colorButton: ImageButton){
-        lastColorButton = colorButton
-        if(!shape_preview.isFillColor)
-        {
-            color_fill_btn.setBackgroundResource( R.drawable.border)
-            shape_preview.isFillColor =!shape_preview.isFillColor
-        }
-        val drawable = colorButton.drawable as ColorDrawable
-        shape_preview.fillColor = drawable.color
-        shape_preview.postInvalidate()
-        selectColorButton(colorButton, shape_colors)
-    }
-
-    private fun selectColorButton(colorButton: ImageButton?, linearLayout: LinearLayout){
-        var childCount = linearLayout.childCount
-        for (i in 1 until childCount){
-            val v = linearLayout.getChildAt(i)
-            v.setPadding(dpToPx(0.5f, context!!), dpToPx(0.5f, context!!), dpToPx(0.5f, context!!), dpToPx(0.5f, context!!))
-            v.setBackgroundColor(-0x5E5E5E)
-        }
-        if(colorButton != null) {
-            colorButton!!.setBackgroundResource(R.drawable.btn_selected_border)
-            colorButton!!.setPadding(
-                dpToPx(3.5f, context!!),
-                dpToPx(3.5f, context!!),
-                dpToPx(3.5f, context!!),
-                dpToPx(3.5f, context!!)
-            )
-        }
-    }
-
-    private fun selectShapeButton(shapeButton: ImageButton?, linearLayout: LinearLayout){
-        var childCount = linearLayout.childCount
-        for (i in 0 until childCount){
-            val v = linearLayout.getChildAt(i)
-            v.setBackgroundColor(Color.parseColor("#fafafa"))
-        }
-        shapeButton?.setBackgroundResource( R.drawable.btn_selected_border)
-
-    }
-
-    private fun dpToPx(dp: Float, context: Context): Int {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()
-    }
 }

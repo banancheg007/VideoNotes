@@ -10,12 +10,10 @@
             android:id="@+id/youtube_player_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:showFullScreenButton="false"
-            app:showYouTubeButton="false"
             android:elevation="4dp"
             android:background="@drawable/myrect"
     />
-    <!--app:videoId="_3aF8O0AHFk"-->
+
 
 
     <RelativeLayout

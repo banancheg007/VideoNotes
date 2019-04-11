@@ -64,6 +64,8 @@ class ImageBlockController(internal val model: EditorViewModel){
         }
 
         controllerLayout.image_remove_button.setOnClickListener {
+            if(viewBlock is ImageView)
+                model.addUrlForDelete(viewBlock.transitionName)
             removeImageFocus()
             (viewBlock.parent as ViewManager).removeView(viewBlock)
         }

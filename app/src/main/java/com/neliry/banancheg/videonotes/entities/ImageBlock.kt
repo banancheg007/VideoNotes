@@ -51,9 +51,19 @@ class ImageBlock(private val blockController: ImageBlockController)  {
                 val imageUri = data!!.data
                 val imageStream = context.contentResolver.openInputStream(imageUri!!)
                 val selectedImage = BitmapFactory.decodeStream(imageStream)
-                imageView.setImageBitmap(selectedImage)
-                imageView.transitionName = "$imageUri;"
-//                imageView.background = BitmapDrawable(context.resources, imageStream)
+                if (selectedImage.width > 1200 || selectedImage.height >1200){
+                    val i: Float = Math.max(selectedImage.width, selectedImage.height).toFloat()
+                    val indexer = 1200/i
+                    val scaled = Bitmap.createScaledBitmap(selectedImage, (selectedImage.width*indexer).toInt(), (selectedImage.height*indexer).toInt(), true)
+                    scaled.width
+                    scaled.height
+                    imageView.setImageBitmap(scaled)
+                }
+                else{
+                    imageView.setImageBitmap(selectedImage)
+                }
+                imageView.transitionName = ""
+
                 setFocus(context, imageView)
                 return imageView
             } catch (e: FileNotFoundException) {
@@ -93,7 +103,7 @@ class ImageBlock(private val blockController: ImageBlockController)  {
                 changeControllerPosition(context, view as ImageView)
             }
         }
-        imageView.transitionName = ";$content"
+        imageView.transitionName = content
         imageView.setOnClickListener{
             setFocus(context, imageView)
         }

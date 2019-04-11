@@ -2,6 +2,7 @@ package com.neliry.banancheg.videonotes.entities
 
 import android.content.Context
 import android.text.Editable
+import android.text.InputType
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -10,6 +11,10 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import com.neliry.banancheg.videonotes.fragments.ShapeEditorFragment
 import kotlinx.android.synthetic.main.editor_activity.view.*
+import android.R.attr.password
+import android.text.Spannable
+import android.text.Spanned
+
 
 class TextBlock(private val blockController: TextBlockController) {
 
@@ -36,14 +41,16 @@ class TextBlock(private val blockController: TextBlockController) {
             }
         }
 
+        editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+//        editText.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
         editText.setOnClickListener {
 
             if (blockController.viewBlock != it || blockController.controllerLayout.visibility == View.GONE) {
                 it.isFocusable = true
                 it.isFocusableInTouchMode = true
                 it.requestFocus()
-//                isOnFocus = true
                 setFocus(context, it as EditText)
+                blockController.model.showTextFormatTools()
                 val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
                 imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
             }
@@ -55,7 +62,7 @@ class TextBlock(private val blockController: TextBlockController) {
         return editText
     }
 
-    fun loadTextBlock(context: Context, content: Editable, width: Int, height: Int, x: Int, y: Int): EditText {
+    fun loadTextBlock(context: Context, content: Spanned, width: Int, height: Int, x: Int, y: Int): EditText {
         val editText = EditText(context)
         val params = RelativeLayout.LayoutParams(
             width,
@@ -70,10 +77,12 @@ class TextBlock(private val blockController: TextBlockController) {
         editText.layoutParams = params
         editText.background = null
 
-        editText.text = content
+        val length = content.length
+        editText.setText(content.subSequence(0, length - 2))
+
+        editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
 
         setFocus(context, editText)
-        editText.requestFocus()
 
         editText.addOnLayoutChangeListener { view, i, i1, i2, i3, i4, i5, i6, i7 ->
             editText.post {
@@ -91,6 +100,7 @@ class TextBlock(private val blockController: TextBlockController) {
                 it.requestFocus()
 //                isOnFocus = true
                 setFocus(context, it as EditText)
+                blockController.model.showTextFormatTools()
                 val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
                 imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
             }
